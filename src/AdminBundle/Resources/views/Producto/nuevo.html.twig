@@ -1,0 +1,164 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <!-- bloque superior -->
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="row"><h4>{{ titulo }}</h4></div>
+            </div>
+            <div class="col-sm-12 col-md-6 text-right">
+                <a href="{{ url('admin_producto') }}" class="btn btn-system btn-per" data-toggle="tooltip" data-placement="bottom" title="Atras"><i class="material-icons">arrow_back</i></a>
+            </div>
+        </div>
+        <!-- bloque superior fin-->
+       
+
+        <!-- contenido -->
+        <div class="row">
+            <div role="tab-block">
+                <!-- Tabs Navigation -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#datos-vendedor-tab" aria-controls="datos-vendedor-tab" role="tab" data-toggle="tab">Datos Producto</a></li>
+                 {#% if data.id is defined %#}
+                    <li role="presentation"><a href="#add-categoria-tab" aria-controls="add-categoria-tab" role="tab" data-toggle="tab">Vincular a Categoria</a></li>
+                 {#% endif %#}
+                </ul>
+                 
+                <!-- Tab Content Panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade active in" id="datos-vendedor-tab">
+                        <div class="admin-form theme-default theme-info">
+                            <div class="panel heading-border panel-default panel-info">
+                                <div class="panel-body bg-light">
+                                    <form id="form_nuevo_producto" class="" action="{{ url('admin_producto_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
+                                        <div class="section-divider mb40">
+                                            <span>Datos del Producto</span>
+                                        </div>
+                                        
+                                        <input type="hidden" name="prod_id" id="prod_id" value="{{ data.id is defined ?  data.id}}" >                         
+                                        
+                                        <div class="row">
+                                            <div class="form-group col-sm-12 col-lg-3">
+                                                <label class="field">
+                                                    Nombre
+                                                    <input type="text" name="prod_nombre" id="prod_nombre" class="gui-input" value="{{data.prod_nombre is defined ? data.prod_nombre}}" required>
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-lg-3">
+                                                <label class="field">
+                                                    Codigo producto
+                                                    <input type="text" name="prod_codigo" id="prod_codigo" class="gui-input" value="{{data.prod_codigo is defined ? data.prod_codigo}}" required>
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-3">
+                                                <label class="field">
+                                                    Precio
+                                                    <input type="text" name="prod_valor" id="prod_valor" class="gui-input" value="{{data.prod_valor is defined ? data.prod_valor}}" required>
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-lg-3">
+                                                <label class="field">
+                                                    Descripcion
+                                                    <input type="text" name="prod_descp" id="prod_descp" class="gui-input" value="{{data.prod_descp is defined ? data.prod_descp}}">
+                                                </label>
+                                            </div>
+                                        </div>   
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <label class="field">Observaciones</label>
+                                                <label class="field prepend-icon">
+                                                    <textarea class="gui-textarea" id="prod_obs" name="prod_obs">{{ data.prod_obs is defined ? data.prod_obs}}</textarea>
+                                                    <label for="prod_obs" class="field-icon"><i class="fa fa-comments"></i></label>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            {% if data.id is not defined %}
+                                                 {# Si crea un producto y se guarda en ajax activa la etiqueta div "mostrar" #}      
+                                                <div id="mostrar" style="display: none;">
+                                                    <div class="form-group col-sm-12 col-md-3">
+                                                        <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar Categorias</h5>
+                                                        <div class="dropdown">
+                                                            <input type="text" id="busq_cat" name="buscar" class="form-control dropdown-toggle" data-toggle="dropdown">
+                                                            <ul id="match" aria-labelledby="busq_cat" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
+                                                        </div>
+                                                        <div id="cli-cat" class="cli-cat" >
+                                                            <!-- se agregan las empresas para hacer el vinculo -->
+                                                            {% if liscat is defined %}                                               
+                                                                {% for lcat in liscat %}
+                                                                    <div class="valign-wrapper"><i class="material-icons del_btn_i pointer" data-id="{{ lcat.id }}">remove_circle_outline</i>{{ lcat.nombre }}</div>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                             {% endif %}
+                                        </div> 
+                                        <!-- imagen carga-->
+                                        {% if data.imagen is defined and data.imagen is not empty %}
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <div >
+                                                    <img style="max-width: 100%;" src="{{ absolute_url(asset('uploads/producto/'~data.imagen)) }}" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        <!-- imagen ingreso-->
+                                        <div class="row">
+                                            <div class="input-field col-sm-3">
+                                                <label class="field prepend-icon append-button file">
+                                                    <span class="button btn-primary">Elija un archivo</span>
+                                                    <input type="file" class="gui-file" name="prod_imagen" id="prod_imagen" onChange="document.getElementById('upload_prod_i').value = this.value;">
+                                                    <input type="text" class="gui-input" id="upload_prod_i" name="upload_prod_i">
+                                                    <label class="field-icon"><i class="fa fa-upload"></i>
+                                                    </label>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="panel-footer text-right">
+                                    <button id="guardar_producto" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
+                                    <button id="" class="btn btn-warning ">Cancelar <i class="fa fa-ban"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                   
+                    {#% if data is defined %#}
+					<div role="tabpanel" class="tab-pane fade" id="add-categoria-tab" style="display: none;">
+						<div class="admin-form theme-default theme-info">
+							<div class="panel heading-border panel-default panel-info">
+                    			<div class="panel-body bg-light">
+                        			 <div class="form-group col-sm-12">
+                                                        <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar Categorias</h5>
+                                                        <div class="dropdown">
+                                                            <input type="text" id="busq_cat" name="buscar" class="form-control dropdown-toggle" data-toggle="dropdown">
+                                                            <ul id="match" aria-labelledby="busq_cat" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
+                                                        </div>
+                                                        <div id="cli-cat" class="cli-cat" >
+                                                            <!-- se agregan las empresas para hacer el vinculo -->
+                                                            {% if liscat is defined %}                                               
+                                                                {% for lcat in liscat %}
+                                                                    <div class="valign-wrapper"><i class="material-icons del_btn_i pointer" data-id="{{ lcat.id }}">remove_circle_outline</i>{{ lcat.nombre }}</div>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    
+                        		</div>
+                        	</div>
+                        </div>
+                	</div>
+                	{#% endif %#}      
+                </div>
+            </div>
+        </div>
+        <!-- contenido fin-->
+    </div>
+{% endblock %}
+
+{% block javascripts %}      
+        <script src="{{ absolute_url(asset('assets/js/module/producto/nuevo.js')) }}"></script>
+{% endblock %}

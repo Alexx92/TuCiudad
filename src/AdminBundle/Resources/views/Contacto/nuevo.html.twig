@@ -1,0 +1,174 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <!-- bloque superior -->
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="row"><h4>{{ titulo }}</h4></div>
+            </div>
+            <div class="col-sm-12 col-md-6 text-right">
+                <a href="{{ url('admin_contacto') }}" class="btn btn-system btn-per" data-toggle="tooltip" data-placement="bottom" title="Atras"><i class="material-icons">arrow_back</i></a>
+            </div>
+        </div>
+        <!-- bloque superior fin-->
+
+        <!-- contenido -->
+        <div class="row">
+            <div role="tab-block">
+                <!-- Tabs Navigation -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#datos-contacto-tab" aria-controls="datos-contacto-tab" role="tab" data-toggle="tab">Datos Contacto</a></li>
+                    {% if data.id is defined %}
+                         <li role="presentation"><a href="#add-contacto-tab" aria-controls="add-contacto-tab" role="tab" data-toggle="tab">Vincular a empresa</a></li>
+                    {% endif %}
+                </ul>
+                <!-- Tab Content Panes -->
+                <div class="tab-content">
+
+                    <div role="tabpanel" class="tab-pane fade active in" id="datos-contacto-tab">
+                        <div class="col-sm-12">
+                            <h5 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
+                            <div class="row">
+                                <form id="form_nuevo_cliente" class="admin-form" action="{{ url('admin_contacto_guardar') }}" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="id_contacto" id="id_contacto" value="{{ data.id is defined ? data.id}}" >                                    
+                                    <div class="col-md-6 col-lg-6">
+                                        <div class="row">
+                                            <div class="form-group col-md-6">                                           
+                                                <label class="field">
+                                                    Primer Nombre
+                                                    <input type="text" name="contacto_pri_nomb" id="contacto_pri_nomb" class="gui-input" value="{{ data.primer_nombre is defined ? data.primer_nombre}}">
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="field">
+                                                    Segundo Nombre
+                                                    <input type="text" name="contacto_seg_nomb" id="contacto_seg_nomb" class="gui-input" value="{{ data.segundo_nombre is defined ? data.segundo_nombre}}">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                    <div class="col-md-6 col-lg-6">
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label class="field">
+                                                    Apellido Paterno
+                                                    <input type="text" name="contacto_ape_pate" id="contacto_ape_pate" class="gui-input" value="{{ data.apellido_paterno is defined ? data.apellido_paterno}}">
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="field">
+                                                    Apellido Materno
+                                                    <input type="text" name="contacto_ape_mate" id="contacto_ape_mate" class="gui-input" value="{{ data.apellido_materno is defined ? data.apellido_materno}}">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6">
+                                        <div class="row">
+                                            <div class="form-group col-sm-12 col-lg-6">
+                                                <label class="field">
+                                                    Email
+                                                    <input type="text" name="contacto_email" id="contacto_email" class="gui-input" value="{{ data.email is defined ? data.email}}">
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-lg-6">
+                                                <label class="field">
+                                                    Tel&eacute;fono
+                                                    <input type="text" name="contacto_fono" id="contacto_fono" class="gui-input val_num" value="{{ data.telefono is defined ? data.telefono}}">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group col-sm-12 col-lg-6">
+                                        <label class="field">
+                                            Cargo en la empresa
+                                            <input type="text" name="contacto_cargo" id="contacto_cargo" class="gui-input" value="{{ data.cargo is defined ? data.cargo}}">
+                                        </label>
+                                    </div>
+                                    <div class="form-group col-sm-12">
+                                        <label class="field">Observaciones</label>
+                                        <label class="field prepend-icon">
+                                            <textarea class="gui-textarea" id="contacto_obs" name="contacto_obs">{{ data.observacion is defined ? data.observacion}}</textarea>
+                                            <label for="contacto_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
+                                        </label>
+                                    </div>
+                                    {% if data.id is not defined %}
+                                    <div id="mostrar" style="display: none;" >
+                                       <div class="col-sm-12">
+                                           <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar empresas</h5>
+                                            <div class="dropdown">
+                                                <input type="text" id="busq_empre" name="buscar" class="form-control dropdown-toggle" data-toggle="dropdown">
+                                                <ul id="match" aria-labelledby="busq_empre" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
+                                            </div>
+                                            <div id="cli-emp" class="cli-emp" >
+                                                <!-- se agregan las empresas para hacer el vinculo -->
+                                                {% if lista_emprecont is defined %}
+                                                    {% for lista_emprecont in lista_emprecont %}
+                                                        <div class="valign-wrapper"><i class="material-icons del_btn_i pointer" data-id="{{ lista_emprecont.id_contempr }}">remove_circle_outline</i>{{ lista_emprecont.nombre_fkempre }}</div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>  
+                                    {% endif %}
+                                    <!-- imagen -->
+                                    {% if data.imagen is defined and data.imagen is not empty %}
+                                    <div class="form-group col-sm-12">
+                                        <div >
+                                            <img style="max-width: 100%;" src="{{ absolute_url(asset('uploads/contacto/'~data.imagen)) }}" alt="">
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    <!-- imagen -->
+                                    <div class="input-field col-sm-3">
+                                        <label class="field">Imagen adjunta</label>
+                                        <label class="field prepend-icon append-button file">
+                                            <span class="button btn-primary">Elija un archivo</span>
+                                            <input type="file" class="gui-file" name="contacto_img" id="contacto_img" onChange="document.getElementById('uploader1').value = this.value;">
+                                            <input type="text" class="gui-input" id="uploader1" name="uploader1">
+                                            <label class="field-icon"><i class="fa fa-upload"></i>
+                                            </label>
+                                        </label>
+                                    </div>
+                                </form>                            
+                            </div> 
+                            <div class="row">
+                                <div class="col-sm-12 text-right">
+                                    <button id="guardar_contacto" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
+                                    <button id="cancelar_contacto" class="btn btn-warning ">Cancelar <i class="fa fa-ban"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     {% if data.id is defined  %}
+
+                    <div  role="tabpanel" class="tab-pane fade" id="add-contacto-tab">
+                            <div class="col-sm-12">
+                                <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar empresas</h5>
+                                <div class="dropdown">
+                                    <input type="text" id="busq_empre" name="buscar" class="form-control dropdown-toggle" data-toggle="dropdown">
+                                    <ul id="match" aria-labelledby="busq_empre" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
+                                </div>
+                                <div id="cli-emp" class="cli-emp" >
+                                    <!-- se agregan las empresas para hacer el vinculo -->
+                                 {% if lista_emprecont is defined %}
+                                        {% for lista_emprecont in lista_emprecont %}
+                                            <div class="valign-wrapper"><i class="material-icons del_btn_i pointer" data-id="{{ lista_emprecont.id_contempr }}">remove_circle_outline</i>{{ lista_emprecont.nombre_fkempre }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                    </div>   
+                    {% endif %}                 
+                </div>
+            </div>
+        </div>
+        <!-- contenido fin-->
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ absolute_url(asset('assets/js/module/contacto/nuevo.js')) }}"></script>
+{% endblock %}

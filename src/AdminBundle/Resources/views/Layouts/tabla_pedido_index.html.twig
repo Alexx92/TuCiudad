@@ -1,0 +1,13 @@
+{% for lpedidos in lista_pedidos %}
+	<tr>
+		<td>{{ lpedidos.codigo_pedido }}</td>
+		<td>{{ lpedidos.empresa_nombre }}</td>
+		<td>{{ lpedidos.vendedor_nombre }}</td>
+		<td>{{ lpedidos.observacion }}</td>
+		<td>{{ lpedidos.valorNeto }}</td>
+		<td>
+			<a class="btn_dele_cont cur_poin text-danger" data-id="{{ lpedidos.id }}" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="red-text small material-icons ">cancel</i></a>
+			<a class="btn_test cur_poin" href="{{ url('admin_producto_editar',{id:lpedidos.id}) }}" data-toggle="tooltip" data-placement="bottom" title="Editar"><i class="small material-icons ">mode_edit</i></a>
+		</td>
+	</tr>
+{% endfor %}

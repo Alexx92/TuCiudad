@@ -1,0 +1,82 @@
+/*errores para formularios*/
+label.error {
+	color: #F44336 !important;
+	margin-bottom: 10px;
+
+}
+input.error{
+	margin-bottom: 0;
+	border: 1px solid #F44336 !important;
+    box-shadow: 0 1px 0 0 #F44336 !important;
+}
+input.error:focus {
+	color:#F44336;
+	opacity:1;
+	border: 1px solid #F44336 !important;
+    box-shadow: 0 1px 0 0 #F44336 !important;
+}
+textarea.error{
+	color:#F44336;
+	opacity:1;
+	border: 1px solid #F44336 !important;
+    box-shadow: 0 1px 0 0 #F44336 !important;
+    margin-bottom: 0;
+}
+textarea.error:focus{
+	color:#F44336;
+	border: 1px solid #F44336 !important;
+    box-shadow: 0 1px 0 0 #F44336 !important;
+}
+
+
+
+/*errores Placeholder*/
+input.error::-moz-placeholder {
+	color:#F44336;
+	opacity:1
+}
+input.error:-ms-input-placeholder {
+	color:#F44336;
+}
+input.error::-webkit-input-placeholder {
+	color:#F44336;
+}
+input.error::-ms-expand {
+	background-color:transparent;
+	border:0
+}
+input.error:focus::-moz-placeholder {
+	color:#F44336;
+	opacity:1
+}
+input.error:focus:-ms-input-placeholder {
+	color:#F44336;
+}
+input.error:focus::-webkit-input-placeholder {
+	color:#F44336;
+}
+input.error:focus::-ms-expand {
+	background-color:transparent;
+	border:0
+}
+textarea.error::-webkit-input-placeholder {
+	color:#F44336;
+}
+textarea.error::-ms-expand {
+	background-color:transparent;
+	border:0
+}
+textarea.error:focus::-moz-placeholder {
+	color:#F44336;
+	opacity:1
+}
+textarea.error:focus:-ms-input-placeholder {
+	color:#F44336;
+}
+textarea.error:focus::-webkit-input-placeholder {
+	color:#F44336;
+}
+textarea.error:focus::-ms-expand {
+	background-color:transparent;
+	border:0
+}

@@ -1,0 +1,10 @@
+{% for lcategoria in lista_Categorias %}
+	<tr>
+		<td>{{ lcategoria.cat_nombre }}</td>
+		<td>{{ lcategoria.fechaIngreso|date("m/d/Y") }}</td>
+		<td>
+			<a class="btn_dele_cont cur_poin text-danger" data-id="{{ lcategoria.id }}" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="red-text small material-icons ">cancel</i></a>
+			<a class="btn_test cur_poin" href="{{ url('admin_categorias_editar',{id:lcategoria.id}) }}" data-toggle="tooltip" data-placement="bottom" title="Editar"><i class="small material-icons ">mode_edit</i></a>
+		</td>
+	</tr>
+{% endfor %}

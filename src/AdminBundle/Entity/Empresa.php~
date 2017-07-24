@@ -1,0 +1,165 @@
+<?php
+
+namespace AdminBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Empresa
+ *
+ * @ORM\Table(name="empresa")
+ * @ORM\Entity
+ */
+class Empresa
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string", length=200, nullable=true)
+     */
+    private $nombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="razonsocial", type="string", length=200, nullable=true)
+     */
+    private $razonsocial;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="rut", type="string", length=200, nullable=true)
+     */
+    private $rut;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comuna", type="string", length=30, nullable=false)
+     */
+    private $comuna;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="provincia", type="string", length=30, nullable=false)
+     */
+    private $provincia;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="region", type="string", length=30, nullable=false)
+     */
+    private $region;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dir_villa_pbla", type="string", length=50, nullable=true)
+     */
+    private $dirVillaPbla;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dir_calle", type="string", length=50, nullable=true)
+     */
+    private $dirCalle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dir_numero", type="string", length=50, nullable=true)
+     */
+    private $dirNumero;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dir_numero_departamento", type="string", length=50, nullable=true)
+     */
+    private $dirNumeroDepartamento;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dir_numero_piso", type="string", length=50, nullable=true)
+     */
+    private $dirNumeroPiso;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="telefono", type="integer", nullable=true)
+     */
+    private $telefono;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="celular", type="integer", nullable=true)
+     */
+    private $celular;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="correo", type="string", length=200, nullable=true)
+     */
+    private $correo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="web", type="string", length=200, nullable=true)
+     */
+    private $web;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion", type="text", length=65535, nullable=true)
+     */
+    private $observacion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="coordenadas", type="string", length=200, nullable=true)
+     */
+    private $coordenadas;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="imagen", type="string", length=200, nullable=true)
+     */
+    private $imagen;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=true)
+     */
+    private $fechaIngreso;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="estado", type="integer", nullable=true)
+     */
+    private $estado;
+
+
+}

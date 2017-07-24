@@ -1,0 +1,198 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+	<div class="container">
+		<!-- bloque superior -->
+		<div class="row">
+			<div class="col-sm-12 col-md-6">
+                <div class="row"><h4>{{ titulo }}</h4></div>
+            </div>
+			<div class="col-sm-12 col-md-6 text-right">
+				<a href="{{ url('admin_pedido') }}" class="btn btn-system btn-per" data-toggle="tooltip" data-placement="bottom" title="Atras"><i class="material-icons">arrow_back</i></a>
+			</div>
+		</div>
+		<!-- bloque superior fin-->
+
+		<!-- contenido -->
+		<div class="row">
+			<div role="tab-block">
+				<!-- Tabs Navigation -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#datos-pedido-tab" aria-controls="datos-pedido-tab" role="tab" data-toggle="tab">Datos Empresa</a></li>
+                </ul>
+				<!-- Tab Content Panes -->
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane fade active in" id="datos-pedido-tab">
+						<div class="admin-form theme-default theme-info">
+							<div class="panel heading-border panel-default panel-info">
+                    			<div class="panel-body bg-light">
+									<form id="form_datos_empresa" action="{{ url('admin_pedido_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group col-sm-12 col-lg-3">													
+                        							<label class="field append-icon">
+                        								<div class="dropdown">
+                            								<input type="text" name="bsq_empre_pedido" id="bsq_empre_pedido" class="gui-input dropdown-toggle" data-toggle="dropdown" placeholder="Busqueda de empresa">
+                            								<ul id="lista_empre_cot" aria-labelledby="bsq_empre_pedido" class="dropdown-menu" role="menu"></ul>
+                            							</div>
+                            							<label for="bsq_empre_pedido" class="field-icon">
+                              									<i class="fa fa-search"></i>
+                            							</label>
+                          							</label>
+                    							</div>
+												<div class="input-group form-group col-sm-12 col-lg-3 pull-right">
+												  	<span class="input-group-addon">Cot n°:</span>
+												  	<input type="text" class="gui-input" name="n_cot" id="n_cot" disabled>
+												</div>
+											</div>
+										</div>
+										<div class="section-divider mb40">
+                    					  	<span>Datos Empresa</span>
+                    					</div>
+										<input type="hidden" name="empre_id" id="empre_id" value="{{ data.id is defined ? data.id}}" >
+										<div class="row">
+											<div class="form-group col-sm-12 col-lg-3">
+												<label class="field">
+												    <input type="text" placeholder="Nombre de fantas&iacute;a" name="empre_nombre" id="empre_nombre" class="gui-input" value="{{data.nombre is defined ? data.nombre}}" disabled>
+												</label>
+											</div>
+											<div class="form-group col-sm-12 col-lg-3">
+												<label class="field">
+												    <input type="text" placeholder="Razon Social" name="empre_razon_soc" id="empre_razon_soc" class="gui-input" value="{{data.rsocial is defined ? data.rsocial}}" disabled>
+												</label>
+											</div>
+											<div class="form-group col-sm-12 col-md-3">
+												<label class="field">
+												    <input type="text" placeholder="Rut / Run" name="empre_rut" id="empre_rut" class="gui-input val_num" value="{{data.rut is defined ? data.rut}}" disabled>
+												</label>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group col-sm-12 col-md-2">
+												<label class="field">
+												    <input type="text" placeholder="Comuna" name="empre_comuna" id="empre_comuna" class="gui-input" value="{{data.comuna is defined ? data.comuna}}" disabled>
+												</label>
+											</div>
+											<div class="form-group col-sm-12 col-md-2">
+												<label class="field">
+												    <input type="text" placeholder="Provincia" name="empre_provincia" id="empre_provincia" class="gui-input" value="{{data.provincia is defined ? data.provincia}}" disabled>
+												</label>
+											</div>
+											<div class="form-group col-sm-12 col-md-2">
+												<label class="field">
+												    <input type="text" placeholder="Region" name="empre_region" id="empre_region" class="gui-input" value="{{data.region is defined ? data.region}}" disabled>
+												</label>
+											</div>
+											<div class="form-group col-sm-12 col-md-2">
+												<label class="field">
+												    <input type="text" placeholder="Calle" name="empre_calle" id="empre_calle" class="gui-input" value="{{data.dir_calle is defined ? data.dir_calle}}" disabled>
+												</label>
+											</div>
+											<div class="form-group col-sm-12 col-md-2">
+												<label class="field">
+												    <input type="text" placeholder="Numero" name="empre_nume" id="empre_nume" class="gui-input val_num" value="{{data.dir_numero is defined ? data.dir_numero}}" disabled>
+												</label>
+											</div>
+											<div class="form-group col-sm-12 col-md-2">
+												<label class="field">
+												    <input type="text" placeholder="Villa / Poblacion" name="empre_villa_pobl" id="empre_villa_pobl" class="gui-input" value="{{data.dir_villa_pobl is defined ? data.dir_villa_pobl}}" disabled>
+												</label>
+											</div>
+											<div class="form-group col-sm-12 col-md-2">
+												<label class="field">
+												    <input type="text" placeholder="N° Departamento" name="empre_num_dpto" id="empre_num_dpto" class="gui-input val_num" value="{{data.dir_numero_depto is defined ? data.dir_numero_depto}}" disabled>
+												</label>
+											</div>
+											<div class="form-group col-sm-12 col-md-2">
+												<label class="field">
+												    <input type="text" placeholder="Piso dpto." name="empre_dpto_piso" id="empre_dpto_piso" class="gui-input val_num" value="{{data.dir_numero_piso is defined ? data.dir_numero_piso}}" disabled>
+												</label>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group col-sm-12 col-md-2">
+												<label class="field">
+												    <input type="text" placeholder="Telefono" name="empre_telefono" id="empre_telefono" class="gui-input val_num" value="{{data.telefono is defined ? data.telefono}}" disabled>
+												</label>
+											</div>
+											<div class="form-group col-sm-12 col-md-2">
+												<label class="field">
+												    <input type="text" placeholder="Celular" name="empre_celular" id="empre_celular" class="gui-input val_num" value="{{data.celular is defined ? data.celular}}" disabled>
+												</label>
+											</div>
+											<div class="form-group col-sm-12 col-md-2">
+												<label class="field">
+												    <input type="email" placeholder="Email" name="empre_mail" id="empre_mail" class="gui-input" value="{{data.email is defined ? data.email}}" disabled>
+												</label>
+											</div>
+										</div>
+									
+										<div  id="prod_empresa" style="display: none;" class="row" >
+											<div class="section-divider mb40" >
+                    					  		<span>Ingreso de productos  / servicios</span>											
+                    						</div>
+                                             <div class="form-group col-md-6 " > 
+                                                <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar Producto / Servicio</h5>
+                                                <div class="dropdown">
+													{# <input type="hidden" name="prod_id" id="prod_id" value="" > #}
+													<input type="hidden" name="ped_id" id="ped_id" value="" >
+
+                                                    <input  type="text" id="bsq_producto" name="buscar" class="form-control dropdown-toggle" data-toggle="dropdown">
+                                                        <ul id="lista_producto" aria-labelledby="bsq_producto" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
+                                                </div>
+											</div>
+                                       	</div>
+										<div class="section-divider mb40">
+                    					  	<span>Listado de productos / servicios</span>
+                    					</div>
+                    					<div class="row">
+                    						<div class="col-md-12">
+												<!-- bloque busqueda / filtros -->
+												<!-- bloque busqueda / filtros fin-->
+												
+												<!-- bloque tabla -->
+												<div class="table-responsive">
+													<table class="table table-striped" id="dT_pedido">
+														<thead>
+															<tr>
+															 	<th>#</th>
+															 	<th>Producto</th>
+															 	<th>Descripcion</th>
+															 	<th class="text-right">Cantidad</th>
+															 	<th class="text-right">Valor Unitario</th>
+															 	<th class="text-right">Valor Total</th>
+															</tr>
+														</thead>
+														<tbody>
+															{# <tr>
+																<td class="td-width-40">1</td>
+																<td title="NOmbre">NOmbre</td>
+																<td title="Descripcion">Descripcion</td>
+																<td class="text-right td-width-72" title="Cantidad">199</td>
+																<td class="text-right td-width-110" title="Valor Unitario">$ 99.999.99</td>
+																<td class="text-right td-width-110" title="Valor Total">$ 99.999.99</td>
+															</tr> #}
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</form>
+                        		</div>
+                        		<div class="panel-footer text-right">
+                        			<button id="guardar_empresa" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
+                        			<button id="cancelar_empresa" class="btn btn-warning ">Cancelar <i class="fa fa-ban"></i></button>
+                        		</div>
+                        	</div>
+                        </div>
+					</div>
+                </div>
+			</div>
+		</div>
+		<!-- contenido fin-->
+	</div>
+{% endblock %}
+
+{% block javascripts %}	
+	<script src="{{ absolute_url(asset('assets/js/module/pedido/nuevo.js')) }}"></script>
+{% endblock %}

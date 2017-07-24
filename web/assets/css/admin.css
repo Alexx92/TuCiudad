@@ -1,0 +1,53 @@
+
+
+/*titulos de las paginas*/
+.title-page {
+  padding-left: 400px;
+}
+.title-page h1, .title-page h2,
+.title-page h3, .title-page h4, 
+.title-page h5, .title-page h6{
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+.cur_poin, .pointer{
+    cursor: pointer;
+}
+.valign-wrapper{
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.dropdown-menu > li > span {
+    display: block;
+    padding: 5px 15px;
+    clear: both;
+    color: #666666;
+    font-weight: normal;
+    line-height: 1.49;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.btn-per{
+    font-size: 0;
+    padding: 5px 5px;
+}
+.td-width-40{
+    width: 40px;
+}
+.td-width-72{
+    width: 72px;
+}
+.td-width-110{
+    width: 110px;
+}
+
+.admin-form .gui-input[disabled], .admin-form .gui-textarea[disabled],
+.admin-form .select > select[disabled], .admin-form .select-multiple select[disabled],
+.admin-form .gui-input[disabled] ~ .input-footer, .admin-form .file .gui-file[disabled] + .gui-input,
+.admin-form .file .gui-file[disabled]:hover + .gui-input, .admin-form .gui-textarea[disabled] ~ .input-footer {
+    color: #626262 !important;
+}

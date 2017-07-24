@@ -1,0 +1,45 @@
+<?php
+
+namespace AdminBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * ProductoCategoria
+ *
+ * @ORM\Table(name="producto_categoria", indexes={@ORM\Index(name="fk_producto", columns={"fk_producto"}), @ORM\Index(name="fk_categoria", columns={"fk_categoria"})})
+ * @ORM\Entity
+ */
+class ProductoCategoria
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Producto
+     *
+     * @ORM\ManyToOne(targetEntity="Producto")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="fk_producto", referencedColumnName="id")
+     * })
+     */
+    private $fkProducto;
+
+    /**
+     * @var \Categorias
+     *
+     * @ORM\ManyToOne(targetEntity="Categorias")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="fk_categoria", referencedColumnName="id")
+     * })
+     */
+    private $fkCategoria;
+
+
+}

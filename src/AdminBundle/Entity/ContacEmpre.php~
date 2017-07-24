@@ -1,0 +1,45 @@
+<?php
+
+namespace AdminBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * ContacEmpre
+ *
+ * @ORM\Table(name="contac_empre", indexes={@ORM\Index(name="fk_contacto", columns={"fk_contacto"}), @ORM\Index(name="fk_empresa", columns={"fk_empresa"})})
+ * @ORM\Entity
+ */
+class ContacEmpre
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Contacto
+     *
+     * @ORM\ManyToOne(targetEntity="Contacto")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="fk_contacto", referencedColumnName="id")
+     * })
+     */
+    private $fkContacto;
+
+    /**
+     * @var \Empresa
+     *
+     * @ORM\ManyToOne(targetEntity="Empresa")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="fk_empresa", referencedColumnName="id")
+     * })
+     */
+    private $fkEmpresa;
+
+
+}

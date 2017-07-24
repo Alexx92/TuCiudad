@@ -1,0 +1,254 @@
+admin_homepage:
+    path:     /
+    defaults: { _controller: AdminBundle:Default:index }
+
+#-----------------------Contacto-----------------------
+admin_contacto:
+    path:     /contacto/
+    defaults: { _controller: AdminBundle:Contacto:contactoIndex }
+
+cargar_contacto_tabla:
+    path:     /contacto/tabla/
+    defaults: { _controller: AdminBundle:Contacto:contactoCargartabla }
+
+admin_contacto_nuevo:
+    path:     /contacto/nuevo/
+    defaults: { _controller: AdminBundle:Contacto:contactoNuevo }
+
+admin_contacto_guardar:
+    path:     /contacto/guardar/
+    defaults: { _controller: AdminBundle:Contacto:contactoGuardar }
+
+admin_contacto_editar:
+    path:     /contacto/editar/{id}
+    defaults: { _controller: AdminBundle:Contacto:contactoEditar }
+
+admin_contacto_eliminar:
+    path:     /contacto/eliminar/
+    defaults: { _controller: AdminBundle:Contacto:contactoEliminar }
+    options:
+        expose: true
+
+#ruta ajax buscar empresas
+ajax_autocomplete_empresa:
+    path:     /ajax/autocomplete/contacto/data/
+    defaults: { _controller: AdminBundle:Contacto:buscarData }
+    options:
+        expose: true
+# ruta ajax guardar relaciones cliente-empresa
+ajax_guardar_empresa:
+    path:     /ajax/contacto/empresa/save/
+    defaults: { _controller: AdminBundle:Contacto:ajax_guardar_empresa }
+    options:
+        expose: true
+# ruta ajax para quitar empresas viculadas a clientes
+ajax_borrar_empresa:
+    path:     /ajax/contacto/empresa/delete/
+    defaults: { _controller: AdminBundle:Contacto:ajax_borrar_empresa }
+    options:
+        expose: true
+
+#-----------------------Empresa-----------------------
+admin_empresa:
+    path:     /empresa/
+    defaults: { _controller: AdminBundle:Empresas:empresaIndex }
+
+cargar_empresa_tabla:
+    path:     /empresa/tabla/
+    defaults: { _controller: AdminBundle:Empresas:empresaCargartabla }
+
+admin_empresa_nuevo:
+    path:     /empresa/nuevo/
+    defaults: { _controller: AdminBundle:Empresas:empresaNuevo }
+
+admin_empresa_guardar:
+    path:     /empresa/guardar/
+    defaults: { _controller: AdminBundle:Empresas:empresaGuardar }
+
+admin_empresa_editar:
+    path:     /empresa/editar/{id}
+    defaults: { _controller: AdminBundle:Empresas:empresaEditar }
+
+admin_empresa_eliminar:
+    path:     /empresa/eliminar/
+    defaults: { _controller: AdminBundle:Empresas:empresaEliminar }
+    options:
+        expose: true
+
+#ruta ajax buscar empresas
+ajax_autocomplete_contacto:
+    path:     /ajax/autocomplete/empresa/data/
+    defaults: { _controller: AdminBundle:Empresas:buscarcontacto }
+    options:
+        expose: true
+# ruta ajax guardar relaciones cliente-empresa
+ajax_guardar_contacto:
+    path:     /ajax/empresa/contacto/data/
+    defaults: { _controller: AdminBundle:Empresas:ajax_guardar_contacto }
+    options:
+        expose: true
+# ruta ajax para quitar empresas viculadas a clientes
+ajax_borrar_contacto:
+    path:     /ajax/empresa/contacto/remove/
+    defaults: { _controller: AdminBundle:Empresas:ajax_borrar_contacto }
+    options:
+        expose: true
+
+#-----------------------Vendedor-----------------------
+admin_vendedor:
+    path:     /vendedor/
+    defaults: { _controller: AdminBundle:Vendedor:vendedorIndex }
+
+cargar_vendedor_tabla:
+    path:     /vendedor/tabla/
+    defaults: { _controller: AdminBundle:Vendedor:vendedorCargartabla }
+
+admin_vendedor_nuevo:
+    path:     /vendedor/nuevo/
+    defaults: { _controller: AdminBundle:Vendedor:vendedorNuevo }
+
+admin_vendedor_guardar:
+    path:     /vendedor/guardar/
+    defaults: { _controller: AdminBundle:Vendedor:vendedorGuardar }
+
+admin_vendedor_editar:
+    path:     /vendedor/editar/{id}
+    defaults: { _controller: AdminBundle:Vendedor:vendedorEditar }
+
+admin_vendedor_eliminar:
+    path:     /vendedor/eliminar/
+    defaults: { _controller: AdminBundle:Vendedor:vendedorEliminar }
+    options:
+        expose: true
+
+#-----------------------Producto-----------------------
+admin_producto:
+    path:     /producto/
+    defaults: { _controller: AdminBundle:Producto:productoIndex }
+
+cargar_producto_tabla:
+    path:     /producto/tabla/
+    defaults: { _controller: AdminBundle:Producto:productoCargartabla }
+
+admin_producto_nuevo:
+    path:     /producto/nuevo/
+    defaults: { _controller: AdminBundle:Producto:productoNuevo }
+
+admin_producto_guardar:
+    path:     /producto/guardar/
+    defaults: { _controller: AdminBundle:Producto:productoGuardar }
+
+admin_producto_editar:
+    path:     /producto/editar/{id}
+    defaults: { _controller: AdminBundle:Producto:productoEditar }
+
+admin_producto_eliminar:
+    path:     /producto/eliminar/
+    defaults: { _controller: AdminBundle:Producto:productoEliminar }
+    options:
+        expose: true
+
+#-----------------------Categorias-----------------------
+admin_categorias:
+    path:     /categorias/
+    defaults: { _controller: AdminBundle:Categorias:categoriasIndex }
+
+cargar_categorias_tabla:
+    path:     /categorias/tabla/
+    defaults: { _controller: AdminBundle:Categorias:categoriasCargartabla }
+
+admin_categorias_nuevo:
+    path:     /categorias/nuevo/
+    defaults: { _controller: AdminBundle:Categorias:categoriasNuevo }
+
+admin_categorias_guardar:
+    path:     /categorias/guardar/
+    defaults: { _controller: AdminBundle:Categorias:categoriasGuardar }
+
+admin_categorias_editar:
+    path:     /categorias/editar/{id}
+    defaults: { _controller: AdminBundle:Categorias:categoriasEditar }
+
+admin_categorias_eliminar:
+    path:     /categorias/eliminar/
+    defaults: { _controller: AdminBundle:Categorias:categoriasEliminar }
+    options:
+        expose: true
+#ruta ajax buscar categorias
+ajax_autocomplete_categoria: 
+    path:     /ajax/autocomplete/producto/data/
+    defaults: { _controller: AdminBundle:Producto:buscarData }
+    options:
+        expose: true
+# ruta ajax guardar relaciones producto-categoria
+ajax_guardar_categoria:
+    path:     /ajax/contacto/categoria/save/
+    defaults: { _controller: AdminBundle:Producto:ajax_guardar_categoria }
+    options:
+        expose: true
+# ruta ajax para quitar categorias viculadas a producto
+ajax_borrar_categoria:
+    path:     /ajax/contacto/categoria/delete/
+    defaults: { _controller: AdminBundle:Producto:ajax_borrar_categoria }
+    options:
+        expose: true
+
+#-----------------------Pedido-----------------------
+admin_pedido:
+    path:     /pedido/
+    defaults: { _controller: AdminBundle:Pedido:pedidoIndex }
+
+cargar_pedido_tabla:
+    path:     /pedido/tabla/
+    defaults: { _controller: AdminBundle:Pedido:pedidoCargartabla }
+
+admin_pedido_nuevo:
+    path:     /pedido/nuevo/
+    defaults: { _controller: AdminBundle:Pedido:pedidoNuevo }
+
+admin_pedido_guardar:
+    path:     /pedido/guardar/
+    defaults: { _controller: AdminBundle:Pedido:pedidoGuardar }
+
+admin_pedido_editar:
+    path:     /pedido/editar/{id}
+    defaults: { _controller: AdminBundle:Pedido:pedidoEditar }
+
+admin_pedido_eliminar:
+    path:     /pedido/eliminar/
+    defaults: { _controller: AdminBundle:Pedido:pedidoEliminar }
+    options:
+        expose: true
+
+#ruta ajax buscar empresas
+ajax_busq_empre_cot:
+    path:     /ajax/busqueda/empresa/data/
+    defaults: { _controller: AdminBundle:Pedido:buscarEmpresa }
+    options:
+        expose: true
+ajax_busq_empre_form:
+    path:     /ajax/busqueda/empresa/data/response/
+    defaults: { _controller: AdminBundle:Pedido:cargarFormCotizacion }
+    options:
+        expose: true
+
+#ruta ajax guardar producto-empresa
+# ajax_guard_prod_empresa:
+#     path:     /ajax/busqueda/empresa/data/response/prod
+#     defaults: { _controller: AdminBundle:Pedido:guardarProducto }
+#     options:
+#         expose: true
+
+#ruta ajax buscar producto
+ajax_busq_producto:
+    path:     /ajax/busqueda/producto/data/
+    defaults: { _controller: AdminBundle:Pedido:buscarProductos }
+    options:
+        expose: true
+
+#ruta ajax buscar datos producto
+ajax_busq_datos_producto:
+    path:     /ajax/busqueda/producto/data/otro/
+    defaults: { _controller: AdminBundle:Pedido:buscardatosproductos }
+    options:
+        expose: true

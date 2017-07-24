@@ -1,0 +1,102 @@
+<?php
+
+namespace AdminBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Contacto
+ *
+ * @ORM\Table(name="contacto")
+ * @ORM\Entity
+ */
+class Contacto
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="primer_nombre", type="string", length=30, nullable=true)
+     */
+    private $primerNombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="segundo_nombre", type="string", length=30, nullable=true)
+     */
+    private $segundoNombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="apellido_paterno", type="string", length=30, nullable=true)
+     */
+    private $apellidoPaterno;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="apellido_materno", type="string", length=30, nullable=true)
+     */
+    private $apellidoMaterno;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="correo", type="string", length=180, nullable=true)
+     */
+    private $correo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telefono", type="string", length=20, nullable=true)
+     */
+    private $telefono;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cargo", type="string", length=200, nullable=true)
+     */
+    private $cargo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion", type="string", length=300, nullable=true)
+     */
+    private $observacion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="imagen", type="string", length=200, nullable=true)
+     */
+    private $imagen;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=true)
+     */
+    private $fechaIngreso;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="estado", type="integer", nullable=true)
+     */
+    private $estado;
+
+
+}

@@ -1,0 +1,111 @@
+<?php
+
+namespace AdminBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Pedidos
+ *
+ * @ORM\Table(name="pedidos", indexes={@ORM\Index(name="fk_empresa", columns={"fk_empresa"}), @ORM\Index(name="fk_vendedor", columns={"fk_vendedor"}), @ORM\Index(name="fk_etapa", columns={"fk_etapa"})})
+ * @ORM\Entity
+ */
+class Pedidos
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="codigo_pedido", type="string", length=200, nullable=true)
+     */
+    private $codigoPedido;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=true)
+     */
+    private $fechaIngreso;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="valor_bruto", type="string", length=50, nullable=true)
+     */
+    private $valorBruto;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="descuentos", type="string", length=50, nullable=true)
+     */
+    private $descuentos;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="valor_neto", type="string", length=50, nullable=true)
+     */
+    private $valorNeto;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total", type="string", length=50, nullable=true)
+     */
+    private $total;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion", type="text", length=65535, nullable=true)
+     */
+    private $observacion;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_modificacion", type="datetime", nullable=true)
+     */
+    private $fechaModificacion;
+
+    /**
+     * @var \Vendedor
+     *
+     * @ORM\ManyToOne(targetEntity="Vendedor")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="fk_vendedor", referencedColumnName="id")
+     * })
+     */
+    private $fkVendedor;
+
+    /**
+     * @var \Empresa
+     *
+     * @ORM\ManyToOne(targetEntity="Empresa")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="fk_empresa", referencedColumnName="id")
+     * })
+     */
+    private $fkEmpresa;
+
+    /**
+     * @var \Etapas
+     *
+     * @ORM\ManyToOne(targetEntity="Etapas")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="fk_etapa", referencedColumnName="id")
+     * })
+     */
+    private $fkEtapa;
+
+
+}

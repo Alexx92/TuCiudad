@@ -1,0 +1,49 @@
+<?php
+
+namespace AdminBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * DefProvincia
+ *
+ * @ORM\Table(name="def_provincia", indexes={@ORM\Index(name="pro_region_fk", columns={"pro_region_fk"})})
+ * @ORM\Entity
+ */
+class DefProvincia
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="pro_id_pk", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $proIdPk;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pro_nombre", type="string", length=25, nullable=true)
+     */
+    private $proNombre;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="pro_comunas", type="integer", nullable=true)
+     */
+    private $proComunas;
+
+    /**
+     * @var \DefRegion
+     *
+     * @ORM\ManyToOne(targetEntity="DefRegion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="pro_region_fk", referencedColumnName="reg_id_pk")
+     * })
+     */
+    private $proRegionFk;
+
+
+}

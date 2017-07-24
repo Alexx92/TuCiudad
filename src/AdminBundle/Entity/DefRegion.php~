@@ -1,0 +1,60 @@
+<?php
+
+namespace AdminBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * DefRegion
+ *
+ * @ORM\Table(name="def_region")
+ * @ORM\Entity
+ */
+class DefRegion
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="reg_id_pk", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $regIdPk;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="reg_nombre", type="string", length=40, nullable=true)
+     */
+    private $regNombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="reg_romano", type="string", length=4, nullable=true)
+     */
+    private $regRomano;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="reg_provincias", type="integer", nullable=true)
+     */
+    private $regProvincias;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="reg_comunas", type="integer", nullable=true)
+     */
+    private $regComunas;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="reg_orden", type="integer", nullable=true)
+     */
+    private $regOrden;
+
+
+}
