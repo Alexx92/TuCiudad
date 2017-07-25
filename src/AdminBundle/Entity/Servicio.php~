@@ -1,0 +1,39 @@
+<?php
+
+namespace AdminBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Servicio
+ *
+ * @ORM\Table(name="servicio")
+ * @ORM\Entity
+ */
+class Servicio
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="tiempo_de_desarrollo", type="integer", nullable=true)
+     */
+    private $tiempoDeDesarrollo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="caracteristicas", type="text", length=65535, nullable=true)
+     */
+    private $caracteristicas;
+
+
+}

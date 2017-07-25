@@ -171,8 +171,8 @@ $(document).ready(function() {
 
 function cargar() {
     var drop1 = $('#id_comuna').val();
-    //  var drop2 = $('#id_provincia').val();
-    //  var drop3 = $('#id_region').val();
+    // var drop2 = $('#id_provincia').val();
+    // var drop3 = $('#id_region').val();
     // var data = { id_comuna: drop1, id_provincia: drop2 };
     if (drop1 != "") {
         $("#comuna").show();

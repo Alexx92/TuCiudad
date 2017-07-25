@@ -5,12 +5,12 @@ namespace AdminBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * PedidoDetalle
+ * Historial
  *
- * @ORM\Table(name="pedido_detalle", indexes={@ORM\Index(name="fk_pedido", columns={"fk_pedido"}), @ORM\Index(name="fk_producto", columns={"fk_producto"}), @ORM\Index(name="fk_pedido_detalle_personal1_idx", columns={"personal_id"})})
+ * @ORM\Table(name="historial", indexes={@ORM\Index(name="fk_historial_pedido_detalle1_idx", columns={"pedido_detalle_id"})})
  * @ORM\Entity
  */
-class PedidoDetalle
+class Historial
 {
     /**
      * @var integer
@@ -22,6 +22,20 @@ class PedidoDetalle
     private $id;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_cambio", type="datetime", nullable=true)
+     */
+    private $fechaCambio;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
+     */
+    private $comentarios;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="valor_producto", type="string", length=50, nullable=true)
@@ -31,21 +45,21 @@ class PedidoDetalle
     /**
      * @var string
      *
-     * @ORM\Column(name="valor_modificado", type="string", length=50, nullable=true)
+     * @ORM\Column(name="valor_modificado", type="string", length=45, nullable=true)
      */
     private $valorModificado;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="cantidad", type="string", length=50, nullable=true)
+     * @ORM\Column(name="cantidad", type="string", length=45, nullable=true)
      */
     private $cantidad;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="total", type="string", length=50, nullable=true)
+     * @ORM\Column(name="total", type="string", length=45, nullable=true)
      */
     private $total;
 
@@ -57,34 +71,14 @@ class PedidoDetalle
     private $observacion;
 
     /**
-     * @var \Personal
+     * @var \PedidoDetalle
      *
-     * @ORM\ManyToOne(targetEntity="Personal")
+     * @ORM\ManyToOne(targetEntity="PedidoDetalle")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="personal_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="pedido_detalle_id", referencedColumnName="id")
      * })
      */
-    private $personal;
-
-    /**
-     * @var \Pedidos
-     *
-     * @ORM\ManyToOne(targetEntity="Pedidos")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="fk_pedido", referencedColumnName="id")
-     * })
-     */
-    private $fkPedido;
-
-    /**
-     * @var \Producto
-     *
-     * @ORM\ManyToOne(targetEntity="Producto")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="fk_producto", referencedColumnName="id")
-     * })
-     */
-    private $fkProducto;
+    private $pedidoDetalle;
 
 
 
@@ -99,10 +93,56 @@ class PedidoDetalle
     }
 
     /**
+     * Set fechaCambio
+     *
+     * @param \DateTime $fechaCambio
+     * @return Historial
+     */
+    public function setFechaCambio($fechaCambio)
+    {
+        $this->fechaCambio = $fechaCambio;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaCambio
+     *
+     * @return \DateTime 
+     */
+    public function getFechaCambio()
+    {
+        return $this->fechaCambio;
+    }
+
+    /**
+     * Set comentarios
+     *
+     * @param string $comentarios
+     * @return Historial
+     */
+    public function setComentarios($comentarios)
+    {
+        $this->comentarios = $comentarios;
+
+        return $this;
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return string 
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
+    }
+
+    /**
      * Set valorProducto
      *
      * @param string $valorProducto
-     * @return PedidoDetalle
+     * @return Historial
      */
     public function setValorProducto($valorProducto)
     {
@@ -125,7 +165,7 @@ class PedidoDetalle
      * Set valorModificado
      *
      * @param string $valorModificado
-     * @return PedidoDetalle
+     * @return Historial
      */
     public function setValorModificado($valorModificado)
     {
@@ -148,7 +188,7 @@ class PedidoDetalle
      * Set cantidad
      *
      * @param string $cantidad
-     * @return PedidoDetalle
+     * @return Historial
      */
     public function setCantidad($cantidad)
     {
@@ -171,7 +211,7 @@ class PedidoDetalle
      * Set total
      *
      * @param string $total
-     * @return PedidoDetalle
+     * @return Historial
      */
     public function setTotal($total)
     {
@@ -194,7 +234,7 @@ class PedidoDetalle
      * Set observacion
      *
      * @param string $observacion
-     * @return PedidoDetalle
+     * @return Historial
      */
     public function setObservacion($observacion)
     {
@@ -214,71 +254,25 @@ class PedidoDetalle
     }
 
     /**
-     * Set personal
+     * Set pedidoDetalle
      *
-     * @param \AdminBundle\Entity\Personal $personal
-     * @return PedidoDetalle
+     * @param \AdminBundle\Entity\PedidoDetalle $pedidoDetalle
+     * @return Historial
      */
-    public function setPersonal(\AdminBundle\Entity\Personal $personal = null)
+    public function setPedidoDetalle(\AdminBundle\Entity\PedidoDetalle $pedidoDetalle = null)
     {
-        $this->personal = $personal;
+        $this->pedidoDetalle = $pedidoDetalle;
 
         return $this;
     }
 
     /**
-     * Get personal
+     * Get pedidoDetalle
      *
-     * @return \AdminBundle\Entity\Personal 
+     * @return \AdminBundle\Entity\PedidoDetalle 
      */
-    public function getPersonal()
+    public function getPedidoDetalle()
     {
-        return $this->personal;
-    }
-
-    /**
-     * Set fkPedido
-     *
-     * @param \AdminBundle\Entity\Pedidos $fkPedido
-     * @return PedidoDetalle
-     */
-    public function setFkPedido(\AdminBundle\Entity\Pedidos $fkPedido = null)
-    {
-        $this->fkPedido = $fkPedido;
-
-        return $this;
-    }
-
-    /**
-     * Get fkPedido
-     *
-     * @return \AdminBundle\Entity\Pedidos 
-     */
-    public function getFkPedido()
-    {
-        return $this->fkPedido;
-    }
-
-    /**
-     * Set fkProducto
-     *
-     * @param \AdminBundle\Entity\Producto $fkProducto
-     * @return PedidoDetalle
-     */
-    public function setFkProducto(\AdminBundle\Entity\Producto $fkProducto = null)
-    {
-        $this->fkProducto = $fkProducto;
-
-        return $this;
-    }
-
-    /**
-     * Get fkProducto
-     *
-     * @return \AdminBundle\Entity\Producto 
-     */
-    public function getFkProducto()
-    {
-        return $this->fkProducto;
+        return $this->pedidoDetalle;
     }
 }

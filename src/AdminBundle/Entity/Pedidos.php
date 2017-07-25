@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Pedidos
  *
- * @ORM\Table(name="pedidos", indexes={@ORM\Index(name="fk_empresa", columns={"fk_empresa"}), @ORM\Index(name="fk_vendedor", columns={"fk_vendedor"}), @ORM\Index(name="fk_etapa", columns={"fk_etapa"})})
+ * @ORM\Table(name="pedidos", indexes={@ORM\Index(name="fk_etapa", columns={"fk_etapa"}), @ORM\Index(name="fk_pedidos_contac_empre1_idx", columns={"contac_empre_id"}), @ORM\Index(name="fk_pedidos_personal1_idx", columns={"personal_id"})})
  * @ORM\Entity
  */
 class Pedidos
@@ -78,24 +78,24 @@ class Pedidos
     private $fechaModificacion;
 
     /**
-     * @var \Vendedor
+     * @var \ContacEmpre
      *
-     * @ORM\ManyToOne(targetEntity="Vendedor")
+     * @ORM\ManyToOne(targetEntity="ContacEmpre")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="fk_vendedor", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="contac_empre_id", referencedColumnName="id")
      * })
      */
-    private $fkVendedor;
+    private $contacEmpre;
 
     /**
-     * @var \Empresa
+     * @var \Personal
      *
-     * @ORM\ManyToOne(targetEntity="Empresa")
+     * @ORM\ManyToOne(targetEntity="Personal")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="fk_empresa", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="personal_id", referencedColumnName="id")
      * })
      */
-    private $fkEmpresa;
+    private $personal;
 
     /**
      * @var \Etapas
@@ -304,49 +304,49 @@ class Pedidos
     }
 
     /**
-     * Set fkVendedor
+     * Set contacEmpre
      *
-     * @param \AdminBundle\Entity\Vendedor $fkVendedor
+     * @param \AdminBundle\Entity\ContacEmpre $contacEmpre
      * @return Pedidos
      */
-    public function setFkVendedor(\AdminBundle\Entity\Vendedor $fkVendedor = null)
+    public function setContacEmpre(\AdminBundle\Entity\ContacEmpre $contacEmpre = null)
     {
-        $this->fkVendedor = $fkVendedor;
+        $this->contacEmpre = $contacEmpre;
 
         return $this;
     }
 
     /**
-     * Get fkVendedor
+     * Get contacEmpre
      *
-     * @return \AdminBundle\Entity\Vendedor 
+     * @return \AdminBundle\Entity\ContacEmpre 
      */
-    public function getFkVendedor()
+    public function getContacEmpre()
     {
-        return $this->fkVendedor;
+        return $this->contacEmpre;
     }
 
     /**
-     * Set fkEmpresa
+     * Set personal
      *
-     * @param \AdminBundle\Entity\Empresa $fkEmpresa
+     * @param \AdminBundle\Entity\Personal $personal
      * @return Pedidos
      */
-    public function setFkEmpresa(\AdminBundle\Entity\Empresa $fkEmpresa = null)
+    public function setPersonal(\AdminBundle\Entity\Personal $personal = null)
     {
-        $this->fkEmpresa = $fkEmpresa;
+        $this->personal = $personal;
 
         return $this;
     }
 
     /**
-     * Get fkEmpresa
+     * Get personal
      *
-     * @return \AdminBundle\Entity\Empresa 
+     * @return \AdminBundle\Entity\Personal 
      */
-    public function getFkEmpresa()
+    public function getPersonal()
     {
-        return $this->fkEmpresa;
+        return $this->personal;
     }
 
     /**

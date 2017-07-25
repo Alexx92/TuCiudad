@@ -1,0 +1,84 @@
+<?php
+
+namespace AdminBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Historial
+ *
+ * @ORM\Table(name="historial", indexes={@ORM\Index(name="fk_historial_pedido_detalle1_idx", columns={"pedido_detalle_id"})})
+ * @ORM\Entity
+ */
+class Historial
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_cambio", type="datetime", nullable=true)
+     */
+    private $fechaCambio;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
+     */
+    private $comentarios;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="valor_producto", type="string", length=50, nullable=true)
+     */
+    private $valorProducto;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="valor_modificado", type="string", length=45, nullable=true)
+     */
+    private $valorModificado;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cantidad", type="string", length=45, nullable=true)
+     */
+    private $cantidad;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total", type="string", length=45, nullable=true)
+     */
+    private $total;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion", type="text", length=65535, nullable=true)
+     */
+    private $observacion;
+
+    /**
+     * @var \PedidoDetalle
+     *
+     * @ORM\ManyToOne(targetEntity="PedidoDetalle")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="pedido_detalle_id", referencedColumnName="id")
+     * })
+     */
+    private $pedidoDetalle;
+
+
+}

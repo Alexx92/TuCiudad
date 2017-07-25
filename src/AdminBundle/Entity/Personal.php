@@ -5,12 +5,12 @@ namespace AdminBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Empresa
+ * Personal
  *
- * @ORM\Table(name="empresa", indexes={@ORM\Index(name="fk_empresa_estado_empresa1_idx", columns={"estado_empresa_id"})})
+ * @ORM\Table(name="personal", indexes={@ORM\Index(name="fk_personal_empresa1_idx", columns={"empresa_id"})})
  * @ORM\Entity
  */
-class Empresa
+class Personal
 {
     /**
      * @var integer
@@ -24,42 +24,77 @@ class Empresa
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=200, nullable=true)
+     * @ORM\Column(name="primer_nombre", type="string", length=30, nullable=true)
      */
-    private $nombre;
+    private $primerNombre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="razonsocial", type="string", length=200, nullable=true)
+     * @ORM\Column(name="segundo_nombre", type="string", length=30, nullable=true)
      */
-    private $razonsocial;
+    private $segundoNombre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="rut", type="string", length=200, nullable=true)
+     * @ORM\Column(name="apellido_paterno", type="string", length=30, nullable=true)
      */
-    private $rut;
+    private $apellidoPaterno;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="comuna", type="string", length=30, nullable=false)
+     * @ORM\Column(name="apellido_materno", type="string", length=30, nullable=true)
+     */
+    private $apellidoMaterno;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="username", type="string", length=180, nullable=true)
+     */
+    private $username;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dni", type="string", length=30, nullable=true)
+     */
+    private $dni;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sexo", type="string", length=1, nullable=true)
+     */
+    private $sexo;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
+     */
+    private $fechaNacimiento;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comuna", type="string", length=30, nullable=true)
      */
     private $comuna;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="provincia", type="string", length=30, nullable=false)
+     * @ORM\Column(name="provincia", type="string", length=30, nullable=true)
      */
     private $provincia;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="region", type="string", length=30, nullable=false)
+     * @ORM\Column(name="region", type="string", length=30, nullable=true)
      */
     private $region;
 
@@ -80,51 +115,51 @@ class Empresa
     /**
      * @var string
      *
-     * @ORM\Column(name="dir_numero", type="string", length=50, nullable=true)
+     * @ORM\Column(name="dir_numero_casa", type="string", length=10, nullable=true)
      */
-    private $dirNumero;
+    private $dirNumeroCasa;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="dir_numero_departamento", type="string", length=50, nullable=true)
+     * @ORM\Column(name="dir_numero_departamento", type="string", length=10, nullable=true)
      */
     private $dirNumeroDepartamento;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="dir_numero_piso", type="string", length=50, nullable=true)
+     * @ORM\Column(name="dir_numero_piso", type="string", length=10, nullable=true)
      */
     private $dirNumeroPiso;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="telefono", type="integer", nullable=true)
+     * @ORM\Column(name="telefono", type="string", length=15, nullable=true)
      */
     private $telefono;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="celular", type="integer", nullable=true)
+     * @ORM\Column(name="celular", type="string", length=15, nullable=true)
      */
     private $celular;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="correo", type="string", length=200, nullable=true)
+     * @ORM\Column(name="correo", type="string", length=30, nullable=true)
      */
     private $correo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="web", type="string", length=200, nullable=true)
+     * @ORM\Column(name="skype", type="string", length=30, nullable=true)
      */
-    private $web;
+    private $skype;
 
     /**
      * @var string
@@ -132,13 +167,6 @@ class Empresa
      * @ORM\Column(name="observacion", type="text", length=65535, nullable=true)
      */
     private $observacion;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="coordenadas", type="string", length=200, nullable=true)
-     */
-    private $coordenadas;
 
     /**
      * @var string
@@ -162,14 +190,14 @@ class Empresa
     private $estado;
 
     /**
-     * @var \EstadoEmpresa
+     * @var \Empresa
      *
-     * @ORM\ManyToOne(targetEntity="EstadoEmpresa")
+     * @ORM\ManyToOne(targetEntity="Empresa")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="estado_empresa_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="empresa_id", referencedColumnName="id")
      * })
      */
-    private $estadoEmpresa;
+    private $empresa;
 
 
 
@@ -184,79 +212,194 @@ class Empresa
     }
 
     /**
-     * Set nombre
+     * Set primerNombre
      *
-     * @param string $nombre
-     * @return Empresa
+     * @param string $primerNombre
+     * @return Personal
      */
-    public function setNombre($nombre)
+    public function setPrimerNombre($primerNombre)
     {
-        $this->nombre = $nombre;
+        $this->primerNombre = $primerNombre;
 
         return $this;
     }
 
     /**
-     * Get nombre
+     * Get primerNombre
      *
      * @return string 
      */
-    public function getNombre()
+    public function getPrimerNombre()
     {
-        return $this->nombre;
+        return $this->primerNombre;
     }
 
     /**
-     * Set razonsocial
+     * Set segundoNombre
      *
-     * @param string $razonsocial
-     * @return Empresa
+     * @param string $segundoNombre
+     * @return Personal
      */
-    public function setRazonsocial($razonsocial)
+    public function setSegundoNombre($segundoNombre)
     {
-        $this->razonsocial = $razonsocial;
+        $this->segundoNombre = $segundoNombre;
 
         return $this;
     }
 
     /**
-     * Get razonsocial
+     * Get segundoNombre
      *
      * @return string 
      */
-    public function getRazonsocial()
+    public function getSegundoNombre()
     {
-        return $this->razonsocial;
+        return $this->segundoNombre;
     }
 
     /**
-     * Set rut
+     * Set apellidoPaterno
      *
-     * @param string $rut
-     * @return Empresa
+     * @param string $apellidoPaterno
+     * @return Personal
      */
-    public function setRut($rut)
+    public function setApellidoPaterno($apellidoPaterno)
     {
-        $this->rut = $rut;
+        $this->apellidoPaterno = $apellidoPaterno;
 
         return $this;
     }
 
     /**
-     * Get rut
+     * Get apellidoPaterno
      *
      * @return string 
      */
-    public function getRut()
+    public function getApellidoPaterno()
     {
-        return $this->rut;
+        return $this->apellidoPaterno;
+    }
+
+    /**
+     * Set apellidoMaterno
+     *
+     * @param string $apellidoMaterno
+     * @return Personal
+     */
+    public function setApellidoMaterno($apellidoMaterno)
+    {
+        $this->apellidoMaterno = $apellidoMaterno;
+
+        return $this;
+    }
+
+    /**
+     * Get apellidoMaterno
+     *
+     * @return string 
+     */
+    public function getApellidoMaterno()
+    {
+        return $this->apellidoMaterno;
+    }
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     * @return Personal
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Get username
+     *
+     * @return string 
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * Set dni
+     *
+     * @param string $dni
+     * @return Personal
+     */
+    public function setDni($dni)
+    {
+        $this->dni = $dni;
+
+        return $this;
+    }
+
+    /**
+     * Get dni
+     *
+     * @return string 
+     */
+    public function getDni()
+    {
+        return $this->dni;
+    }
+
+    /**
+     * Set sexo
+     *
+     * @param string $sexo
+     * @return Personal
+     */
+    public function setSexo($sexo)
+    {
+        $this->sexo = $sexo;
+
+        return $this;
+    }
+
+    /**
+     * Get sexo
+     *
+     * @return string 
+     */
+    public function getSexo()
+    {
+        return $this->sexo;
+    }
+
+    /**
+     * Set fechaNacimiento
+     *
+     * @param \DateTime $fechaNacimiento
+     * @return Personal
+     */
+    public function setFechaNacimiento($fechaNacimiento)
+    {
+        $this->fechaNacimiento = $fechaNacimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaNacimiento
+     *
+     * @return \DateTime 
+     */
+    public function getFechaNacimiento()
+    {
+        return $this->fechaNacimiento;
     }
 
     /**
      * Set comuna
      *
      * @param string $comuna
-     * @return Empresa
+     * @return Personal
      */
     public function setComuna($comuna)
     {
@@ -279,7 +422,7 @@ class Empresa
      * Set provincia
      *
      * @param string $provincia
-     * @return Empresa
+     * @return Personal
      */
     public function setProvincia($provincia)
     {
@@ -302,7 +445,7 @@ class Empresa
      * Set region
      *
      * @param string $region
-     * @return Empresa
+     * @return Personal
      */
     public function setRegion($region)
     {
@@ -325,7 +468,7 @@ class Empresa
      * Set dirVillaPbla
      *
      * @param string $dirVillaPbla
-     * @return Empresa
+     * @return Personal
      */
     public function setDirVillaPbla($dirVillaPbla)
     {
@@ -348,7 +491,7 @@ class Empresa
      * Set dirCalle
      *
      * @param string $dirCalle
-     * @return Empresa
+     * @return Personal
      */
     public function setDirCalle($dirCalle)
     {
@@ -368,33 +511,33 @@ class Empresa
     }
 
     /**
-     * Set dirNumero
+     * Set dirNumeroCasa
      *
-     * @param string $dirNumero
-     * @return Empresa
+     * @param string $dirNumeroCasa
+     * @return Personal
      */
-    public function setDirNumero($dirNumero)
+    public function setDirNumeroCasa($dirNumeroCasa)
     {
-        $this->dirNumero = $dirNumero;
+        $this->dirNumeroCasa = $dirNumeroCasa;
 
         return $this;
     }
 
     /**
-     * Get dirNumero
+     * Get dirNumeroCasa
      *
      * @return string 
      */
-    public function getDirNumero()
+    public function getDirNumeroCasa()
     {
-        return $this->dirNumero;
+        return $this->dirNumeroCasa;
     }
 
     /**
      * Set dirNumeroDepartamento
      *
      * @param string $dirNumeroDepartamento
-     * @return Empresa
+     * @return Personal
      */
     public function setDirNumeroDepartamento($dirNumeroDepartamento)
     {
@@ -417,7 +560,7 @@ class Empresa
      * Set dirNumeroPiso
      *
      * @param string $dirNumeroPiso
-     * @return Empresa
+     * @return Personal
      */
     public function setDirNumeroPiso($dirNumeroPiso)
     {
@@ -439,8 +582,8 @@ class Empresa
     /**
      * Set telefono
      *
-     * @param integer $telefono
-     * @return Empresa
+     * @param string $telefono
+     * @return Personal
      */
     public function setTelefono($telefono)
     {
@@ -452,7 +595,7 @@ class Empresa
     /**
      * Get telefono
      *
-     * @return integer 
+     * @return string 
      */
     public function getTelefono()
     {
@@ -462,8 +605,8 @@ class Empresa
     /**
      * Set celular
      *
-     * @param integer $celular
-     * @return Empresa
+     * @param string $celular
+     * @return Personal
      */
     public function setCelular($celular)
     {
@@ -475,7 +618,7 @@ class Empresa
     /**
      * Get celular
      *
-     * @return integer 
+     * @return string 
      */
     public function getCelular()
     {
@@ -486,7 +629,7 @@ class Empresa
      * Set correo
      *
      * @param string $correo
-     * @return Empresa
+     * @return Personal
      */
     public function setCorreo($correo)
     {
@@ -506,33 +649,33 @@ class Empresa
     }
 
     /**
-     * Set web
+     * Set skype
      *
-     * @param string $web
-     * @return Empresa
+     * @param string $skype
+     * @return Personal
      */
-    public function setWeb($web)
+    public function setSkype($skype)
     {
-        $this->web = $web;
+        $this->skype = $skype;
 
         return $this;
     }
 
     /**
-     * Get web
+     * Get skype
      *
      * @return string 
      */
-    public function getWeb()
+    public function getSkype()
     {
-        return $this->web;
+        return $this->skype;
     }
 
     /**
      * Set observacion
      *
      * @param string $observacion
-     * @return Empresa
+     * @return Personal
      */
     public function setObservacion($observacion)
     {
@@ -552,33 +695,10 @@ class Empresa
     }
 
     /**
-     * Set coordenadas
-     *
-     * @param string $coordenadas
-     * @return Empresa
-     */
-    public function setCoordenadas($coordenadas)
-    {
-        $this->coordenadas = $coordenadas;
-
-        return $this;
-    }
-
-    /**
-     * Get coordenadas
-     *
-     * @return string 
-     */
-    public function getCoordenadas()
-    {
-        return $this->coordenadas;
-    }
-
-    /**
      * Set imagen
      *
      * @param string $imagen
-     * @return Empresa
+     * @return Personal
      */
     public function setImagen($imagen)
     {
@@ -601,7 +721,7 @@ class Empresa
      * Set fechaIngreso
      *
      * @param \DateTime $fechaIngreso
-     * @return Empresa
+     * @return Personal
      */
     public function setFechaIngreso($fechaIngreso)
     {
@@ -624,7 +744,7 @@ class Empresa
      * Set estado
      *
      * @param integer $estado
-     * @return Empresa
+     * @return Personal
      */
     public function setEstado($estado)
     {
@@ -644,25 +764,25 @@ class Empresa
     }
 
     /**
-     * Set estadoEmpresa
+     * Set empresa
      *
-     * @param \AdminBundle\Entity\EstadoEmpresa $estadoEmpresa
-     * @return Empresa
+     * @param \AdminBundle\Entity\Empresa $empresa
+     * @return Personal
      */
-    public function setEstadoEmpresa(\AdminBundle\Entity\EstadoEmpresa $estadoEmpresa = null)
+    public function setEmpresa(\AdminBundle\Entity\Empresa $empresa = null)
     {
-        $this->estadoEmpresa = $estadoEmpresa;
+        $this->empresa = $empresa;
 
         return $this;
     }
 
     /**
-     * Get estadoEmpresa
+     * Get empresa
      *
-     * @return \AdminBundle\Entity\EstadoEmpresa 
+     * @return \AdminBundle\Entity\Empresa 
      */
-    public function getEstadoEmpresa()
+    public function getEmpresa()
     {
-        return $this->estadoEmpresa;
+        return $this->empresa;
     }
 }

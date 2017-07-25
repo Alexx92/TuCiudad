@@ -64,7 +64,7 @@
 												<div class="form-group col-sm-12 col-md-3">
 													<label class="field">
 														Region
-														<select id="regiones" name="regiones" class="form-control">
+														<select id="regiones" name="regiones" class="form-control" required>
 														{% if data.region is defined  %}
 															<option value="{{data.region is defined? data.region}}"> {{ data.region is defined? nombreRegion }}</option> 
 														{% endif %}
@@ -80,7 +80,7 @@
 												<div id="provincia" class="form-group col-sm-12 col-md-3" style="display: none" >
 													<label class="field">
 														Provincia
-														<select id="provincias" name="provincias" class="form-control">
+														<select id="provincias" name="provincias" class="form-control" required>
 															{% if data.provincia is defined  %}
 																<option value="{{data.provincia is defined? data.provincia}}"> {{ data.provincia is defined? nombreProvincia }}</option> 
 															{% endif %}   
@@ -95,12 +95,11 @@
 												<div  id="comuna" class="form-group col-sm-12 col-md-3" style="display: none">
 													<label class="field">
 														Comuna
-														<select id="comunas" name="comunas" class="form-control">
+														<select id="comunas" name="comunas" class="form-control" required>
 															{% if data.comuna is defined  %}
 																<option value="{{data.comuna is defined? data.comuna}}"> {{ data.comuna is defined? nombreComuna }}</option> 
 															{% endif %}
-																<option value="">Seleccione Comuna</option> 
-
+																<option value="">Seleccione Comuna</option>
 																{% for lista_comunas in lista_comunas %}
 																	<option id="seleccion" name="seleccion" value={{lista_comunas.comIdPk}}>{{lista_comunas.comNombre}}</option>
 																{% endfor %}

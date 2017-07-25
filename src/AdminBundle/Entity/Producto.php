@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Producto
  *
- * @ORM\Table(name="producto")
+ * @ORM\Table(name="producto", indexes={@ORM\Index(name="fk_producto_servicio1_idx", columns={"servicio_id"})})
  * @ORM\Entity
  */
 class Producto
@@ -76,6 +76,16 @@ class Producto
      * @ORM\Column(name="estado", type="integer", nullable=true)
      */
     private $estado;
+
+    /**
+     * @var \Servicio
+     *
+     * @ORM\ManyToOne(targetEntity="Servicio")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="servicio_id", referencedColumnName="id")
+     * })
+     */
+    private $servicio;
 
 
 
@@ -271,5 +281,28 @@ class Producto
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set servicio
+     *
+     * @param \AdminBundle\Entity\Servicio $servicio
+     * @return Producto
+     */
+    public function setServicio(\AdminBundle\Entity\Servicio $servicio = null)
+    {
+        $this->servicio = $servicio;
+
+        return $this;
+    }
+
+    /**
+     * Get servicio
+     *
+     * @return \AdminBundle\Entity\Servicio 
+     */
+    public function getServicio()
+    {
+        return $this->servicio;
     }
 }

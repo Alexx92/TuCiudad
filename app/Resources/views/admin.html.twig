@@ -133,17 +133,17 @@
                 </ul>
             </li>
             <li>
-                <a class="accordion-toggle {{menu_o_con == 'vendedor'?'menu-open'}}" href="#">
+                <a class="accordion-toggle {{menu_o_con == 'personal'?'menu-open'}}" href="#">
                     <span><i class="fa fa-users"></i></span>
-                    <span class="sidebar-title">Vendedores</span>
+                    <span class="sidebar-title">Personal</span>
                     <span class="caret"></span>
                 </a>
                 <ul class="nav sub-nav">
-                    <li class="{{submenu == 'vendedor'?'active'}}">
-                        <a href="{{ url('admin_vendedor') }}">Lista</a>
+                    <li class="{{submenu == 'Personal'?'active'}}">
+                        <a href="{{ url('admin_personal') }}">Lista</a>
                     </li>
-                    <li class="{{submenu == 'vendedor_nuevo'?'active'}}">
-                        <a href="{{ url('admin_vendedor_nuevo') }}">Nuevo</a>
+                    <li class="{{submenu == 'personal_nuevo'?'active'}}">
+                        <a href="{{ url('admin_personal_nuevo') }}">Nuevo</a>
                     </li>
                 </ul>
             </li>

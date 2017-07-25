@@ -94,30 +94,30 @@ ajax_borrar_contacto:
     options:
         expose: true
 
-#-----------------------Vendedor-----------------------
-admin_vendedor:
-    path:     /vendedor/
-    defaults: { _controller: AdminBundle:Vendedor:vendedorIndex }
+#-----------------------Personal-----------------------
+admin_personal:
+    path:     /personal/
+    defaults: { _controller: AdminBundle:Personal:personalIndex }
 
-cargar_vendedor_tabla:
-    path:     /vendedor/tabla/
-    defaults: { _controller: AdminBundle:Vendedor:vendedorCargartabla }
+cargar_personal_tabla:
+    path:     /personal/tabla/
+    defaults: { _controller: AdminBundle:Personal:personalCargartabla }
 
-admin_vendedor_nuevo:
-    path:     /vendedor/nuevo/
-    defaults: { _controller: AdminBundle:Vendedor:vendedorNuevo }
+admin_personal_nuevo:
+    path:     /personal/nuevo/
+    defaults: { _controller: AdminBundle:Personal:personalNuevo }
 
-admin_vendedor_guardar:
-    path:     /vendedor/guardar/
-    defaults: { _controller: AdminBundle:Vendedor:vendedorGuardar }
+admin_personal_guardar:
+    path:     /personal/guardar/
+    defaults: { _controller: AdminBundle:Personal:personalGuardar }
 
-admin_vendedor_editar:
-    path:     /vendedor/editar/{id}
-    defaults: { _controller: AdminBundle:Vendedor:vendedorEditar }
+admin_personal_editar:
+    path:     /personal/editar/{id}
+    defaults: { _controller: AdminBundle:Personal:personalEditar }
 
-admin_vendedor_eliminar:
-    path:     /vendedor/eliminar/
-    defaults: { _controller: AdminBundle:Vendedor:vendedorEliminar }
+admin_personal_eliminar:
+    path:     /personal/eliminar/
+    defaults: { _controller: AdminBundle:Personal:personalEliminar }
     options:
         expose: true
 

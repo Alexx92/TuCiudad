@@ -43,11 +43,7 @@
                                             <div class="form-group col-sm-12 col-lg-3">
                                                 <label class="field">
                                                     Fecha Ingreso                                                   
-                                                    {% if data.cat_fechaIngreso is defined %}
-                                                           <input type="text" name="cat_fechaIngreso" disabled="true" id="cat_fechaIngreso" class="gui-input" value="{{data.cat_fechaIngreso|date("m/d/Y")}}">
-                                                    {% else %}
-                                                           <input type="text" name="cat_fechaIngreso" disabled="true" id="cat_fechaIngreso" class="gui-input" value="{{fecha|date("m/d/Y")}}">
-                                                    {% endif %}
+                                                           <input type="text" name="cat_fechaIngreso" disabled="true" id="cat_fechaIngreso" class="gui-input" value="{{ data.cat_fechaIngreso is defined ? data.cat_fechaIngreso|date("m/d/Y") : fecha|date("m/d/Y") }}">
                                                 </label>
                                             </div> 
                                             

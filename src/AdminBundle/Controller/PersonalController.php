@@ -6,46 +6,46 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use AdminBundle\Entity\Vendedor;
+use AdminBundle\Entity\Personal;
 
 use \stdClass;
 
-class VendedorController extends Controller
+class PersonalController extends Controller
 {
-    public function vendedorIndexAction()
+    public function personalIndexAction()
     {
 
-        return $this->render('AdminBundle:Vendedores:index.html.twig',array(
+        return $this->render('AdminBundle:Personal:index.html.twig',array(
             'menu'         => 'index',
-            'submenu'      => 'vendedor',
-            'menu_o_con'   => 'vendedor'
+            'submenu'      => 'personal',
+            'menu_o_con'   => 'personal'
         ));
     }
 
-    public function vendedorNuevoAction()
+    public function personalNuevoAction()
     {
-        $titulo  = 'Nuevo Vendedores';
+        $titulo  = 'Nuevo Personal';
 
-        return $this->render('AdminBundle:Vendedores:nuevo.html.twig',array(
+        return $this->render('AdminBundle:Personal:nuevo.html.twig',array(
             'titulo'          =>  $titulo,
             'menu'            => 'nuevo',
-            'menu_o_con'      => 'vendedor',
-            'submenu'         => 'vendedor_nuevo'
+            'menu_o_con'      => 'personal',
+            'submenu'         => 'personal_nuevo'
         ));
     }
 
     // carga la taba de contactos en el index
-    public function vendedorCargartablaAction(Request $request)
+    public function personalCargartablaAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $where = array('estado' => 1);
 
-        $lista_vendedor = array();
+        $lista_personal = array();
 
-        if($vendedor = $em->getRepository('AdminBundle:Vendedor')->findBy($where, array('id' => 'ASC')) )
+        if($personal = $em->getRepository('AdminBundle:Personal')->findBy($where, array('id' => 'ASC')) )
         {
-            foreach($vendedor as $value)
+            foreach($personal as $value)
             {
                 $datos = new stdClass();
                 
@@ -55,25 +55,25 @@ class VendedorController extends Controller
                 $datos->email              = $value->getCorreo();
                 $datos->celular            = $value->getCelular();
                 
-                $lista_vendedor[]  = $datos;
+                $lista_personal[]  = $datos;
 
             }
         }
 
-        return $this->render('AdminBundle:Layouts:tabla_vendedor_index.html.twig', array(
-            'lista_vendedor' => $lista_vendedor
+        return $this->render('AdminBundle:Layouts:tabla_personal_index.html.twig', array(
+            'lista_personal' => $lista_personal
         ));
     }
 
     // guarda nuevo contacto
-    public function vendedorGuardarAction(Request $request)
+    public function personalGuardarAction(Request $request)
     {
         $result = false;
 
         if( $request->getMethod() == 'POST' )
         {
             // captura de datos desde el formulario
-            $id                        = ($request->get('vendedor_id', false)) ? $request->get('vendedor_id'): 0;
+            $id                        = ($request->get('personal_id', false)) ? $request->get('personal_id'): 0;
             $primer_nombre             = ucfirst($request->get('primer_nombre'));
             $segundo_nombre            = ucfirst($request->get('segundo_nombre'));
             $apellido_paterno          = ucfirst($request->get('apellido_paterno'));
@@ -95,13 +95,13 @@ class VendedorController extends Controller
             $skype                     = $request->get('skype');
 
             $observacion               = ucfirst($request->get('obs'));
-            $imagen                    = ($request->files->get('img_vendedor', false))? $request->files->get('img_vendedor'): null;
+            $imagen                    = ($request->files->get('img_personal', false))? $request->files->get('img_personal'): null;
 
             $em = $this->getDoctrine()->getManager();
 
-            if( !$contacto = $em->getRepository('AdminBundle:Vendedor')->findOneBy(array( 'id' => $id )) )
+            if( !$contacto = $em->getRepository('AdminBundle:Personal')->findOneBy(array( 'id' => $id )) )
             {
-                $contacto = new Vendedor();
+                $contacto = new Personal();
                 $contacto->setEstado(1);                
                 $contacto->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));                
             }
@@ -148,44 +148,44 @@ class VendedorController extends Controller
     }
 
     // cargar formulario para editar
-    public function vendedorEditarAction(Request $request)
+    public function personalEditarAction(Request $request)
     {
 
-        $titulo  = 'Editar Vendedor';
+        $titulo  = 'Editar Personal';
 
         $id = $request->get('id', false);
 
         $em = $this->getDoctrine()->getManager();
 
-        $vendedor = $em->getRepository('AdminBundle:Vendedor')->findOneBy(array('id' => $id));        
+        $personal = $em->getRepository('AdminBundle:Personal')->findOneBy(array('id' => $id));        
         
         $data = array();
 
-        $data['id']                = $vendedor->getId();
-        $data['primer_nombre']     = $vendedor->getPrimerNombre();
-        $data['segundo_nombre']    = $vendedor->getSegundoNombre();
-        $data['apellido_paterno']  = $vendedor->getApellidoPaterno();
-        $data['apellido_materno']  = $vendedor->getApellidoMaterno();
+        $data['id']                = $personal->getId();
+        $data['primer_nombre']     = $personal->getPrimerNombre();
+        $data['segundo_nombre']    = $personal->getSegundoNombre();
+        $data['apellido_paterno']  = $personal->getApellidoPaterno();
+        $data['apellido_materno']  = $personal->getApellidoMaterno();
         
-        $data['dni']               = $vendedor->getDni();
-        $data['sexo']              = $vendedor->getSexo();
-        $data['fecha_nacto']       = $vendedor->getFechaNacimiento();
+        $data['dni']               = $personal->getDni();
+        $data['sexo']              = $personal->getSexo();
+        $data['fecha_nacto']       = $personal->getFechaNacimiento();
         
-        $data['comuna']            = $vendedor->getComuna();
-        $data['provincia']         = $vendedor->getProvincia();
-        $data['region']            = $vendedor->getRegion();
-        $data['dir_villa_pobl']    = $vendedor->getDirVillaPbla();
-        $data['dir_calle']         = $vendedor->getDirCalle();
-        $data['dir_numero_casa']   = $vendedor->getDirNumeroCasa();
-        $data['dir_numero_depto']  = $vendedor->getDirNumeroDepartamento();
-        $data['dir_numero_piso']   = $vendedor->getDirNumeroPiso();
+        $data['comuna']            = $personal->getComuna();
+        $data['provincia']         = $personal->getProvincia();
+        $data['region']            = $personal->getRegion();
+        $data['dir_villa_pobl']    = $personal->getDirVillaPbla();
+        $data['dir_calle']         = $personal->getDirCalle();
+        $data['dir_numero_casa']   = $personal->getDirNumeroCasa();
+        $data['dir_numero_depto']  = $personal->getDirNumeroDepartamento();
+        $data['dir_numero_piso']   = $personal->getDirNumeroPiso();
         
-        $data['telefono']          = $vendedor->getTelefono();
-        $data['celular']           = $vendedor->getCelular();
-        $data['email']             = $vendedor->getCorreo();
-        $data['skype']             = $vendedor->getSkype();
-        $data['obs']               = $vendedor->getObservacion();
-        $data['imagen']            = $vendedor->getImagen();
+        $data['telefono']          = $personal->getTelefono();
+        $data['celular']           = $personal->getCelular();
+        $data['email']             = $personal->getCorreo();
+        $data['skype']             = $personal->getSkype();
+        $data['obs']               = $personal->getObservacion();
+        $data['imagen']            = $personal->getImagen();
 
         // carga de datos con la lista de contactos vinculados a la empresa
         //$lista_contempre = array();
@@ -203,25 +203,25 @@ class VendedorController extends Controller
         //    }
         //}
         
-        return $this->render('AdminBundle:Vendedores:nuevo.html.twig',array(
+        return $this->render('AdminBundle:Personal:nuevo.html.twig',array(
             'titulo'          => $titulo,
             'data'            => $data,
-            'submenu'         => 'vendedor_nuevo',
+            'submenu'         => 'personal_nuevo',
             'form'            => 'activo',
-            'menu_o_con'      => 'vendedor'
+            'menu_o_con'      => 'personal'
         ));
     }
     
-    // elimanr un vendedor
-    public function vendedorEliminarAction(Request $request)
+    // elimanr un personal
+    public function personalEliminarAction(Request $request)
     {
         $id = $request->get('id', false);
         $em = $this->getDoctrine()->getManager();
 
-        if( $vendedor = $em->getRepository('AdminBundle:Vendedor')->findOneBy(array('id' => $id,'estado' => 1)) )
+        if( $personal = $em->getRepository('AdminBundle:Personal')->findOneBy(array('id' => $id,'estado' => 1)) )
         {
-            $vendedor->setEstado(0);
-            $em->persist($vendedor);
+            $personal->setEstado(0);
+            $em->persist($personal);
             $em->flush();
         }
 
@@ -240,7 +240,7 @@ class VendedorController extends Controller
                 'filetype'      => $imagen->getClientMimeType(),
                 'fileextension' => $imagen->getClientOriginalExtension(),
                 'filenewname'   => uniqid().".".$imagen->getClientOriginalExtension(),
-                'filenewpath'   => __DIR__.'/../../../web/uploads/vendedor'
+                'filenewpath'   => __DIR__.'/../../../web/uploads/personal'
             );
             if($obj['filetype'] == 'image/png' || $obj['filetype'] == 'image/jpeg')
             {

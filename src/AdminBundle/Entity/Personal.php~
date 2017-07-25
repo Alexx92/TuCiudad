@@ -1,0 +1,203 @@
+<?php
+
+namespace AdminBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Personal
+ *
+ * @ORM\Table(name="personal", indexes={@ORM\Index(name="fk_personal_empresa1_idx", columns={"empresa_id"})})
+ * @ORM\Entity
+ */
+class Personal
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="primer_nombre", type="string", length=30, nullable=true)
+     */
+    private $primerNombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="segundo_nombre", type="string", length=30, nullable=true)
+     */
+    private $segundoNombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="apellido_paterno", type="string", length=30, nullable=true)
+     */
+    private $apellidoPaterno;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="apellido_materno", type="string", length=30, nullable=true)
+     */
+    private $apellidoMaterno;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="username", type="string", length=180, nullable=true)
+     */
+    private $username;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dni", type="string", length=30, nullable=true)
+     */
+    private $dni;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sexo", type="string", length=1, nullable=true)
+     */
+    private $sexo;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
+     */
+    private $fechaNacimiento;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comuna", type="string", length=30, nullable=true)
+     */
+    private $comuna;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="provincia", type="string", length=30, nullable=true)
+     */
+    private $provincia;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="region", type="string", length=30, nullable=true)
+     */
+    private $region;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dir_villa_pbla", type="string", length=50, nullable=true)
+     */
+    private $dirVillaPbla;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dir_calle", type="string", length=50, nullable=true)
+     */
+    private $dirCalle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dir_numero_casa", type="string", length=10, nullable=true)
+     */
+    private $dirNumeroCasa;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dir_numero_departamento", type="string", length=10, nullable=true)
+     */
+    private $dirNumeroDepartamento;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dir_numero_piso", type="string", length=10, nullable=true)
+     */
+    private $dirNumeroPiso;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telefono", type="string", length=15, nullable=true)
+     */
+    private $telefono;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="celular", type="string", length=15, nullable=true)
+     */
+    private $celular;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="correo", type="string", length=30, nullable=true)
+     */
+    private $correo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="skype", type="string", length=30, nullable=true)
+     */
+    private $skype;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion", type="text", length=65535, nullable=true)
+     */
+    private $observacion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="imagen", type="string", length=200, nullable=true)
+     */
+    private $imagen;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=true)
+     */
+    private $fechaIngreso;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="estado", type="integer", nullable=true)
+     */
+    private $estado;
+
+    /**
+     * @var \Empresa
+     *
+     * @ORM\ManyToOne(targetEntity="Empresa")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="empresa_id", referencedColumnName="id")
+     * })
+     */
+    private $empresa;
+
+
+}
