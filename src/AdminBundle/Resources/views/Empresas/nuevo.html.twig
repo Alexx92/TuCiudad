@@ -40,57 +40,74 @@
 											<div class="form-group col-sm-12 col-lg-6">
 												<label class="field">
 													Nombre de fantas&iacute;a
-												    <input type="text" name="empre_nombre" id="empre_nombre" class="gui-input" value="{{data.nombre is defined ? data.nombre}}">
+												    <input type="text" name="empre_nombre" id="empre_nombre" class="gui-input" value="{{data.nombre is defined ? data.nombre}}" required>
 												</label>
 											</div>										
 											<div class="form-group col-sm-12 col-lg-6">
 												<label class="field">
 													Razon Social
-												    <input type="text" name="empre_razon_soc" id="empre_razon_soc" class="gui-input" value="{{data.rsocial is defined ? data.rsocial}}">
+												    <input type="text" name="empre_razon_soc" id="empre_razon_soc" class="gui-input" value="{{data.rsocial is defined ? data.rsocial}}" required>
 												</label>
 											</div>										
 											<div class="form-group col-sm-12 col-md-6">
 												<label class="field">
 													Rut / Run
-												    <input type="text" name="empre_rut" id="empre_rut" class="gui-input val_num" value="{{data.rut is defined ? data.rut}}">
+												    <input type="text" name="empre_rut" id="empre_rut" class="gui-input val_num" value="{{data.rut is defined ? data.rut}}" required>
 												</label>
 											</div>
-										</div>
-										{# <div class="form-group col-sm-12 col-md-6">
-											<label class="field">
-												Giro
-											    <input type="text" name="giro_empresa" id="giro_empresa" class="gui-input" value="{{data.giro is defined ? data.giro}}">
-											</label>
-										</div>
-										<div class="form-group col-sm-12 col-md-6">
-											<label class="field">
-												Rubro / Actividad
-											    <input type="text" name="rubro_empresa" id="rubro_empresa" class="gui-input" value="{{data.rubro is defined ? data.rubro}}">
-											</label>
-										</div> #}
+										</div>										
 										<div class="section-divider mb40">
                     					  	<span>Datos de Contacto</span>
-                    					</div>
-										<div class="row">
-											<div class="form-group col-sm-12 col-md-3">
-												<label class="field">
-													Comuna
-												    <input type="text" name="empre_comuna" id="empre_comuna" class="gui-input" value="{{data.comuna is defined ? data.comuna}}">
-												</label>
-											</div>
-											<div class="form-group col-sm-12 col-md-3">
-												<label class="field">
-													Provincia
-												    <input type="text" name="empre_provincia" id="empre_provincia" class="gui-input" value="{{data.provincia is defined ? data.provincia}}">
-												</label>
-											</div>
-											<div class="form-group col-sm-12 col-md-3">
-												<label class="field">
-													Region
-												    <input type="text" name="empre_region" id="empre_region" class="gui-input" value="{{data.region is defined ? data.region}}">
-												</label>
-											</div>
-										</div>
+                    					</div>										
+											<div class="row">{# divs dependientes si la empresa no esta cargada#}
+												<input type="hidden" name="id_region" id="id_region" value="{{ data.region is defined ? data.region}}" >							
+												<div class="form-group col-sm-12 col-md-3">
+													<label class="field">
+														Region
+														<select id="regiones" name="regiones" class="form-control">
+														{% if data.region is defined  %}
+															<option value="{{data.region is defined? data.region}}"> {{ data.region is defined? nombreRegion }}</option> 
+														{% endif %}
+															<option value="">Seleccione Region</option> 
+
+															{% for lista_regiones in lista_regiones %}
+																<option id="seleccion" name="seleccion" value={{lista_regiones.regIdPk}}>{{lista_regiones.regRomano ~" "~ lista_regiones.regNombre}}</option>
+															{% endfor %}
+														</select>
+													</label>
+												</div>
+												<input type="hidden" name="id_provincia" id="id_provincia" value="{{ data.provincia is defined ? data.provincia}}" >							
+												<div id="provincia" class="form-group col-sm-12 col-md-3" style="display: none" >
+													<label class="field">
+														Provincia
+														<select id="provincias" name="provincias" class="form-control">
+															{% if data.provincia is defined  %}
+																<option value="{{data.provincia is defined? data.provincia}}"> {{ data.provincia is defined? nombreProvincia }}</option> 
+															{% endif %}   
+															<option value="">Seleccione Provincia</option> 
+																{% for lista_provincias in lista_provincias %}
+																	<option id="seleccion" name="seleccion" value={{lista_provincias.proIdPk}}>{{lista_provincias.proNombre}}</option>
+																{% endfor %}
+														</select>	
+													</label>
+												</div>
+												<input type="hidden" name="id_comuna" id="id_comuna" value="{{ data.comuna is defined ? data.comuna}}" >							
+												<div  id="comuna" class="form-group col-sm-12 col-md-3" style="display: none">
+													<label class="field">
+														Comuna
+														<select id="comunas" name="comunas" class="form-control">
+															{% if data.comuna is defined  %}
+																<option value="{{data.comuna is defined? data.comuna}}"> {{ data.comuna is defined? nombreComuna }}</option> 
+															{% endif %}
+																<option value="">Seleccione Comuna</option> 
+
+																{% for lista_comunas in lista_comunas %}
+																	<option id="seleccion" name="seleccion" value={{lista_comunas.comIdPk}}>{{lista_comunas.comNombre}}</option>
+																{% endfor %}
+														</select>												
+													</label>
+												</div>									
+											</div>									
 										<div class="row">
 											<div class="form-group col-sm-12 col-md-3">
 												<label class="field">

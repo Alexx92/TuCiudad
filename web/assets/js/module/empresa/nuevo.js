@@ -1,6 +1,8 @@
 $(document).ready(function() {
 
     // verifica si el rut ingresado es valido
+    window.onload = cargar();
+
     $('#empre_rut').rut({
             formatOn: 'keypress blur',
             validateOn: 'keypress blur'
@@ -70,13 +72,12 @@ $(document).ready(function() {
         }
     });
 
-
     // configuracion del dropdown de busqueda de empresas
 
     // busqueda de empresas por ajax
     $("#busq_cont").on('keyup', function() {
         var input = $(this).val();
-        if (input.length >= 2) {
+        if (input.length > 1) {
             var data = { busq_cont: input };
             $.ajax({
                 dataType: 'json',
@@ -85,11 +86,18 @@ $(document).ready(function() {
                 data: data,
                 timeout: 3000,
             }).done(function(response) {
-                $('#lista_conta').html(response.contactoLista);
-                conta_lista();
+                if (response.contactoLista != "") {
+                    $('#lista_conta').html(response.contactoLista);
+                    conta_lista();
+                } else {
+                    $('#match').html("No se han encontrado coincidencias");
+                }
             }).fail(function() {
                 toastr.error('Error al buscar en la base de datos');
             });
+        } else {
+            $('#match').html("Ingrese mas caracteres para la busqueda");
+
         }
     });
 
@@ -111,22 +119,84 @@ $(document).ready(function() {
             }
         });
     });
+    $('.del_btn_i').on('click', function(e) {
+        var btn = $(this);
+        var id = btn.data('id');
+        var data = { id: id };
+        e.preventDefault();
+        $.ajax({
+            dataType: 'json',
+            method: 'POST',
+            url: Routing.generate('ajax_borrar_contacto'),
+            data: data,
+        }).done(function(json) {
+            if (json) {
+                btn.parent().remove();
+                toastr.success('Dato eliminado');
+            }
+        });
+    });
 
+    $("#regiones").on('change', function() {
+        var region = $(this);
+        var id_region = $(this).val();
+        var data = { id_region: id_region };
+        $.ajax({
+            dataType: 'json',
+            method: 'POST',
+            url: Routing.generate('ajax_cargar_provincia'),
+            data: data,
+        }).done(function(response) {
+            $("#provincias").html(response.provincias);
+            $("#provincia").show();
+            $("#comuna").hide();
+        });
+    });
+
+    $("#provincias").on('change', function() {
+        var provincia = $(this);
+        var id_provincia = $(this).val();
+        var data = { id_provincia: id_provincia };
+        $.ajax({
+            dataType: 'json',
+            method: 'POST',
+            url: Routing.generate('ajax_cargar_comunas'),
+            data: data,
+        }).done(function(response) {
+            $("#comunas").html(response.comunas);
+            $("#comuna").show();
+        });
+    });
 });
 
-
-
+function cargar() {
+    var drop1 = $('#id_comuna').val();
+    //  var drop2 = $('#id_provincia').val();
+    //  var drop3 = $('#id_region').val();
+    // var data = { id_comuna: drop1, id_provincia: drop2 };
+    if (drop1 != "") {
+        $("#comuna").show();
+        $("#provincia").show();
+        //  $.ajax({
+        //      dataType: 'json',
+        //      method: 'POST',
+        //      url: Routing.generate('ajax_cargar_datos_localizacion'),
+        //      data: data,
+        //  }).done(function(response) {
+        //      $("#comunas").html(response.nameComuna);
+        //      $("#provincias").html(response.nameProvincia);
+        //  });
+    }
+}
 // funcion unir empresa-cliente
 function conta_lista() {
     var id_empre = $('#lista_conta').data('cont');
-
     $('.ele span').on('click', function() {
         var span = $(this);
         var id_cont = span.data('id');
         var n_cont = span.data('name');
         var a_cont = span.data('apellido');
         var data = { id_empre: id_empre, id_cont: id_cont };
-
         $.ajax({
             type: "POST",
             url: Routing.generate('ajax_guardar_contacto'),

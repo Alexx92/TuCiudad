@@ -252,3 +252,21 @@ ajax_busq_datos_producto:
     defaults: { _controller: AdminBundle:Pedido:buscardatosproductos }
     options:
         expose: true
+#ruta para cargar regiones
+ajax_cargar_provincia:
+    path:     /ajax/busqueda/empresa/data/provincia/
+    defaults: { _controller: AdminBundle:Empresas:cargarProvincias }
+    options:
+         expose: true
+#ruta para cargar comunas
+ajax_cargar_comunas:
+    path:     /ajax/busqueda/empresa/data/comuna/
+    defaults: { _controller: AdminBundle:Empresas:cargarComunas }
+    options:
+         expose: true
+ajax_cargar_datos_localizacion:
+    path:     /ajax/busqueda/empresa/data/datosdir/
+    defaults: { _controller: AdminBundle:Empresas:cargarLocalizacion }
+    options:
+         expose: true
+

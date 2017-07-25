@@ -81,13 +81,11 @@ $(document).ready(function() {
                 data: data
             }).done(function(response) {
                 if (response.catLista != "") {
-                    console.log(response.catLista);
                     $('#match').html(response.catLista);
                     cli_cat();
                     $(".dropdown-toggle").dropdown("toggle");
                 } else {
                     $('#match').html("No se han encontrado coincidencias");
-
                 }
             }).fail(function() {
                 toastr.error('Error al buscar en la base de datos');
@@ -101,7 +99,6 @@ $(document).ready(function() {
         var btn = $(this);
         var id = btn.data('id');
         var data = { id: id };
-        console.log(id);
         e.preventDefault();
         $.ajax({
             dataType: 'json',

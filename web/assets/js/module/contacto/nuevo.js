@@ -60,10 +60,7 @@ $(document).ready(function() {
             }).done(function(response) {
                 var id_edit = response.id_new;
                 idproducto = id_edit;
-                //form[0].reset();
-                //validator.resetForm();
                 $("#mostrar").show(); //activa el div una vez realiza el guardado
-
                 toastr.success('Datos guardados');
                 //  url: Routing.generate('admin_contacto');
             }).fail(function(response) {
@@ -91,15 +88,19 @@ $(document).ready(function() {
                 url: Routing.generate('ajax_autocomplete_empresa'),
                 data: data
             }).done(function(response) {
-                $('#match').html(response.empreLista);
-                console.log(response.empreLista);
-                cli_empre();
-                $(".dropdown-toggle").dropdown("toggle");
+                if (response.empreLista != "") {
+                    $('#match').html(response.empreLista);
+                    console.log(response.empreLista);
+                    cli_empre();
+                    $(".dropdown-toggle").dropdown("toggle");
+                } else {
+                    $('#match').html("No se han encontrado coincidencias");
+                }
             }).fail(function() {
                 toastr.error('Error al buscar en la base de datos');
             });
         } else {
-            $('#match').html("");
+            $('#match').html("Ingrese mas caracteres para la busqueda");
         }
     });
 

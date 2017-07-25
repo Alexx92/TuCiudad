@@ -28,10 +28,19 @@ class EmpresasController extends Controller
         // Titulo que se mostrara en la barra de navegacion
         $titulo = 'Nueva Empresa';
 
+        $em = $this->getDoctrine()->getManager();
+        $lista_regiones = $em->getRepository('AdminBundle:DefRegion')->findAll();        
+
         return $this->render('AdminBundle:Empresas:nuevo.html.twig',array(
-            'titulo'      => $titulo,
-        	'submenu'     => 'empresa_nueva',
-            'menu_o_con'  => 'empresa'
+            'titulo'          => $titulo,
+            'lista_regiones'  => $lista_regiones,
+            'lista_provincias' => null,
+            'lista_comunas'    => null,
+            'nombreRegion'     => null,
+            'nombreProvincia'  => null,
+            'nombreComuna'     => null,
+        	'submenu'         => 'empresa_nueva',
+            'menu_o_con'      => 'empresa'
         ));
     }
 
@@ -79,9 +88,9 @@ class EmpresasController extends Controller
             $nombre             = ucfirst($request->get('empre_nombre'));
             $rsocial            = ucfirst($request->get('empre_razon_soc'));
             $rut                = $request->get('empre_rut');
-            $comuna             = $request->get('empre_comuna');
-            $provincia          = $request->get('empre_provincia');
-            $region             = $request->get('empre_region');
+            $comuna             = $request->get('comunas');
+            $provincia          = $request->get('provincias');
+            $region             = $request->get('regiones');
             $dir_villa_pobl     = ucfirst($request->get('empre_villa_pobl'));
             $dir_calle          = ucfirst($request->get('empre_calle'));
             $dir_numero         = $request->get('empre_nume');
@@ -151,7 +160,8 @@ class EmpresasController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $empresa = $em->getRepository('AdminBundle:Empresa')->findOneBy(array('id' => $id));        
+        $empresa = $em->getRepository('AdminBundle:Empresa')->findOneBy(array('id' => $id));
+
         
         $data = array();
 
@@ -195,14 +205,31 @@ class EmpresasController extends Controller
 
             }
         }
-        
+
+        $region = $em->getRepository('AdminBundle:DefRegion')->findOneBy(array( 'regIdPk' => $empresa->getRegion()));
+        $nombreRegion =$region->getRegRomano()." ".$region->getRegNombre();
+        $provincia = $em->getRepository('AdminBundle:DefProvincia')->findOneBy(array( 'proIdPk' => $empresa->getProvincia()));
+        $nombreProvincia = $provincia->getProNombre();
+        $comuna = $em->getRepository('AdminBundle:DefComuna')->findOneBy(array( 'comIdPk' => $empresa->getComuna()));
+        $nombreComuna = $comuna->getComNombre();
+
+        $lista_regiones = $em->getRepository('AdminBundle:DefRegion')->findAll();        
+        $lista_provincias = $em->getRepository('AdminBundle:DefProvincia')->findBy(array('proRegionFk'=>$empresa->getRegion()));        
+        $lista_comunas = $em->getRepository('AdminBundle:DefComuna')->findBy(array('comProvinciaFk'=>$empresa->getProvincia()));           
+
         return $this->render('AdminBundle:Empresas:nuevo.html.twig',array(
-            'titulo'          => $titulo,
-            'data'            => $data,
-            'lista_contempre' => $lista_contempre,
-            'submenu'         => 'empresa_nueva',
-            'form'            => 'activo',
-            'menu_o_con'      => 'empresa'
+            'titulo'           => $titulo,
+            'data'             => $data,
+            'lista_regiones'   => $lista_regiones,
+            'lista_provincias' => $lista_provincias,
+            'lista_comunas'    => $lista_comunas,
+            'nombreRegion'     => $nombreRegion,
+            'nombreProvincia'  => $nombreProvincia,
+            'nombreComuna'     => $nombreComuna,
+            'lista_contempre'  => $lista_contempre,
+            'submenu'          => 'empresa_nueva',
+            'form'             => 'activo',
+            'menu_o_con'       => 'empresa'
         ));
     }
 
@@ -328,5 +355,61 @@ class EmpresasController extends Controller
         echo json_encode(array(true));
         exit;
     }
+    public function cargarProvinciasAction(Request $request){
 
+        $data = $request->get('id_region');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $provincias = $em->getRepository('AdminBundle:DefProvincia')->findBy(array('proRegionFk'=>$data)); 
+
+        $lista_provincias = '';
+        foreach ($provincias as $result) {
+            if($lista_provincias==''){
+                $lista_provincias .= '<option value="">Seleccione Provincia</option>';
+            }
+            $lista_provincias .= '<option value="'.$result->getProIdPk().'">' .$result->getProNombre(). '</option>';
+        }
+        $response = new JsonResponse();
+        $response->setData(array('provincias' => $lista_provincias));
+        
+        return $response;
+    }
+
+    public function cargarComunasAction(Request $request)
+    {
+        $data = $request->get('id_provincia');
+        $em = $this->getDoctrine()->getManager();
+        $comunas = $em->getRepository('AdminBundle:DefComuna')->findBy(array('comProvinciaFk'=>$data)); 
+        $lista_comunas = '';
+        foreach ($comunas as $result) {
+            if($lista_comunas==''){
+                $lista_comunas .= '<option value="">Seleccione Comuna</option>';
+            }
+            $lista_comunas .= '<option value="'.$result->getComIdPk().'">' .$result->getComNombre(). '</option>';
+        }
+        $response = new JsonResponse();
+        $response->setData(array('comunas' => $lista_comunas));
+        
+        return $response;
+    }
+    public function cargarLocalizacionAction(Request $request){
+
+        $pkcomuna    = $request->get('id_comuna');
+        $pkprovincia = $request->get('id_provincia'); 
+        $em = $this->getDoctrine()->getManager();
+
+        $comuna = $em->getRepository('AdminBundle:DefComuna')->findOneBy(array('comIdPk'=>$pkcomuna));
+        $provincia = $em->getRepository('AdminBundle:DefProvincia')->findOneBy(array('proIdPk'=>$pkprovincia));
+
+        $name_comuna    =  '<option value="'.$pkcomuna.'">' .$comuna->getComNombre(). '</option>';
+        $name_provincia    =  '<option value="'.$pkprovincia.'">' .$provincia->getProNombre(). '</option>';
+      //  $name_comuna    = $comuna->getComNombre();
+       // $name_provincia = $provincia->getProNombre();
+
+        $response = new JsonResponse();
+        $response->setData(array('nameComuna' => $name_comuna, 'nameProvincia'=>$name_provincia));
+        
+        return $response;
+    }
 }
