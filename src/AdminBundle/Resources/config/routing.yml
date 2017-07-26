@@ -120,7 +120,24 @@ admin_personal_eliminar:
     defaults: { _controller: AdminBundle:Personal:personalEliminar }
     options:
         expose: true
-
+#ruta para cargar provincias
+ajax_cargar_provincia_personal:
+    path:     /ajax/busqueda/personal/data/provincia/
+    defaults: { _controller: AdminBundle:Personal:cargarProvincias }
+    options:
+         expose: true
+#ruta para cargar comunas
+ajax_cargar_comunas_personal:
+    path:     /ajax/busqueda/personal/data/comuna/
+    defaults: { _controller: AdminBundle:Personal:cargarComunas }
+    options:
+         expose: true
+#ruta para cargar areas
+ajax_cargar_area:
+    path:     /ajax/busqueda/personal/data/area/
+    defaults: { _controller: AdminBundle:Personal:cargarArea }
+    options:
+         expose: true
 #-----------------------Producto-----------------------
 admin_producto:
     path:     /producto/

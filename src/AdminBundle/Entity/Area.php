@@ -5,12 +5,12 @@ namespace AdminBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Departamento
+ * Area
  *
- * @ORM\Table(name="departamento")
+ * @ORM\Table(name="area", indexes={@ORM\Index(name="fk_area_departamento1_idx", columns={"departamento_id"})})
  * @ORM\Entity
  */
-class Departamento
+class Area
 {
     /**
      * @var integer
@@ -24,7 +24,7 @@ class Departamento
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=45, nullable=false)
+     * @ORM\Column(name="nombre", type="string", length=45, nullable=true)
      */
     private $nombre;
 
@@ -34,6 +34,16 @@ class Departamento
      * @ORM\Column(name="descripcion", type="string", length=100, nullable=true)
      */
     private $descripcion;
+
+    /**
+     * @var \Departamento
+     *
+     * @ORM\ManyToOne(targetEntity="Departamento")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="departamento_id", referencedColumnName="id")
+     * })
+     */
+    private $departamento;
 
 
 
@@ -51,7 +61,7 @@ class Departamento
      * Set nombre
      *
      * @param string $nombre
-     * @return Departamento
+     * @return Area
      */
     public function setNombre($nombre)
     {
@@ -74,7 +84,7 @@ class Departamento
      * Set descripcion
      *
      * @param string $descripcion
-     * @return Departamento
+     * @return Area
      */
     public function setDescripcion($descripcion)
     {
@@ -91,5 +101,28 @@ class Departamento
     public function getDescripcion()
     {
         return $this->descripcion;
+    }
+
+    /**
+     * Set departamento
+     *
+     * @param \AdminBundle\Entity\Departamento $departamento
+     * @return Area
+     */
+    public function setDepartamento(\AdminBundle\Entity\Departamento $departamento = null)
+    {
+        $this->departamento = $departamento;
+
+        return $this;
+    }
+
+    /**
+     * Get departamento
+     *
+     * @return \AdminBundle\Entity\Departamento 
+     */
+    public function getDepartamento()
+    {
+        return $this->departamento;
     }
 }

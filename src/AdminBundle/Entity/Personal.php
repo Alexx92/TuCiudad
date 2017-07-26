@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Personal
  *
- * @ORM\Table(name="personal", indexes={@ORM\Index(name="fk_personal_empresa1_idx", columns={"empresa_id"})})
+ * @ORM\Table(name="personal", indexes={@ORM\Index(name="fk_personal_empresa1_idx", columns={"empresa_id"}), @ORM\Index(name="fk_personal_estado_personal1_idx", columns={"estado_personal_id"}), @ORM\Index(name="fk_personal_area1_idx", columns={"area_id"})})
  * @ORM\Entity
  */
 class Personal
@@ -190,6 +190,16 @@ class Personal
     private $estado;
 
     /**
+     * @var \Area
+     *
+     * @ORM\ManyToOne(targetEntity="Area")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="area_id", referencedColumnName="id")
+     * })
+     */
+    private $area;
+
+    /**
      * @var \Empresa
      *
      * @ORM\ManyToOne(targetEntity="Empresa")
@@ -198,6 +208,16 @@ class Personal
      * })
      */
     private $empresa;
+
+    /**
+     * @var \EstadoPersonal
+     *
+     * @ORM\ManyToOne(targetEntity="EstadoPersonal")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="estado_personal_id", referencedColumnName="id")
+     * })
+     */
+    private $estadoPersonal;
 
 
 
@@ -764,6 +784,29 @@ class Personal
     }
 
     /**
+     * Set area
+     *
+     * @param \AdminBundle\Entity\Area $area
+     * @return Personal
+     */
+    public function setArea(\AdminBundle\Entity\Area $area = null)
+    {
+        $this->area = $area;
+
+        return $this;
+    }
+
+    /**
+     * Get area
+     *
+     * @return \AdminBundle\Entity\Area 
+     */
+    public function getArea()
+    {
+        return $this->area;
+    }
+
+    /**
      * Set empresa
      *
      * @param \AdminBundle\Entity\Empresa $empresa
@@ -784,5 +827,28 @@ class Personal
     public function getEmpresa()
     {
         return $this->empresa;
+    }
+
+    /**
+     * Set estadoPersonal
+     *
+     * @param \AdminBundle\Entity\EstadoPersonal $estadoPersonal
+     * @return Personal
+     */
+    public function setEstadoPersonal(\AdminBundle\Entity\EstadoPersonal $estadoPersonal = null)
+    {
+        $this->estadoPersonal = $estadoPersonal;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoPersonal
+     *
+     * @return \AdminBundle\Entity\EstadoPersonal 
+     */
+    public function getEstadoPersonal()
+    {
+        return $this->estadoPersonal;
     }
 }

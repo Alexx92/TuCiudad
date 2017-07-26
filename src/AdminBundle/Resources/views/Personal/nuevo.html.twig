@@ -8,7 +8,7 @@
                 <div class="row"><h4>{{ titulo }}</h4></div>
             </div>
             <div class="col-sm-12 col-md-6 text-right">
-                <a href="{{ url('admin_vendedor') }}" class="btn btn-system btn-per" data-toggle="tooltip" data-placement="bottom" title="Atras"><i class="material-icons">arrow_back</i></a>
+                <a href="{{ url('admin_personal') }}" class="btn btn-system btn-per" data-toggle="tooltip" data-placement="bottom" title="Atras"><i class="material-icons">arrow_back</i></a>
             </div>
         </div>
         <!-- bloque superior fin-->
@@ -18,20 +18,20 @@
             <div role="tab-block">
                 <!-- Tabs Navigation -->
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#datos-vendedor-tab" aria-controls="datos-vendedor-tab" role="tab" data-toggle="tab">Datos Contacto</a></li>                    
+                    <li role="presentation" class="active"><a href="#datos-personal-tab" aria-controls="datos-personal-tab" role="tab" data-toggle="tab">Datos Contacto</a></li>                    
                 </ul>
                 <!-- Tab Content Panes -->
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane fade active in" id="datos-vendedor-tab">
+                    <div role="tabpanel" class="tab-pane fade active in" id="datos-personal-tab">
                         <div class="admin-form theme-default theme-info">
                             <div class="panel heading-border panel-default panel-info">
                                 <div class="panel-body bg-light">
-                                    <form id="form_nuevo_vendedor" class="" action="{{ url('admin_vendedor_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
+                                    <form id="form_nuevo_personal" class="" action="{{ url('admin_personal_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
                                         <div class="section-divider mb40">
-                                            <span>Datos del Vendedor</span>
+                                            <span>Datos del personal</span>
                                         </div>
                                         
-                                        <input type="hidden" name="vendedor_id" id="vendedor_id" value="{{ data.id is defined ? data.id}}" >                          
+                                        <input type="hidden" name="personal_id" id="personal_id" value="{{ data.id is defined ? data.id}}" >                          
                                         
                                         <div class="row">
                                             <div class="form-group col-sm-12 col-lg-3">
@@ -58,13 +58,15 @@
                                                     <input type="text" name="apellido_materno" id="apellido_materno" class="gui-input" value="{{data.apellido_materno is defined ? data.apellido_materno}}">
                                                 </label>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3">
-                                                <label class="field">Fecha de nacmiento</label>
+                                             {# <div class="form-group col-sm-12 col-md-3">
+                                                <label class="field">Fecha de nacimiento</label>
                                                 <label for="fecha_nacimiento" class="field prepend-icon">
                                                     <input type="text" id="fecha_nacimiento" name="fecha_nacimiento" class="gui-input hasDatepicker" value="{{data.fecha_nacto is defined ? data.fecha_nacto|date("m/d/Y")}}">
                                                     <label class="field-icon"><i class="fa fa-calendar-o"></i></label>
                                                 </label>
-                                            </div>
+                                            </div>  #}
+                                  
+                                            
                                             <div class="form-group col-sm-12 col-md-3">
                                                 <label class="field">
                                                     Cedula de Identidad
@@ -72,12 +74,26 @@
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3">
-                                                <label class="field">Sexo</label>
+                                                <label class="field">
+                                                    Sexo
+                                                </label>
                                                 <label class="field select">
                                                     <select id="sexo" name="sexo">
-                                                        <option value=""></option>
-                                                        <option value="01">Hombre</option>
-                                                        <option value="02">Mujer</option>
+                                                         {% if data.sexo is defined  %}
+                                                            {% if data.sexo in [1] %}
+                                                                <option value="">Seleccione</option>
+                                                                <option  selected value="1">Hombre</option>
+                                                                <option  value="2">Mujer</option>
+                                                            {% else %}
+                                                                <option value="">Seleccione</option>
+                                                                <option   value="1">Hombre</option>
+                                                                <option  selected value="2">Mujer</option>
+                                                            {% endif %}
+                                                        {% else %}
+                                                                 <option value="">Seleccione</option>
+                                                                <option   value="1">Hombre</option>
+                                                                <option   value="2">Mujer</option>
+                                                        {% endif %}                                                   
                                                     </select>
                                                     <i class="arrow"></i>
                                                 </label>
@@ -86,26 +102,54 @@
                                         <div class="section-divider mb40">
                                             <span>Datos de Contacto</span>
                                         </div>
-                                        <div class="row">
-                                            <div class="form-group col-sm-12 col-md-3">
-                                                <label class="field">
-                                                    Comuna
-                                                    <input type="text" name="comuna" id="comuna" class="gui-input" value="{{data.comuna is defined ? data.comuna}}">
-                                                </label>
-                                            </div>
-                                            <div class="form-group col-sm-12 col-md-3">
-                                                <label class="field">
-                                                    Provincia
-                                                    <input type="text" name="provincia" id="provincia" class="gui-input" value="{{data.provincia is defined ? data.provincia}}">
-                                                </label>
-                                            </div>
-                                            <div class="form-group col-sm-12 col-md-3">
-                                                <label class="field">
-                                                    Region
-                                                    <input type="text" name="region" id="region" class="gui-input" value="{{data.region is defined ? data.region}}">
-                                                </label>
-                                            </div>
-                                        </div>
+                                        <div class="row">{# divs dependientes si la empresa no esta cargada#}
+												<input type="hidden" name="id_region" id="id_region" value="{{ data.region is defined ? data.region}}" >							
+												<div class="form-group col-sm-12 col-md-3">
+													<label class="field">
+														Region
+														<select id="regiones" name="regiones" class="form-control" required>
+														{% if data.region is defined  %}
+															<option value="{{data.region is defined? data.region}}"> {{ data.region is defined? nombreRegion }}</option> 
+														{% endif %}
+															<option value="">Seleccione Region</option> 
+
+															{% for lista_regiones in lista_regiones %}
+																<option id="seleccion" name="seleccion" value={{lista_regiones.regIdPk}}>{{lista_regiones.regRomano ~" "~ lista_regiones.regNombre}}</option>
+															{% endfor %}
+														</select>
+													</label>
+												</div>
+												<input type="hidden" name="id_provincia" id="id_provincia" value="{{ data.provincia is defined ? data.provincia}}" >							
+												<div id="provincia" class="form-group col-sm-12 col-md-3" style="display: none" >
+													<label class="field">
+														Provincia
+														<select id="provincias" name="provincias" class="form-control" required>
+															{% if data.provincia is defined  %}
+																<option value="{{data.provincia is defined? data.provincia}}"> {{ data.provincia is defined? nombreProvincia }}</option> 
+															{% endif %}   
+															<option value="">Seleccione Provincia</option> 
+																{% for lista_provincias in lista_provincias %}
+																	<option id="seleccion" name="seleccion" value={{lista_provincias.proIdPk}}>{{lista_provincias.proNombre}}</option>
+																{% endfor %}
+														</select>	
+													</label>
+												</div>
+												<input type="hidden" name="id_comuna" id="id_comuna" value="{{ data.comuna is defined ? data.comuna}}" >							
+												<div  id="comuna" class="form-group col-sm-12 col-md-3" style="display: none">
+													<label class="field">
+														Comuna
+														<select id="comunas" name="comunas" class="form-control" required>
+															{% if data.comuna is defined  %}
+																<option value="{{data.comuna is defined? data.comuna}}"> {{ data.comuna is defined? nombreComuna }}</option> 
+															{% endif %}
+																<option value="">Seleccione Comuna</option>
+																{% for lista_comunas in lista_comunas %}
+																	<option id="seleccion" name="seleccion" value={{lista_comunas.comIdPk}}>{{lista_comunas.comNombre}}</option>
+																{% endfor %}
+														</select>												
+													</label>
+												</div>									
+											</div>			
                                         <div class="row">
                                             <div class="form-group col-sm-12 col-md-3">
                                                 <label class="field">
@@ -164,6 +208,43 @@
                                                 </label>
                                             </div>
                                         </div>
+                                        <div class="section-divider mb40">
+                                            <span>Area de Desarrollo</span>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-12">
+                                                <input type="hidden" name="id_departamento" id="id_departamento" value="{{ data.region is defined ? data.region}}" >							
+												<div class="form-group col-sm-12 col-md-3">
+													<label class="field">
+														Departamento
+														<select id="departamentos" name="id_departamento" class="form-control" required>
+														{% if data.region is defined  %}
+															<option value="{{data.depa is defined? data.depa}}"> {{ data.depa is defined? nombreDepartamento }}</option> 
+														{% endif %}
+														<option value="">Seleccione</option>
+															{% for lista_departamento in lista_departamento %}
+																<option id="seleccion" name="seleccion" value={{lista_departamento.id}}>{{lista_departamento.nombre}}</option>
+															{% endfor %}
+														</select>
+													</label>
+                                                </div>
+                                                <input type="hidden" name="id_area" id="id_area" value="{{ data.area is defined ? data.area}}" >							
+												<div id="area" class="form-group col-sm-12 col-md-3"  style="display:none">
+													<label class="field">
+														Area
+														<select id="areas" name="areas" class="form-control" required>
+															{% if data.area is defined  %}
+																<option value="{{data.area is defined? data.area}}"> {{ data.area is defined? nombreArea }}</option> 
+															{% endif %}   
+															<option value="">Seleccione </option> 
+																{% for lista_area in lista_area %}
+																	<option id="seleccion" name="seleccion" value={{lista_area.id}}>{{lista_area.Nombre}}</option>
+																{% endfor %}
+														</select>	
+													</label>
+												</div>
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <div class="form-group col-sm-12">
                                                 <label class="field">Observaciones</label>
@@ -178,7 +259,7 @@
                                         <div class="row">
                                             <div class="form-group col-sm-12">
                                                 <div >
-                                                    <img style="max-width: 100%;" src="{{ absolute_url(asset('uploads/vendedor/'~data.imagen)) }}" alt="">
+                                                    <img style="max-width: 100%;" src="{{ absolute_url(asset('uploads/personal/'~data.imagen)) }}" alt="">
                                                 </div>
                                             </div>
                                         </div>
@@ -198,7 +279,7 @@
                                     </form>
                                 </div>
                                 <div class="panel-footer text-right">
-                                    <button id="guardar_vendedor" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
+                                    <button id="guardar_personal" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
                                     <button id="" class="btn btn-warning ">Cancelar <i class="fa fa-ban"></i></button>
                                 </div>
                             </div>
@@ -244,6 +325,6 @@
 
 {% block javascripts %}
 
-<script src="{{ absolute_url(asset('assets/js/rut/jquery.rut.js')) }}"></script>        
-        <script src="{{ absolute_url(asset('assets/js/module/vendedor/nuevo.js')) }}"></script>
+        <script src="{{ absolute_url(asset('assets/js/rut/jquery.rut.js')) }}"></script>        
+        <script src="{{ absolute_url(asset('assets/js/module/personal/nuevo.js')) }}"></script>
 {% endblock %}

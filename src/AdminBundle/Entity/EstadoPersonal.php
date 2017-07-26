@@ -5,12 +5,12 @@ namespace AdminBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Departamento
+ * EstadoPersonal
  *
- * @ORM\Table(name="departamento")
+ * @ORM\Table(name="estado_personal")
  * @ORM\Entity
  */
-class Departamento
+class EstadoPersonal
 {
     /**
      * @var integer
@@ -24,7 +24,7 @@ class Departamento
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=45, nullable=false)
+     * @ORM\Column(name="nombre", type="string", length=45, nullable=true)
      */
     private $nombre;
 
@@ -51,7 +51,7 @@ class Departamento
      * Set nombre
      *
      * @param string $nombre
-     * @return Departamento
+     * @return EstadoPersonal
      */
     public function setNombre($nombre)
     {
@@ -74,7 +74,7 @@ class Departamento
      * Set descripcion
      *
      * @param string $descripcion
-     * @return Departamento
+     * @return EstadoPersonal
      */
     public function setDescripcion($descripcion)
     {

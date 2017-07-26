@@ -1,0 +1,12 @@
+{% for lpersonal in lista_personal %}
+	<tr>
+		<td>{{ lpersonal.primer_nombre }}</td>
+		<td>{{ lpersonal.apellido_paterno }}</td>
+		<td>{{ lpersonal.email }}</td>
+		<td>{{ lpersonal.celular }}</td>
+		<td>
+			<a class="btn_dele_cont cur_poin text-danger" data-id="{{ lpersonal.id }}" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="red-text small material-icons ">cancel</i></a>
+			<a class="btn_test cur_poin" href="{{ url('admin_personal_editar',{id:lpersonal.id}) }}" data-toggle="tooltip" data-placement="bottom" title="Editar"><i class="small material-icons ">mode_edit</i></a>
+		</td>
+	</tr>
+{% endfor %}

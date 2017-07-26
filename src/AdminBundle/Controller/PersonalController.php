@@ -25,12 +25,25 @@ class PersonalController extends Controller
     public function personalNuevoAction()
     {
         $titulo  = 'Nuevo Personal';
+         $em = $this->getDoctrine()->getManager();
+        $lista_regiones = $em->getRepository('AdminBundle:DefRegion')->findAll();    
+        $lista_departamento = $em->getRepository('AdminBundle:Departamento')->findAll();
 
         return $this->render('AdminBundle:Personal:nuevo.html.twig',array(
-            'titulo'          =>  $titulo,
-            'menu'            => 'nuevo',
-            'menu_o_con'      => 'personal',
-            'submenu'         => 'personal_nuevo'
+            'titulo'            =>  $titulo,
+            'lista_regiones'    => $lista_regiones,
+            'lista_provincias'  => null,
+            'lista_comunas'     => null,
+            'nombreRegion'      => null,
+            'nombreProvincia'   => null,
+            'nombreComuna'      => null,
+            'nombreArea'        => null,
+            'nombreDepartamento'=>null,
+            'lista_departamento'=> $lista_departamento,
+            'lista_area'        => null,
+            'menu'              => 'nuevo',
+            'menu_o_con'        => 'personal',
+            'submenu'           => 'personal_nuevo'
         ));
     }
 
@@ -72,6 +85,7 @@ class PersonalController extends Controller
 
         if( $request->getMethod() == 'POST' )
         {
+                  
             // captura de datos desde el formulario
             $id                        = ($request->get('personal_id', false)) ? $request->get('personal_id'): 0;
             $primer_nombre             = ucfirst($request->get('primer_nombre'));
@@ -79,11 +93,11 @@ class PersonalController extends Controller
             $apellido_paterno          = ucfirst($request->get('apellido_paterno'));
             $apellido_materno          = ucfirst($request->get('apellido_materno'));
             $dni                       = $request->get('dni');
-            $sexo                      = ucfirst($request->get('sexo'));
-            //$fecha_nacimiento          = $request->get('fecha_nacimiento');
-            $comuna                    = ucfirst($request->get('comuna'));
-            $provincia                 = ucfirst($request->get('provincia'));
-            $region                    = ucfirst($request->get('region'));
+            $sexo                      = $request->get('sexo');
+            $fecha_nacimiento          = $request->get('fecha_nacimiento');
+            $comuna                    = ucfirst($request->get('comunas'));
+            $provincia                 = ucfirst($request->get('provincias'));
+            $region                    = ucfirst($request->get('regiones'));
             $dir_villa_pobl            = ucfirst($request->get('dir_villa_pobl'));
             $dir_calle                 = ucfirst($request->get('dir_calle'));
             $dir_numero_casa           = $request->get('dir_numero_casa');
@@ -93,6 +107,7 @@ class PersonalController extends Controller
             $celular                   = $request->get('celular');
             $email                     = $request->get('email');
             $skype                     = $request->get('skype');
+            $area                      = $request->get('areas');
 
             $observacion               = ucfirst($request->get('obs'));
             $imagen                    = ($request->files->get('img_personal', false))? $request->files->get('img_personal'): null;
@@ -103,16 +118,19 @@ class PersonalController extends Controller
             {
                 $contacto = new Personal();
                 $contacto->setEstado(1);                
-                $contacto->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));                
+                $contacto->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));         
+                $contacto->setEstadoPersonal($em->getRepository('AdminBundle:EstadoPersonal')->findOneBy(array('id'=>2)));       
             }
-
+            //$objArea = $em->getRepository('AdminBundle:Area')->findOneBy(array('id'=>$area));
+            
+            $contacto->setArea($em->getRepository('AdminBundle:Area')->findOneBy(array('id'=>$area)));
             $contacto->setPrimerNombre($primer_nombre);
             $contacto->setSegundoNombre($segundo_nombre);
             $contacto->setApellidoPaterno($apellido_paterno);
             $contacto->setApellidoMaterno($apellido_materno);
             $contacto->setDni($dni);
             $contacto->setSexo($sexo);
-            //$contacto->setFechaNacimiento($fecha_nacimiento);                
+            $contacto->setFechaNacimiento($fecha_nacimiento);                
             $contacto->setComuna($comuna);
             $contacto->setProvincia($provincia);
             $contacto->setRegion($region);
@@ -187,28 +205,46 @@ class PersonalController extends Controller
         $data['obs']               = $personal->getObservacion();
         $data['imagen']            = $personal->getImagen();
 
-        // carga de datos con la lista de contactos vinculados a la empresa
-        //$lista_contempre = array();
-        //if( $cont_empre = $em->getRepository('AdminBundle:ContacEmpre')->findBy(array( 'fkEmpresa' => $id )) )
-        //{
-        //    foreach($cont_empre as $value)
-        //    {
-        //        $datos = new stdClass();                
-        //        $datos->id_contacto            = $value->getId();
-        //        $datos->pri_nombre_fkcont      = $value->getFkContacto()->getPrimerNombre();
-        //        $datos->seg_nombre_fkcont      = $value->getFkContacto()->getSegundoNombre();
-        //        $datos->apellido_pate_fkcont   = $value->getFkContacto()->getApellidoPaterno();
-        //        $datos->apellido_mate_fkcont   = $value->getFkContacto()->getApellidoMaterno();                
-        //        $lista_contempre[]  = $datos;
-        //    }
-        //}
+        $data['area']              = $personal->getArea()->getId();
+
+
         
+        $region = $em->getRepository('AdminBundle:DefRegion')->findOneBy(array( 'regIdPk' => $personal->getRegion()));
+        $nombreRegion =$region->getRegRomano()." ".$region->getRegNombre();
+        $provincia = $em->getRepository('AdminBundle:DefProvincia')->findOneBy(array( 'proIdPk' => $personal->getProvincia()));
+        $nombreProvincia = $provincia->getProNombre();
+        $comuna = $em->getRepository('AdminBundle:DefComuna')->findOneBy(array( 'comIdPk' => $personal->getComuna()));
+        $nombreComuna = $comuna->getComNombre();
+
+        $area = $em->getRepository('AdminBundle:Area')->findOneBy(array( 'id' => $personal->getArea()));
+        $nombreArea = $area->getNombre();
+
+        $departamento = $em->getRepository('AdminBundle:Departamento')->findOneBy(array( 'id' => $area->getDepartamento()));
+        $nombreDepartamento = $departamento->getNombre();
+        $data['depa'] = $departamento->getId();
+        $lista_regiones     = $em->getRepository('AdminBundle:DefRegion')->findAll();        
+        $lista_provincias   = $em->getRepository('AdminBundle:DefProvincia')->findBy(array('proRegionFk'=>$personal->getRegion()));        
+        $lista_comunas      = $em->getRepository('AdminBundle:DefComuna')->findBy(array('comProvinciaFk'=>$personal->getProvincia()));  
+
+        $lista_departamento = $em->getRepository('AdminBundle:Departamento')->findAll();
+        $lista_area         = $em->getRepository('AdminBundle:Area')->findBy(array('departamento'=>$departamento->getId()));
+
         return $this->render('AdminBundle:Personal:nuevo.html.twig',array(
-            'titulo'          => $titulo,
-            'data'            => $data,
-            'submenu'         => 'personal_nuevo',
-            'form'            => 'activo',
-            'menu_o_con'      => 'personal'
+            'titulo'            => $titulo,
+            'data'              => $data,
+            'lista_regiones'    => $lista_regiones,
+            'lista_provincias'  => $lista_provincias,
+            'lista_comunas'     => $lista_comunas,
+            'nombreRegion'      => $nombreRegion,
+            'nombreProvincia'   => $nombreProvincia,
+            'nombreComuna'      => $nombreComuna,
+            'nombreArea'        => $nombreArea,
+            'nombreDepartamento'=> $nombreDepartamento,
+            'lista_departamento'=> $lista_departamento,
+            'lista_area'        => $lista_area,
+            'submenu'           => 'personal_nuevo',
+            'form'              => 'activo',
+            'menu_o_con'        => 'personal'
         ));
     }
     
@@ -249,6 +285,63 @@ class PersonalController extends Controller
             }
         }
         return $result;
+    }
+
+     public function cargarProvinciasAction(Request $request){
+
+        $data = $request->get('id_region');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $provincias = $em->getRepository('AdminBundle:DefProvincia')->findBy(array('proRegionFk'=>$data)); 
+
+        $lista_provincias = '';
+        foreach ($provincias as $result) {
+            if($lista_provincias==''){
+                $lista_provincias .= '<option value="">Seleccione Provincia</option>';
+            }
+            $lista_provincias .= '<option value="'.$result->getProIdPk().'">' .$result->getProNombre(). '</option>';
+        }
+        $response = new JsonResponse();
+        $response->setData(array('provincias' => $lista_provincias));
+        
+        return $response;
+    }
+
+    public function cargarComunasAction(Request $request)
+    {
+        $data = $request->get('id_provincia');
+        $em = $this->getDoctrine()->getManager();
+        $comunas = $em->getRepository('AdminBundle:DefComuna')->findBy(array('comProvinciaFk'=>$data)); 
+        $lista_comunas = '';
+        foreach ($comunas as $result) {
+            if($lista_comunas==''){
+                $lista_comunas .= '<option value="">Seleccione Comuna</option>';
+            }
+            $lista_comunas .= '<option value="'.$result->getComIdPk().'">' .$result->getComNombre(). '</option>';
+        }
+        $response = new JsonResponse();
+        $response->setData(array('comunas' => $lista_comunas));
+        
+        return $response;
+    }
+    public function cargarAreaAction(Request $request)
+    {
+        $data = $request->get('id_departamento');
+        $em = $this->getDoctrine()->getManager();
+        $areas = $em->getRepository('AdminBundle:Area')->findBy(array('departamento'=>$data)); 
+        $lista_areas = '';
+        foreach ($areas as $result) {
+            if($lista_areas==''){
+                $lista_areas .= '<option value="">Seleccione Area</option>';
+            }
+              $lista_areas .= '<option value="'.$result->getId().'">' .$result->getNombre(). '</option>';
+           
+        }
+        $response = new JsonResponse();
+        $response->setData(array('areas' => $lista_areas));
+        
+        return $response;
     }
 
 }

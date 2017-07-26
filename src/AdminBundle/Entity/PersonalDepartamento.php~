@@ -42,4 +42,60 @@ class PersonalDepartamento
     private $personal;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set departamento
+     *
+     * @param \AdminBundle\Entity\Departamento $departamento
+     * @return PersonalDepartamento
+     */
+    public function setDepartamento(\AdminBundle\Entity\Departamento $departamento = null)
+    {
+        $this->departamento = $departamento;
+
+        return $this;
+    }
+
+    /**
+     * Get departamento
+     *
+     * @return \AdminBundle\Entity\Departamento 
+     */
+    public function getDepartamento()
+    {
+        return $this->departamento;
+    }
+
+    /**
+     * Set personal
+     *
+     * @param \AdminBundle\Entity\Personal $personal
+     * @return PersonalDepartamento
+     */
+    public function setPersonal(\AdminBundle\Entity\Personal $personal = null)
+    {
+        $this->personal = $personal;
+
+        return $this;
+    }
+
+    /**
+     * Get personal
+     *
+     * @return \AdminBundle\Entity\Personal 
+     */
+    public function getPersonal()
+    {
+        return $this->personal;
+    }
 }

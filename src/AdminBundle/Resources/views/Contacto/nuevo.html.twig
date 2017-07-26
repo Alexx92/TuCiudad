@@ -95,23 +95,23 @@
                                         </label>
                                     </div>
                                     {% if data.id is not defined %}
-                                    <div id="mostrar" style="display: none;" >
-                                       <div class="col-sm-12">
-                                           <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar empresas</h5>
-                                            <div class="dropdown">
-                                                <input type="text" id="busq_empre" name="buscar" class="form-control dropdown-toggle" data-toggle="dropdown">
-                                                <ul id="match" aria-labelledby="busq_empre" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
+                                        <div id="mostrar" style="display: none;" >
+                                            <div class="col-sm-12">
+                                                <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar empresas</h5>
+                                                <div class="dropdown">
+                                                    <input type="text" id="busq_empre" name="buscar" class="form-control dropdown-toggle" data-toggle="dropdown">
+                                                    <ul id="match" aria-labelledby="busq_empre" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
+                                                </div>
+                                                <div id="cli-emp" class="cli-emp" >
+                                                    <!-- se agregan las empresas para hacer el vinculo -->
+                                                    {% if lista_emprecont is defined %}
+                                                        {% for lista_emprecont in lista_emprecont %}
+                                                            <div class="valign-wrapper"><i class="material-icons del_btn_i pointer" data-id="{{ lista_emprecont.id_contempr }}">remove_circle_outline</i>{{ lista_emprecont.nombre_fkempre }}</div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
                                             </div>
-                                            <div id="cli-emp" class="cli-emp" >
-                                                <!-- se agregan las empresas para hacer el vinculo -->
-                                                {% if lista_emprecont is defined %}
-                                                    {% for lista_emprecont in lista_emprecont %}
-                                                        <div class="valign-wrapper"><i class="material-icons del_btn_i pointer" data-id="{{ lista_emprecont.id_contempr }}">remove_circle_outline</i>{{ lista_emprecont.nombre_fkempre }}</div>
-                                                    {% endfor %}
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </div>  
+                                        </div>  
                                     {% endif %}
                                     <!-- imagen -->
                                     {% if data.imagen is defined and data.imagen is not empty %}
