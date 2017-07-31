@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Producto
  *
- * @ORM\Table(name="producto", indexes={@ORM\Index(name="fk_producto_servicio1_idx", columns={"servicio_id"})})
+ * @ORM\Table(name="producto")
  * @ORM\Entity
  */
 class Producto
@@ -78,14 +78,18 @@ class Producto
     private $estado;
 
     /**
-     * @var \Servicio
+     * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="Servicio")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="servicio_id", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="tipo", type="integer", nullable=true)
      */
-    private $servicio;
+    private $tipo;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="tiempo_apx_produccion", type="integer", nullable=true)
+     */
+    private $tiempoApxProduccion;
 
 
 
@@ -284,25 +288,48 @@ class Producto
     }
 
     /**
-     * Set servicio
+     * Set tipo
      *
-     * @param \AdminBundle\Entity\Servicio $servicio
+     * @param integer $tipo
      * @return Producto
      */
-    public function setServicio(\AdminBundle\Entity\Servicio $servicio = null)
+    public function setTipo($tipo)
     {
-        $this->servicio = $servicio;
+        $this->tipo = $tipo;
 
         return $this;
     }
 
     /**
-     * Get servicio
+     * Get tipo
      *
-     * @return \AdminBundle\Entity\Servicio 
+     * @return integer 
      */
-    public function getServicio()
+    public function getTipo()
     {
-        return $this->servicio;
+        return $this->tipo;
+    }
+
+    /**
+     * Set tiempoApxProduccion
+     *
+     * @param integer $tiempoApxProduccion
+     * @return Producto
+     */
+    public function setTiempoApxProduccion($tiempoApxProduccion)
+    {
+        $this->tiempoApxProduccion = $tiempoApxProduccion;
+
+        return $this;
+    }
+
+    /**
+     * Get tiempoApxProduccion
+     *
+     * @return integer 
+     */
+    public function getTiempoApxProduccion()
+    {
+        return $this->tiempoApxProduccion;
     }
 }

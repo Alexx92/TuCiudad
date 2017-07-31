@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PedidoDetalle
  *
- * @ORM\Table(name="pedido_detalle", indexes={@ORM\Index(name="fk_pedido", columns={"fk_pedido"}), @ORM\Index(name="fk_producto", columns={"fk_producto"}), @ORM\Index(name="fk_pedido_detalle_personal1_idx", columns={"personal_id"})})
+ * @ORM\Table(name="pedido_detalle", indexes={@ORM\Index(name="fk_pedido", columns={"fk_pedido"}), @ORM\Index(name="fk_producto", columns={"fk_producto"})})
  * @ORM\Entity
  */
 class PedidoDetalle
@@ -57,14 +57,25 @@ class PedidoDetalle
     private $observacion;
 
     /**
-     * @var \Personal
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Personal")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="personal_id", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="largo", type="string", length=45, nullable=true)
      */
-    private $personal;
+    private $largo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ancho", type="string", length=45, nullable=true)
+     */
+    private $ancho;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="peso", type="string", length=45, nullable=true)
+     */
+    private $peso;
 
     /**
      * @var \Pedidos
@@ -214,26 +225,72 @@ class PedidoDetalle
     }
 
     /**
-     * Set personal
+     * Set largo
      *
-     * @param \AdminBundle\Entity\Personal $personal
+     * @param string $largo
      * @return PedidoDetalle
      */
-    public function setPersonal(\AdminBundle\Entity\Personal $personal = null)
+    public function setLargo($largo)
     {
-        $this->personal = $personal;
+        $this->largo = $largo;
 
         return $this;
     }
 
     /**
-     * Get personal
+     * Get largo
      *
-     * @return \AdminBundle\Entity\Personal 
+     * @return string 
      */
-    public function getPersonal()
+    public function getLargo()
     {
-        return $this->personal;
+        return $this->largo;
+    }
+
+    /**
+     * Set ancho
+     *
+     * @param string $ancho
+     * @return PedidoDetalle
+     */
+    public function setAncho($ancho)
+    {
+        $this->ancho = $ancho;
+
+        return $this;
+    }
+
+    /**
+     * Get ancho
+     *
+     * @return string 
+     */
+    public function getAncho()
+    {
+        return $this->ancho;
+    }
+
+    /**
+     * Set peso
+     *
+     * @param string $peso
+     * @return PedidoDetalle
+     */
+    public function setPeso($peso)
+    {
+        $this->peso = $peso;
+
+        return $this;
+    }
+
+    /**
+     * Get peso
+     *
+     * @return string 
+     */
+    public function getPeso()
+    {
+        return $this->peso;
     }
 
     /**

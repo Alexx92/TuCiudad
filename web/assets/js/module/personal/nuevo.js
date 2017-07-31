@@ -2,6 +2,7 @@ $(document).ready(function() {
 
     window.onload = cargar();
 
+
     // verifica si el rut ingresado es valido
     $('#empre_rut').rut({
             formatOn: 'keypress blur',
@@ -161,6 +162,8 @@ $(document).ready(function() {
     });
 });
 
+
+
 function cargar() {
     var drop1 = $('#id_comuna').val();
     // var drop2 = $('#id_provincia').val();
@@ -180,6 +183,20 @@ function cargar() {
         //      $("#provincias").html(response.nameProvincia);
         //  });
     }
+    $(document).ready(function() {
+        var date_input = $('input[name="fecha_nacimiento"]'); //our fecha_nacimiento input has the name "date"
+        var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+        var options = {
+            format: "dd-mm-yyyy",
+            weekStart: 1,
+            language: "es",
+            daysOfWeekHighlighted: "0,6",
+            calendarWeeks: true,
+            autoclose: true,
+            todayHighlight: true
+        };
+        date_input.datepicker(options);
+    })
 }
 
 
@@ -193,9 +210,6 @@ function conta_lista() {
         var n_cont = span.data('name');
         var a_cont = span.data('apellido');
         var data = { id_empre: id_empre, id_cont: id_cont };
-
-        //console.log(data);
-
         $.ajax({
             type: "POST",
             url: Routing.generate('ajax_guardar_contacto'),

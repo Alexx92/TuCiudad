@@ -38,13 +38,6 @@ class Pedidos
     /**
      * @var string
      *
-     * @ORM\Column(name="valor_bruto", type="string", length=50, nullable=true)
-     */
-    private $valorBruto;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="descuentos", type="string", length=50, nullable=true)
      */
     private $descuentos;

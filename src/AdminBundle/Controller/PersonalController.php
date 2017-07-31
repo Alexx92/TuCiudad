@@ -84,8 +84,7 @@ class PersonalController extends Controller
         $result = false;
 
         if( $request->getMethod() == 'POST' )
-        {
-                  
+        {                  
             // captura de datos desde el formulario
             $id                        = ($request->get('personal_id', false)) ? $request->get('personal_id'): 0;
             $primer_nombre             = ucfirst($request->get('primer_nombre'));
@@ -94,7 +93,8 @@ class PersonalController extends Controller
             $apellido_materno          = ucfirst($request->get('apellido_materno'));
             $dni                       = $request->get('dni');
             $sexo                      = $request->get('sexo');
-            $fecha_nacimiento          = $request->get('fecha_nacimiento');
+            $date = $request->get('fecha_nacimiento'); 
+			$fecha_nacimiento = new \DateTime(date("d-m-Y H:i:s", strtotime($date)));         
             $comuna                    = ucfirst($request->get('comunas'));
             $provincia                 = ucfirst($request->get('provincias'));
             $region                    = ucfirst($request->get('regiones'));
@@ -187,7 +187,9 @@ class PersonalController extends Controller
         
         $data['dni']               = $personal->getDni();
         $data['sexo']              = $personal->getSexo();
-        $data['fecha_nacto']       = $personal->getFechaNacimiento();
+        $sexo = ($personal->getSexo() == 1) ? "Hombre" : "Mujer" ;
+        //$date     = $personal->getFechaNacimiento();
+        $data['fecha_nacimiento'] = date_format($personal->getFechaNacimiento(), 'd-m-Y');
         
         $data['comuna']            = $personal->getComuna();
         $data['provincia']         = $personal->getProvincia();
@@ -242,6 +244,7 @@ class PersonalController extends Controller
             'nombreDepartamento'=> $nombreDepartamento,
             'lista_departamento'=> $lista_departamento,
             'lista_area'        => $lista_area,
+            'sexo'              => $sexo,
             'submenu'           => 'personal_nuevo',
             'form'              => 'activo',
             'menu_o_con'        => 'personal'

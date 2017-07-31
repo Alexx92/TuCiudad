@@ -37,40 +37,38 @@
                                             <div class="form-group col-sm-12 col-lg-3">
                                                 <label class="field">
                                                     Primer Nombre
-                                                    <input type="text" name="primer_nombre" id="primer_nombre" class="gui-input" value="{{data.primer_nombre is defined ? data.primer_nombre}}">
+                                                    <input type="text" name="primer_nombre" id="primer_nombre" class="gui-input" value="{{data.primer_nombre is defined ? data.primer_nombre}}" required>
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-12 col-lg-3">
                                                 <label class="field">
                                                     Segundo Nombre
-                                                    <input type="text" name="segundo_nombre" id="segundo_nombre" class="gui-input" value="{{data.segundo_nombre is defined ? data.segundo_nombre}}">
+                                                    <input type="text" name="segundo_nombre" id="segundo_nombre" class="gui-input" value="{{data.segundo_nombre is defined ? data.segundo_nombre}}" >
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3">
                                                 <label class="field">
                                                     Apellido Paterno
-                                                    <input type="text" name="apellido_paterno" id="apellido_paterno" class="gui-input" value="{{data.apellido_paterno is defined ? data.apellido_paterno}}">
+                                                    <input type="text" name="apellido_paterno" id="apellido_paterno" class="gui-input" value="{{data.apellido_paterno is defined ? data.apellido_paterno}}" required>
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3">
                                                 <label class="field">
                                                     Apellido Materno
-                                                    <input type="text" name="apellido_materno" id="apellido_materno" class="gui-input" value="{{data.apellido_materno is defined ? data.apellido_materno}}">
+                                                    <input type="text" name="apellido_materno" id="apellido_materno" class="gui-input" value="{{data.apellido_materno is defined ? data.apellido_materno}}" required>
                                                 </label>
                                             </div>
-                                             {# <div class="form-group col-sm-12 col-md-3">
-                                                <label class="field">Fecha de nacimiento</label>
-                                                <label for="fecha_nacimiento" class="field prepend-icon">
-                                                    <input type="text" id="fecha_nacimiento" name="fecha_nacimiento" class="gui-input hasDatepicker" value="{{data.fecha_nacto is defined ? data.fecha_nacto|date("m/d/Y")}}">
-                                                    <label class="field-icon"><i class="fa fa-calendar-o"></i></label>
+                                            <div class="form-group col-sm-12 col-md-3"> <!-- Date input -->
+                                                <label class="field"  for="fecha_nacimiento">
+                                                    Fecha Nacimiento                                                
+                                                    <input  type="text" name="fecha_nacimiento"  id="fecha_nacimiento"  class="gui-input" value="{{data.fecha_nacimiento is defined ? data.fecha_nacimiento }}"  required>
                                                 </label>
-                                            </div>  #}
-                                  
+                                            </div>
                                             
                                             <div class="form-group col-sm-12 col-md-3">
                                                 <label class="field">
                                                     Cedula de Identidad
-                                                    <input type="text" name="dni" id="dni" class="gui-input val_num" value="{{data.dni is defined ? data.dni}}">
+                                                    <input type="text" name="dni" id="dni" class="gui-input val_num" value="{{data.dni is defined ? data.dni}}" required>
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3">
@@ -78,22 +76,10 @@
                                                     Sexo
                                                 </label>
                                                 <label class="field select">
-                                                    <select id="sexo" name="sexo">
-                                                         {% if data.sexo is defined  %}
-                                                            {% if data.sexo in [1] %}
-                                                                <option value="">Seleccione</option>
-                                                                <option  selected value="1">Hombre</option>
-                                                                <option  value="2">Mujer</option>
-                                                            {% else %}
-                                                                <option value="">Seleccione</option>
-                                                                <option   value="1">Hombre</option>
-                                                                <option  selected value="2">Mujer</option>
-                                                            {% endif %}
-                                                        {% else %}
-                                                                 <option value="">Seleccione</option>
-                                                                <option   value="1">Hombre</option>
-                                                                <option   value="2">Mujer</option>
-                                                        {% endif %}                                                   
+                                                    <select id="sexo" name="sexo" required>
+                                                        <option value="{{data.sexo is defined ? data.sexo}}">{{data.sexo is defined ? sexo : "Seleccione"}}</option>
+                                                        <option   value="1">Hombre</option>
+                                                        <option   value="2">Mujer</option>
                                                     </select>
                                                     <i class="arrow"></i>
                                                 </label>
@@ -107,6 +93,8 @@
 												<div class="form-group col-sm-12 col-md-3">
 													<label class="field">
 														Region
+                                                    </label>
+                                                    <label class="field select">
 														<select id="regiones" name="regiones" class="form-control" required>
 														{% if data.region is defined  %}
 															<option value="{{data.region is defined? data.region}}"> {{ data.region is defined? nombreRegion }}</option> 
@@ -117,12 +105,15 @@
 																<option id="seleccion" name="seleccion" value={{lista_regiones.regIdPk}}>{{lista_regiones.regRomano ~" "~ lista_regiones.regNombre}}</option>
 															{% endfor %}
 														</select>
+                                                        <i class="arrow"></i>
 													</label>
 												</div>
 												<input type="hidden" name="id_provincia" id="id_provincia" value="{{ data.provincia is defined ? data.provincia}}" >							
 												<div id="provincia" class="form-group col-sm-12 col-md-3" style="display: none" >
 													<label class="field">
 														Provincia
+                                                    </label>
+                                                    <label class="field select">
 														<select id="provincias" name="provincias" class="form-control" required>
 															{% if data.provincia is defined  %}
 																<option value="{{data.provincia is defined? data.provincia}}"> {{ data.provincia is defined? nombreProvincia }}</option> 
@@ -131,13 +122,17 @@
 																{% for lista_provincias in lista_provincias %}
 																	<option id="seleccion" name="seleccion" value={{lista_provincias.proIdPk}}>{{lista_provincias.proNombre}}</option>
 																{% endfor %}
-														</select>	
+														</select>
+                                                        <i class="arrow"></i>
+	
 													</label>
 												</div>
 												<input type="hidden" name="id_comuna" id="id_comuna" value="{{ data.comuna is defined ? data.comuna}}" >							
 												<div  id="comuna" class="form-group col-sm-12 col-md-3" style="display: none">
 													<label class="field">
 														Comuna
+                                                    </label>
+                                                    <label class="field select">
 														<select id="comunas" name="comunas" class="form-control" required>
 															{% if data.comuna is defined  %}
 																<option value="{{data.comuna is defined? data.comuna}}"> {{ data.comuna is defined? nombreComuna }}</option> 
@@ -146,21 +141,22 @@
 																{% for lista_comunas in lista_comunas %}
 																	<option id="seleccion" name="seleccion" value={{lista_comunas.comIdPk}}>{{lista_comunas.comNombre}}</option>
 																{% endfor %}
-														</select>												
+														</select>
+                                                        <i class="arrow"></i>										
 													</label>
 												</div>									
-											</div>			
+										</div>			
                                         <div class="row">
                                             <div class="form-group col-sm-12 col-md-3">
                                                 <label class="field">
                                                     Calle
-                                                    <input type="text" name="dir_calle" id="dir_calle" class="gui-input" value="{{data.dir_calle is defined ? data.dir_calle}}">
+                                                    <input type="text" name="dir_calle" id="dir_calle" class="gui-input" value="{{data.dir_calle is defined ? data.dir_calle}}" required>
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-2">
                                                 <label class="field">
                                                     Numero
-                                                    <input type="text" name="dir_numero_casa" id="dir_numero_casa" class="gui-input val_num" value="{{data.dir_numero_casa is defined ? data.dir_numero_casa}}">
+                                                    <input type="text" name="dir_numero_casa" id="dir_numero_casa" class="gui-input val_num" value="{{data.dir_numero_casa is defined ? data.dir_numero_casa}}" required>
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3">
@@ -192,13 +188,13 @@
                                             <div class="form-group col-sm-12 col-md-3">
                                                 <label class="field">
                                                     Celular
-                                                    <input type="text" name="celular" id="celular" class="gui-input val_num" value="{{data.celular is defined ? data.celular}}" >
+                                                    <input type="text" name="celular" id="celular" class="gui-input val_num" value="{{data.celular is defined ? data.celular}}" required>
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3">
                                                 <label class="field">
                                                     Email
-                                                    <input type="email" name="email" id="email" class="gui-input" value="{{data.email is defined ? data.email}}">
+                                                    <input type="email" name="email" id="email" class="gui-input" value="{{data.email is defined ? data.email}}" required>
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3">
@@ -217,6 +213,8 @@
 												<div class="form-group col-sm-12 col-md-3">
 													<label class="field">
 														Departamento
+                                                    </label>
+                                                    <label class="field select">
 														<select id="departamentos" name="id_departamento" class="form-control" required>
 														{% if data.region is defined  %}
 															<option value="{{data.depa is defined? data.depa}}"> {{ data.depa is defined? nombreDepartamento }}</option> 
@@ -226,12 +224,15 @@
 																<option id="seleccion" name="seleccion" value={{lista_departamento.id}}>{{lista_departamento.nombre}}</option>
 															{% endfor %}
 														</select>
+                                                        <i class="arrow"></i>	
 													</label>
                                                 </div>
                                                 <input type="hidden" name="id_area" id="id_area" value="{{ data.area is defined ? data.area}}" >							
 												<div id="area" class="form-group col-sm-12 col-md-3"  style="display:none">
 													<label class="field">
 														Area
+                                                    </label>
+                                                    <label class="field select">
 														<select id="areas" name="areas" class="form-control" required>
 															{% if data.area is defined  %}
 																<option value="{{data.area is defined? data.area}}"> {{ data.area is defined? nombreArea }}</option> 
@@ -240,14 +241,17 @@
 																{% for lista_area in lista_area %}
 																	<option id="seleccion" name="seleccion" value={{lista_area.id}}>{{lista_area.Nombre}}</option>
 																{% endfor %}
-														</select>	
+														</select>
+                                                        <i class="arrow"></i>		
 													</label>
 												</div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-sm-12">
-                                                <label class="field">Observaciones</label>
+                                                <label class="field">
+                                                    Observaciones
+                                                </label>
                                                 <label class="field prepend-icon">
                                                     <textarea class="gui-textarea" id="obs" name="obs">{{ data.obs is defined ? data.obs}}</textarea>
                                                     <label for="obs" class="field-icon"><i class="fa fa-comments"></i></label>
@@ -324,7 +328,10 @@
 {% endblock %}
 
 {% block javascripts %}
-
-        <script src="{{ absolute_url(asset('assets/js/rut/jquery.rut.js')) }}"></script>        
+<!-- Bootstrap Date-Picker Plugin -->
+    <script src="{{ absolute_url(asset('assets/js/datapicker/bootstrap-datepicker.min.js')) }}"></script>  
+        <link rel="stylesheet" href="{{ absolute_url(asset('assets/js/datapicker/bootstrap-datepicker3.css')) }}"/>
+        <script src="{{ absolute_url(asset('assets/js/datapicker/bootstrap-datepicker.es.min.js')) }}"></script>
+        <script src="{{ absolute_url(asset('assets/js/rut/jquery.rut.js')) }}"></script>
         <script src="{{ absolute_url(asset('assets/js/module/personal/nuevo.js')) }}"></script>
 {% endblock %}

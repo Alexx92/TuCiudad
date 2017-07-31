@@ -36,4 +36,60 @@ class Servicio
     private $caracteristicas;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set tiempoDeDesarrollo
+     *
+     * @param integer $tiempoDeDesarrollo
+     * @return Servicio
+     */
+    public function setTiempoDeDesarrollo($tiempoDeDesarrollo)
+    {
+        $this->tiempoDeDesarrollo = $tiempoDeDesarrollo;
+
+        return $this;
+    }
+
+    /**
+     * Get tiempoDeDesarrollo
+     *
+     * @return integer 
+     */
+    public function getTiempoDeDesarrollo()
+    {
+        return $this->tiempoDeDesarrollo;
+    }
+
+    /**
+     * Set caracteristicas
+     *
+     * @param string $caracteristicas
+     * @return Servicio
+     */
+    public function setCaracteristicas($caracteristicas)
+    {
+        $this->caracteristicas = $caracteristicas;
+
+        return $this;
+    }
+
+    /**
+     * Get caracteristicas
+     *
+     * @return string 
+     */
+    public function getCaracteristicas()
+    {
+        return $this->caracteristicas;
+    }
 }

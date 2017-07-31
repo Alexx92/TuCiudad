@@ -19,7 +19,7 @@
             <div role="tab-block">
                 <!-- Tabs Navigation -->
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#datos-vendedor-tab" aria-controls="datos-vendedor-tab" role="tab" data-toggle="tab">Datos Producto</a></li>
+                    <li role="presentation" class="active"><a href="#datos-vendedor-tab" aria-controls="datos-vendedor-tab" role="tab" data-toggle="tab">Datos Producto / Servicio</a></li>
                     {% if data.id is defined %}
                     <li role="presentation"><a href="#add-categoria-tab" aria-controls="add-categoria-tab" role="tab" data-toggle="tab">Vincular a Categoria</a></li>
                  {% endif %}
@@ -33,7 +33,7 @@
                                 <div class="panel-body bg-light">
                                     <form id="form_nuevo_producto" class="" action="{{ url('admin_producto_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
                                         <div class="section-divider mb40">
-                                            <span>Datos del Producto</span>
+                                            <span>Datos del Producto/Servicio</span>
                                         </div>
                                         
                                         <input type="hidden" name="prod_id" id="prod_id" value="{{ data.id is defined ?  data.id}}" >                         
@@ -62,8 +62,31 @@
                                                     Descripcion
                                                     <input type="text" name="prod_descp" id="prod_descp" class="gui-input" value="{{data.prod_descp is defined ? data.prod_descp}}">
                                                 </label>
+                                            </div>                                                                             
+                                            <div class="form-group col-md-2">
+                                                <label class="field">
+                                                    Tiempo de producción 
+                                                    <div class="input-group">                                               
+                                                        <input style="text-align: right;" type="number" name="time" id="time" class="gui-input" value="{{data.time is defined ? data.time}}" required>
+                                                        <div class="input-group-addon">Horas</div>
+                                                    </div>    
+                                                </label>
+                                            </div>                                                                                                                          
+                                        </div>     
+                                        <div class="row">
+                                            <div class="form-group col-sm-9">                                              
+                                                <input type="hidden" name="check" id="check" value="{{ data.tipo is defined ?  data.tipo}}" >                         
+                                                <blockquote>
+                                                    <p>Escoja una opcion para identificar el ingreso</p> 
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="radio" id="radio1" value="1" required> Producto
+                                                    </label>
+                                                    <label class="radio-inline">
+                                                            <input type="radio" name="radio" id="radio2" value="2"required> Servicio
+                                                    </label>     
+                                                </blockquote>                                         
                                             </div>
-                                        </div>   
+                                        </div>                                                                      
                                         <div class="row">
                                             <div class="form-group col-sm-12">
                                                 <label class="field">Observaciones</label>
@@ -120,7 +143,7 @@
                                     </form>
                                 </div>
                                 <div class="panel-footer text-right">
-                                    <button id="guardar_producto" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
+                                    <button  id="guardar_producto" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
                                     <button id="" class="btn btn-warning ">Cancelar <i class="fa fa-ban"></i></button>
                                 </div>
                             </div>

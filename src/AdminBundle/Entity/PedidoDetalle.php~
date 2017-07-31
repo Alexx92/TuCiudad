@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PedidoDetalle
  *
- * @ORM\Table(name="pedido_detalle", indexes={@ORM\Index(name="fk_pedido", columns={"fk_pedido"}), @ORM\Index(name="fk_producto", columns={"fk_producto"}), @ORM\Index(name="fk_pedido_detalle_personal1_idx", columns={"personal_id"})})
+ * @ORM\Table(name="pedido_detalle", indexes={@ORM\Index(name="fk_pedido", columns={"fk_pedido"}), @ORM\Index(name="fk_producto", columns={"fk_producto"})})
  * @ORM\Entity
  */
 class PedidoDetalle
@@ -57,14 +57,25 @@ class PedidoDetalle
     private $observacion;
 
     /**
-     * @var \Personal
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Personal")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="personal_id", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="largo", type="string", length=45, nullable=true)
      */
-    private $personal;
+    private $largo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ancho", type="string", length=45, nullable=true)
+     */
+    private $ancho;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="peso", type="string", length=45, nullable=true)
+     */
+    private $peso;
 
     /**
      * @var \Pedidos

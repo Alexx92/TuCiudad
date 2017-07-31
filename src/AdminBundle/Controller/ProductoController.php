@@ -26,7 +26,7 @@ class ProductoController extends Controller
 
     public function productoNuevoAction()
     {
-        $titulo  = 'Nuevo Producto';
+        $titulo  = 'Nuevo Producto / Servicio';
          
 
         return $this->render('AdminBundle:Producto:nuevo.html.twig',array(
@@ -83,7 +83,9 @@ class ProductoController extends Controller
             $prod_descp       = ucfirst($request->get('prod_descp'));
             $prod_valor       = $request->get('prod_valor');
             /*valor de id de select categoria*/
-            $valselect        = $request->get('selectcat');
+            //$valselect        = $request->get('selectcat');
+            $valorCheck       = $request->get('check');
+            $tiempoProduccion = $request->get('time');
 
             $observacion      = ucfirst($request->get('prod_obs'));
             $imagen           = ($request->files->get('prod_imagen', false))? $request->files->get('prod_imagen'): null;
@@ -101,6 +103,8 @@ class ProductoController extends Controller
             $producto->setDescripcion($prod_descp);
             $producto->setValorUnitario($prod_valor);                
             $producto->setObservacion($observacion);
+            $producto->setTipo($valorCheck);
+            $producto->setTiempoApxProduccion($tiempoProduccion);
 
             // guardar imagen
             if ($imagen)
@@ -125,25 +129,21 @@ class ProductoController extends Controller
     // cargar formulario para editar
     public function productoEditarAction(Request $request)
     {
-
-        $titulo  = 'Editar producto';
-
+        $titulo  = 'Editar Producto/Servicio';
         $id = $request->get('id', false);
-
         $em = $this->getDoctrine()->getManager();
-
-        $producto = $em->getRepository('AdminBundle:Producto')->findOneBy(array('id' => $id));        
+        $producto = $em->getRepository('AdminBundle:Producto')->findOneBy(array('id' => $id));      
         
         $data = array();
-
         $data['id']            = $producto->getId();
         $data['prod_nombre']   = $producto->getNombre();
         $data['prod_codigo']   = $producto->getCodigoProd();
         $data['prod_descp']    = $producto->getDescripcion();
         $data['prod_valor']    = $producto->getValorUnitario();
-        
+        $data['tipo']          = $producto->getTipo();        
         $data['observacion']   = $producto->getObservacion();
         $data['imagen']        = $producto->getImagen();
+        $data['time']          = $producto->getTiempoApxProduccion();
 
         // carga de datos con la lista de contactos vinculados a la empresa
         $lcategoria = array();
@@ -159,8 +159,6 @@ class ProductoController extends Controller
                $lcategoria[]  = $datos;
            }
         }
-        //dump($lcategoria);
-
         return $this->render('AdminBundle:Producto:nuevo.html.twig',array(
             'titulo'          => $titulo,
             'data'            => $data,
@@ -205,26 +203,19 @@ class ProductoController extends Controller
             }
         }
         return $result;
-
     }
-
     private function cargarDropdown()
     {
         $em = $this->getDoctrine()->getManager();
-
         $where = array('estado' => 1);
-
         $listadoCategoria = array();
-
         if($producto = $em->getRepository('AdminBundle:Categorias')->findBy($where, array('id' => 'ASC')) )
         {
             foreach($producto as $value)
             {
-                $datos = new stdClass();
-                
+                $datos = new stdClass();                
                 $datos->id            = $value->getId();
-                $datos->nombre   = $value->getNombre();             
-                
+                $datos->nombre   = $value->getNombre();      
                 $listadoCategoria[]  = $datos;
             }
         }

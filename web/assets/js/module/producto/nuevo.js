@@ -1,6 +1,7 @@
 var idproducto = null;
 
 $(document).ready(function() {
+    window.onload = cargar();
 
     // bloqueo de letras para un imput con la clase val_mun
     $('.val_num').keypress(function(e) {
@@ -112,7 +113,34 @@ $(document).ready(function() {
             }
         });
     });
+
+    $("input[name=radio]").on('click', function() {
+        $("#check").val($(this).val());
+        var boton = document.getElementById("guardar_producto");
+        boton.disabled = false;
+    });
+
+    /* $("#guardar_producto").click(function() {
+         if ($("#form_nuevo_producto input[name='radio']:radio").is(':checked')) {
+             //alert("Bien!!!, la edad seleccionada es: " + $('input:radio[name=edad]:checked').val());
+             $("#form_nuevo_producto").submit();
+         } else {
+             toastr.error('Identifique el Ingreso');
+         }
+     });*/
+
 });
+
+function cargar() {
+    var check = $("#check").val();
+    if (check != "") {
+        if (check == 1) {
+            $("#radio1").attr('checked', true);
+        } else {
+            $("#radio2").attr('checked', true);
+        }
+    }
+}
 // funcion unir cateforia-producto
 function cli_cat() {
     var data_cont = $('#match').data('prod_id');

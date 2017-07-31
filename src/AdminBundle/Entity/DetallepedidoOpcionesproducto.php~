@@ -1,0 +1,45 @@
+<?php
+
+namespace AdminBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * DetallepedidoOpcionesproducto
+ *
+ * @ORM\Table(name="detallepedido_opcionesproducto", indexes={@ORM\Index(name="fk_detallePedido_opcionesProducto_pedido_detalle1_idx", columns={"pedido_detalle_id"}), @ORM\Index(name="fk_detallePedido_opcionesProducto_opciones_producto1_idx", columns={"opciones_producto_id"})})
+ * @ORM\Entity
+ */
+class DetallepedidoOpcionesproducto
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \OpcionesProducto
+     *
+     * @ORM\ManyToOne(targetEntity="OpcionesProducto")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="opciones_producto_id", referencedColumnName="id")
+     * })
+     */
+    private $opcionesProducto;
+
+    /**
+     * @var \PedidoDetalle
+     *
+     * @ORM\ManyToOne(targetEntity="PedidoDetalle")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="pedido_detalle_id", referencedColumnName="id")
+     * })
+     */
+    private $pedidoDetalle;
+
+
+}

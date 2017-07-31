@@ -93,6 +93,23 @@ ajax_borrar_contacto:
     defaults: { _controller: AdminBundle:Empresas:ajax_borrar_contacto }
     options:
         expose: true
+#ruta para cargar regiones
+ajax_cargar_provincia:
+    path:     /ajax/busqueda/empresa/data/provincia/
+    defaults: { _controller: AdminBundle:Empresas:cargarProvincias }
+    options:
+         expose: true
+#ruta para cargar comunas
+ajax_cargar_comunas:
+    path:     /ajax/busqueda/empresa/data/comuna/
+    defaults: { _controller: AdminBundle:Empresas:cargarComunas }
+    options:
+         expose: true
+ajax_cargar_datos_localizacion:
+    path:     /ajax/busqueda/empresa/data/datosdir/
+    defaults: { _controller: AdminBundle:Empresas:cargarLocalizacion }
+    options:
+         expose: true
 
 #-----------------------Personal-----------------------
 admin_personal:
@@ -236,19 +253,24 @@ admin_pedido_eliminar:
     defaults: { _controller: AdminBundle:Pedido:pedidoEliminar }
     options:
         expose: true
-
 #ruta ajax buscar empresas
 ajax_busq_empre_cot:
     path:     /ajax/busqueda/empresa/data/
     defaults: { _controller: AdminBundle:Pedido:buscarEmpresa }
     options:
         expose: true
+#ruta ajax buscar contacto empresas
+ajax_busq_conta_cot:
+    path:     /ajax/busqueda/contacto/data/
+    defaults: { _controller: AdminBundle:Pedido:buscarContacto }
+    options:
+        expose: true
+#ruta para buscar empresas en formulario 
 ajax_busq_empre_form:
     path:     /ajax/busqueda/empresa/data/response/
     defaults: { _controller: AdminBundle:Pedido:cargarFormCotizacion }
     options:
         expose: true
-
 #ruta ajax guardar producto-empresa
 # ajax_guard_prod_empresa:
 #     path:     /ajax/busqueda/empresa/data/response/prod
@@ -269,21 +291,5 @@ ajax_busq_datos_producto:
     defaults: { _controller: AdminBundle:Pedido:buscardatosproductos }
     options:
         expose: true
-#ruta para cargar regiones
-ajax_cargar_provincia:
-    path:     /ajax/busqueda/empresa/data/provincia/
-    defaults: { _controller: AdminBundle:Empresas:cargarProvincias }
-    options:
-         expose: true
-#ruta para cargar comunas
-ajax_cargar_comunas:
-    path:     /ajax/busqueda/empresa/data/comuna/
-    defaults: { _controller: AdminBundle:Empresas:cargarComunas }
-    options:
-         expose: true
-ajax_cargar_datos_localizacion:
-    path:     /ajax/busqueda/empresa/data/datosdir/
-    defaults: { _controller: AdminBundle:Empresas:cargarLocalizacion }
-    options:
-         expose: true
+
 

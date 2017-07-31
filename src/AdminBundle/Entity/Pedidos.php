@@ -38,13 +38,6 @@ class Pedidos
     /**
      * @var string
      *
-     * @ORM\Column(name="valor_bruto", type="string", length=50, nullable=true)
-     */
-    private $valorBruto;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="descuentos", type="string", length=50, nullable=true)
      */
     private $descuentos;
@@ -163,29 +156,6 @@ class Pedidos
     public function getFechaIngreso()
     {
         return $this->fechaIngreso;
-    }
-
-    /**
-     * Set valorBruto
-     *
-     * @param string $valorBruto
-     * @return Pedidos
-     */
-    public function setValorBruto($valorBruto)
-    {
-        $this->valorBruto = $valorBruto;
-
-        return $this;
-    }
-
-    /**
-     * Get valorBruto
-     *
-     * @return string 
-     */
-    public function getValorBruto()
-    {
-        return $this->valorBruto;
     }
 
     /**

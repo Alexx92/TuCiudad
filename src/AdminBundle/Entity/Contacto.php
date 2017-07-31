@@ -24,6 +24,13 @@ class Contacto
     /**
      * @var string
      *
+     * @ORM\Column(name="run", type="string", length=12, nullable=true)
+     */
+    private $run;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="primer_nombre", type="string", length=30, nullable=true)
      */
     private $primerNombre;
@@ -108,6 +115,29 @@ class Contacto
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set run
+     *
+     * @param string $run
+     * @return Contacto
+     */
+    public function setRun($run)
+    {
+        $this->run = $run;
+
+        return $this;
+    }
+
+    /**
+     * Get run
+     *
+     * @return string 
+     */
+    public function getRun()
+    {
+        return $this->run;
     }
 
     /**

@@ -18,7 +18,7 @@
 			<div role="tab-block">
 				<!-- Tabs Navigation -->
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#datos-pedido-tab" aria-controls="datos-pedido-tab" role="tab" data-toggle="tab">Datos Empresa</a></li>
+                    <li role="presentation" class="active"><a href="#datos-pedido-tab" aria-controls="datos-pedido-tab" role="tab" data-toggle="tab">Datos Pedido</a></li>
                 </ul>
 				<!-- Tab Content Panes -->
 				<div class="tab-content">
@@ -126,30 +126,54 @@
 												</label>
 											</div>
 										</div>
-									
+
+										<div class="row" id="contacto" style="display: none;">
+											<div class="section-divider mb40" >
+                    					  		<span>Contacto Asociado a Pedido</span>											
+                    						</div>
+											<div class="form-group col-sm-12 col-lg-6">
+												<label class="field">
+													Contactos asociados a la empresa seleccionada
+												</label>
+												<label class="field select">
+													<select id="lista_contactos_cot" name="lista_contactos_cot" class="form-control" required>
+														<option value="{{data.region is defined? data.region}}"> {{ data.region is defined? nombreRegion: "Seleccione" }}</option> 
+														{% for lista_contactos in lista_contactos %}
+															<option id="seleccion" name="seleccion" value={{lista_contactos.id}}>{{lista_regiones.regNombre}}</option>
+														{% endfor %}
+													</select>
+													<i class="arrow"></i>
+												</label>
+											</div>
+										</div>									
 										<div  id="prod_empresa" style="display: none;" class="row" >
 											<div class="section-divider mb40" >
                     					  		<span>Ingreso de productos  / servicios</span>											
                     						</div>
-                                             <div class="form-group col-md-6 " > 
+                                            <div class="form-group col-md-6 " > 
                                                 <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar Producto / Servicio</h5>
-                                                <div class="dropdown">
-													{# <input type="hidden" name="prod_id" id="prod_id" value="" > #}
-													<input type="hidden" name="ped_id" id="ped_id" value="" >
-
-                                                    <input  type="text" id="bsq_producto" name="buscar" class="form-control dropdown-toggle" data-toggle="dropdown">
-                                                        <ul id="lista_producto" aria-labelledby="bsq_producto" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
-                                                </div>
+												<label class="field append-icon">
+													<div class="dropdown">
+														{# <input type="hidden" name="prod_id" id="prod_id" value="" > #}
+														<input type="hidden" name="ped_id" id="ped_id" value="" >
+														<input  type="text" id="bsq_producto" name="buscar" class="form-control dropdown-toggle" data-toggle="dropdown">
+															<ul id="lista_producto" aria-labelledby="bsq_producto" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
+													</div>
+													<label for="bsq_producto" class="field-icon">
+														<i class="fa fa-search"></i>
+													</label>
+												</label>														
 											</div>
                                        	</div>
 										<div class="section-divider mb40">
                     					  	<span>Listado de productos / servicios</span>
-                    					</div>
+										</div>
+                                                       
+										
                     					<div class="row">
                     						<div class="col-md-12">
 												<!-- bloque busqueda / filtros -->
-												<!-- bloque busqueda / filtros fin-->
-												
+												<!-- bloque busqueda / filtros fin-->												
 												<!-- bloque tabla -->
 												<div class="table-responsive">
 													<table class="table table-striped" id="dT_pedido">

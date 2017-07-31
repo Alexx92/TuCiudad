@@ -8,8 +8,6 @@ $(document).ready(function() {
         te = String.fromCharCode(tecla);
         return patron.test(te);
     });
-
-
     // configuracion del dropdown de busqueda de empresas
     // busqueda de empresas por ajax
     $("#bsq_empre_pedido").on('keyup', function() {
@@ -59,18 +57,40 @@ $(document).ready(function() {
             $('#lista_producto').html("Ingrese mas caracteres para la busqueda");
         }
     });
+    //muestra el input para el ingreso de productos al pedido
+    $("#lista_contactos_cot").on('change', function() {
+        var input = $(this).val();
+        if (input != "") {
+            $("#prod_empresa").show(); //activa div de ingreso de producto
+        } else {
+            $('#lista_producto').html("Ingrese mas caracteres para la busqueda");
+        }
+    });
 });
-
+//Carga los contactos en el select
+function cargarContactos() {
+    var input = $("#empre_id").val();
+    var data = { empresa: input };
+    $.ajax({
+        dataType: 'json',
+        method: "POST",
+        url: Routing.generate('ajax_busq_conta_cot'),
+        data: data
+    }).done(function(response) {
+        $('#lista_contactos_cot').html(response.contLista);
+    }).fail(function() {
+        toastr.error('Error al buscar en la base de datos');
+    })
+}
 //Selecciona un producto y lo muestra en el campo de texto 
 function select_prod() {
     $('.ele span').on('click', function() {
         var span = $(this);
         var id_producto = span.data('id');
         var id_empresa = $('#empre_id').val();
+        var id_contacto = $('#lista_contactos_cot').val();
         var id_pedido = $('#ped_id').val();
-
-        //  console.log(id_empresa);
-        var data = { id_producto: id_producto, id_empresa: id_empresa, id_pedido: id_pedido };
+        var data = { id_producto: id_producto, id_empresa: id_empresa, id_pedido: id_pedido, id_contacto: id_contacto };
         $.ajax({
             dataType: 'json',
             type: "POST",
@@ -79,7 +99,6 @@ function select_prod() {
         }).done(function(response) {
             var respuesta = response.producto;
             var id_pedido = response.id_pedido;
-            // console.log(id_pedido);
             bsq_producto
             $("input#ped_id").val(response.id_pedido);
             $("input#bsq_producto").val("");
@@ -118,7 +137,8 @@ function conta_lista() {
             $("input#empre_mail").val(respuesta.correo);
             $("#bsq_empre_pedido").val();
             $("#lista_empre_cot").html("");
-            $("#prod_empresa").show(); //activa div de ingreso de producto
+            $("#contacto").show(); //activa div de ingreso de producto
+            cargarContactos();
         });
     });
 }

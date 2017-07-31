@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Historial
  *
- * @ORM\Table(name="historial", indexes={@ORM\Index(name="fk_historial_pedido_detalle1_idx", columns={"pedido_detalle_id"})})
+ * @ORM\Table(name="historial", indexes={@ORM\Index(name="fk_historial_pedido_detalle1_idx", columns={"pedido_detalle_id"}), @ORM\Index(name="fk_historial_personal1_idx", columns={"personal_id"})})
  * @ORM\Entity
  */
 class Historial
@@ -71,6 +71,27 @@ class Historial
     private $observacion;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="largo", type="string", length=45, nullable=true)
+     */
+    private $largo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ancho", type="string", length=45, nullable=true)
+     */
+    private $ancho;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="peso", type="string", length=45, nullable=true)
+     */
+    private $peso;
+
+    /**
      * @var \PedidoDetalle
      *
      * @ORM\ManyToOne(targetEntity="PedidoDetalle")
@@ -79,6 +100,16 @@ class Historial
      * })
      */
     private $pedidoDetalle;
+
+    /**
+     * @var \Personal
+     *
+     * @ORM\ManyToOne(targetEntity="Personal")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="personal_id", referencedColumnName="id")
+     * })
+     */
+    private $personal;
 
 
 
@@ -254,6 +285,75 @@ class Historial
     }
 
     /**
+     * Set largo
+     *
+     * @param string $largo
+     * @return Historial
+     */
+    public function setLargo($largo)
+    {
+        $this->largo = $largo;
+
+        return $this;
+    }
+
+    /**
+     * Get largo
+     *
+     * @return string 
+     */
+    public function getLargo()
+    {
+        return $this->largo;
+    }
+
+    /**
+     * Set ancho
+     *
+     * @param string $ancho
+     * @return Historial
+     */
+    public function setAncho($ancho)
+    {
+        $this->ancho = $ancho;
+
+        return $this;
+    }
+
+    /**
+     * Get ancho
+     *
+     * @return string 
+     */
+    public function getAncho()
+    {
+        return $this->ancho;
+    }
+
+    /**
+     * Set peso
+     *
+     * @param string $peso
+     * @return Historial
+     */
+    public function setPeso($peso)
+    {
+        $this->peso = $peso;
+
+        return $this;
+    }
+
+    /**
+     * Get peso
+     *
+     * @return string 
+     */
+    public function getPeso()
+    {
+        return $this->peso;
+    }
+
+    /**
      * Set pedidoDetalle
      *
      * @param \AdminBundle\Entity\PedidoDetalle $pedidoDetalle
@@ -274,5 +374,28 @@ class Historial
     public function getPedidoDetalle()
     {
         return $this->pedidoDetalle;
+    }
+
+    /**
+     * Set personal
+     *
+     * @param \AdminBundle\Entity\Personal $personal
+     * @return Historial
+     */
+    public function setPersonal(\AdminBundle\Entity\Personal $personal = null)
+    {
+        $this->personal = $personal;
+
+        return $this;
+    }
+
+    /**
+     * Get personal
+     *
+     * @return \AdminBundle\Entity\Personal 
+     */
+    public function getPersonal()
+    {
+        return $this->personal;
     }
 }

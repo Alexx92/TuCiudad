@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AdminBundle\Entity\Empresa;
 use AdminBundle\Entity\Pedidos;
+use AdminBundle\Entity\ContacEmpre;
+use AdminBundle\Entity\Personal;
 use AdminBundle\Entity\PedidoDetalle;
 use AdminBundle\Entity\Producto;
 use AdminBundle\Entity\User;
@@ -32,6 +34,8 @@ class PedidoController extends Controller
 
         return $this->render('AdminBundle:Pedidos:nuevo.html.twig', array(
             'titulo'      => $titulo,
+            'nombreContacto' => null,
+            'lista_contactos' =>null,
             'submenu'     => 'pedido_nueva',
             'menu_o_con'  => 'pedido'
         ));
@@ -52,8 +56,9 @@ class PedidoController extends Controller
                 
                 $datos->id                  = $value->getId();
                 $datos->codigo_pedido       = $value->getCodigoPedido();
-                $datos->vendedor_nombre     = $value->getFkVendedor()->getPrimerNombre();
-                $datos->empresa_nombre      = $value->getFkEmpresa()->getNombre();
+               // $datos->personal_nombre     = $value->getPersonal()->getPrimerNombre();
+                $empresa = $em->getRepository('AdminBundle:ContacEmpre')->findOneBy(array ($value->getContacEmpre()));
+                $datos->empresa_nombre      = $empresa->getNombre();
                 $datos->observacion         = $value->getObservacion();
                 $datos->valorNeto           = $value->getValorNeto();
                 
@@ -81,7 +86,7 @@ class PedidoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             /*Si el correo y el usuario existen como vendedor realiza el pedido */
-            if ($usuario_vendedor = $em->getRepository('AdminBundle:Vendedor')->findOneBy(array('username'=>$user_n, 'correo'=>$user_email))) {
+            if ($personal = $em->getRepository('AdminBundle:Vendedor')->findOneBy(array('username'=>$user_n, 'correo'=>$user_email))) {
                 /*Extraccion de objeto empresa  para creacion de pedido */
                 $empresa = $em->getRepository('AdminBundle:Empresa')->findOneBy(array( 'id' => $id_empresa ));
                 /*Inicio creacion pedido*/
@@ -89,7 +94,7 @@ class PedidoController extends Controller
                 if (!$new_pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array( 'id' => $id_pedido ))) {
                     $new_pedido = new Pedidos();
                     $new_pedido->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));
-                    $new_pedido->setFkVendedor($usuario_vendedor);//relaciona el usuario vendedor con el pedido
+                    $new_pedido->setFkVendedor($personal);//relaciona el usuario vendedor con el pedido
                     $new_pedido->setFkEmpresa($empresa);//realciona la empresa con el pedido
                     //$new_pedido->setEtapa(1);
                     $em->persist($new_pedido);
@@ -224,6 +229,29 @@ class PedidoController extends Controller
         
         return $response;
     }
+    // ajax buscar contacto
+    public function buscarContactoAction(Request $request)
+    {
+        $op = false;
+        $data = $request->get('empresa');
+        $em = $this->getDoctrine()->getManager();
+        $lista_contactos = '';
+
+        if ($contacto_empresa = $em->getRepository('AdminBundle:ContacEmpre')->findBy(array( 'fkEmpresa' => $data))){  
+            $op = true;
+            foreach ($contacto_empresa as $result) {
+                if($lista_contactos==''){
+                    $lista_contactos .= '<option value="">Seleccione</option>';
+                }
+                $lista_contactos .= '<option value="'.$result->getFkContacto()->getId().'">'."Rut ".':'.$result->getFkContacto()->getRun(). ',  '.$result->getFkContacto()->getPrimerNombre().' '.$result->getFkContacto()->getApellidoPaterno().'</option>';
+            }       
+        }
+      
+        $response = new JsonResponse();
+        $response->setData(array('op'=>$op, 'contLista' => $lista_contactos));
+        return $response;
+       
+    }
     /*Encargado de Buscar productos para asociar a empresa*/
     public function buscarProductosAction(Request $request)
     {
@@ -260,6 +288,7 @@ class PedidoController extends Controller
     {
         $id_prod = $request->get('id_producto');
         $id_empresa   = $request->get('id_empresa');
+        $id_contacto   = $request->get('id_contacto');
         $id_pedido  = ($request->get('id_pedido', false)) ? $request->get('id_pedido'): 0;
         /*Creacion de pedido*/
         $user = $this->getUser();//se obtiene el usuario del sistema
@@ -267,8 +296,8 @@ class PedidoController extends Controller
         $user_email = $user->getEmail();//obtencion del email del usuario actual
 
         $em = $this->getDoctrine()->getManager();
-        /*Si el correo y el usuario existen como vendedor realiza el pedido */
-        if ($usuario_vendedor = $em->getRepository('AdminBundle:Vendedor')->findOneBy(array('username'=>$user_n, 'correo'=>$user_email))) {
+        /*Si el correo y el usuario existen como personal-vendedor realiza el pedido */
+        if ($personal = $em->getRepository('AdminBundle:Personal')->findOneBy(array('username'=>$user_n, 'correo'=>$user_email))) {
             /*Extraccion de objeto empresa  para creacion de pedido */
             $empresa = $em->getRepository('AdminBundle:Empresa')->findOneBy(array( 'id' => $id_empresa ));
             /*Inicio creacion pedido*/
@@ -276,8 +305,8 @@ class PedidoController extends Controller
                 if (!$new_pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array( 'id' => $id_pedido ))) {
                     $new_pedido = new Pedidos();
                     $new_pedido->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));
-                    $new_pedido->setFkVendedor($usuario_vendedor);//relaciona el usuario vendedor con el pedido
-                    $new_pedido->setFkEmpresa($empresa);//realciona la empresa con el pedido
+                    $new_pedido->setPersonal($personal);//relaciona el usuario vendedor con el pedido                    
+                    $new_pedido->setContacEmpre($em->getRepository('AdminBundle:ContacEmpre')->findOneBy(array('fkContacto'=>$id_contacto, 'fkEmpresa'=>$id_empresa)));//realciona la empresa con el pedido
                     //$new_pedido->setEtapa(1);
                     $em->persist($new_pedido);
                     $em->flush();
@@ -303,14 +332,9 @@ class PedidoController extends Controller
             $new_pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array( 'id' => $id_pedido ));
             $valorTotal =  $new_pedido->getTotal();//obtiene el valor total antes de cambiarlo
             $valorNuevo =  $pedido_detalle->getTotal();//obtiene el valor nuevo a sumar
-
             $new_pedido->setTotal($valorTotal + $valorNuevo);//actualiza el valor total del pedido sumandole el valor del detalle nuevo
             $em->persist($new_pedido);
             $em->flush();
-
-
-
-
               // variables
             $em         = $this->getDoctrine()->getManager();
             $qb         = $em->createQueryBuilder();
@@ -335,14 +359,8 @@ class PedidoController extends Controller
                 }
                 $result = true;
             }
-        }//final if que evalua el vendedor 
+        }//final if que evalua el Personal 
 
-
-
-
-
-      
-        
         $response = new JsonResponse();
         $response->setData(array('producto' => $producto,'id_pedido' => $id_pedido));
         return $response;
