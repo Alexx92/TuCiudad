@@ -29,6 +29,11 @@ admin_contacto_eliminar:
     options:
         expose: true
 
+ajax_admin_contacto_guardar2:
+    path:     /contacto/guardar/
+    defaults: { _controller: AdminBundle:Contacto:contactoGuardar }
+    options:
+            expose: true    
 #ruta ajax buscar empresas
 ajax_autocomplete_empresa:
     path:     /ajax/autocomplete/contacto/data/

@@ -66,6 +66,45 @@ $(document).ready(function() {
             $('#lista_producto').html("Ingrese mas caracteres para la busqueda");
         }
     });
+    $('#guardar_contacto').on('click', function() {
+        var contacto_pri_nomb = $('#contacto_pri_nomb').val();
+        var contacto_seg_nomb = $('#contacto_seg_nomb').val();
+        var contacto_ape_pate = $('#contacto_ape_pate').val();
+        var contacto_ape_mate = $('#contacto_ape_mate').val();
+        var contacto_email = $('#contacto_email').val();
+        var contacto_fono = $('#contacto_fono').val();
+        var contacto_cargo = $('#contacto_cargo').val();
+        var contacto_obs = $('#contacto_obs').val();
+        var contacto_img = $('#contacto_img').val();
+        var uploader1 = $('#uploader1').val();
+        var empresa_id = $('#empre_id').val();
+        var data = { contacto_pri_nomb: contacto_pri_nomb, contacto_seg_nomb: contacto_seg_nomb, contacto_ape_pate: contacto_ape_pate, contacto_email: contacto_email, contacto_fono: contacto_fono, contacto_cargo: contacto_cargo, contacto_obs: contacto_obs, contacto_img: contacto_img, uploader1: uploader1, empresa_id: empresa_id };
+        $.ajax({
+            dataType: 'json',
+            method: "POST",
+            url: Routing.generate('ajax_admin_contacto_guardar2'),
+            data: data,
+        }).done(function(response) {
+            data = { id_cont: response.id_new, id_empre: empresa_id };
+            $.ajax({
+                dataType: 'json',
+                method: "POST",
+                url: Routing.generate('ajax_guardar_empresa'),
+                data: data,
+            }).done(function(response) {
+                toastr.success('Datos guardados');
+                cargarContactos();
+            });
+        });
+    });
+
+
+    $("input[name=radio]").on('click', function() {
+        $("#check").val($(this).val());
+        var boton = document.getElementById("guardar_producto");
+        boton.disabled = false;
+    });
+
 });
 //Carga los contactos en el select
 function cargarContactos() {

@@ -127,7 +127,7 @@
 											</div>
 										</div>
 
-										<div class="row" id="contacto" style="display: none;">
+										<div class="row" id="contacto" {#style="display: none;"#}>
 											<div class="section-divider mb40" >
                     					  		<span>Contacto Asociado a Pedido</span>											
                     						</div>
@@ -144,14 +144,120 @@
 													</select>
 													<i class="arrow"></i>
 												</label>
+											</div>				
+											<div class="form-group col-sm-6">							
+												<!-- Button trigger modal -->											
+												<button type="button"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+													Ingresar Contacto
+												</button>
 											</div>
-										</div>									
-										<div  id="prod_empresa" style="display: none;" class="row" >
-											<div class="section-divider mb40" >
-                    					  		<span>Ingreso de productos  / servicios</span>											
-                    						</div>
-                                            <div class="form-group col-md-6 " > 
-                                                <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar Producto / Servicio</h5>
+
+											<!-- Modal -->
+											<div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+												<div class="modal-dialog modal-lg">
+													<div class="modal-content">
+														<div class="modal-header">
+															<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+																<h5 class="header2"><i class="material-icons">person_add</i> Nuevo Contacto</h5>
+														</div>
+														<div class="modal-body">
+															<div class="panel">
+																<div class="panel-heading">
+																	<h5 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
+																<form id="form_nuevo_cliente" class="modalForm" action="" method="post" enctype="multipart/form-data">
+																	<div class="row">
+																		<div class="col-md-6 col-lg-6">
+																			<div class="row">																				
+																				<div class="form-group col-md-6">                                           
+																					<label class="field">
+																						Run
+																						<input type="text" name="contacto_run" id="contacto_run" class="gui-input" value="" required>
+																					</label>
+																				</div>																				
+																			</div>
+																		</div>  
+																	</div>
+																	<div class="row">																	    
+																		<div class="col-md-6 col-lg-6">
+																			<div class="row">																				
+																				<div class="form-group col-md-6">                                           
+																					<label class="field">
+																						Primer Nombre
+																						<input type="text" name="contacto_pri_nomb" id="contacto_pri_nomb" class="gui-input" value="" required>
+																					</label>
+																				</div>
+																				<div class="form-group col-md-6">
+																					<label class="field">
+																						Segundo Nombre
+																						<input type="text" name="contacto_seg_nomb" id="contacto_seg_nomb" class="gui-input" value="" >
+																					</label>
+																				</div>
+																			</div>
+																		</div>                                    
+																		<div class="col-md-6 col-lg-6">
+																			<div class="row">
+																				<div class="form-group col-md-6">
+																					<label class="field">																						Apellido Paterno
+																						<input type="text" name="contacto_ape_pate" id="contacto_ape_pate" class="gui-input" value="" required>
+																					</label>
+																				</div>
+																				<div class="form-group col-md-6">
+																					<label class="field">
+																						Apellido Materno
+																						<input type="text" name="contacto_ape_mate" id="contacto_ape_mate" class="gui-input" value="" required>
+																					</label>
+																				</div>
+																			</div>
+																		</div>
+																		<div class="col-md-6 col-lg-6">
+																			<div class="row">
+																				<div class="form-group col-sm-12 col-lg-6">
+																					<label class="field">
+																						Email
+																						<input type="text" name="contacto_email" id="contacto_email" class="gui-input" value="" >
+																					</label>
+																				</div>
+																				<div class="form-group col-sm-12 col-lg-6">
+																					<label class="field">
+																						Tel&eacute;fono																						<input type="text" name="contacto_fono" id="contacto_fono" class="gui-input val_num" value="" required>
+																					</label>
+																				</div>
+																			</div>
+																		</div>
+																		<div class="form-group col-sm-12 col-lg-6">
+																			<label class="field">
+																				Cargo en la empresa
+																				<input type="text" name="contacto_cargo" id="contacto_cargo" class="gui-input" value="" required>
+																			</label>
+																		</div>
+																		<div class="form-group col-sm-12">
+																			<label class="field">Observaciones</label>
+																			<label class="field prepend-icon">
+																				<textarea class="gui-textarea" id="contacto_obs" name="contacto_obs"></textarea>
+																				<label for="contacto_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
+																			</label>
+																		</div>													   
+																	</div>																
+																</form>	
+															</div>																
+														</div>																												
+													</div>
+													<div class="modal-footer">
+														<div class="col-sm-12 text-right">
+															<button id="guardar_contacto" type="submit" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
+															<button id="cancelar_contacto" class="btn btn-warning ">Cancelar <i class="fa fa-ban"></i></button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>									
+									<div  id="prod_empresa" style="display: none;" class="row" >
+										<div class="section-divider mb40" >
+                   					  		<span>Ingreso de productos  / servicios</span>											
+                   						</div>
+                                           <div class="form-group col-md-6 " > 
+                                               <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar Producto / Servicio</h5>
 												<label class="field append-icon">
 													<div class="dropdown">
 														{# <input type="hidden" name="prod_id" id="prod_id" value="" > #}
@@ -167,8 +273,7 @@
                                        	</div>
 										<div class="section-divider mb40">
                     					  	<span>Listado de productos / servicios</span>
-										</div>
-                                                       
+										</div>                                             
 										
                     					<div class="row">
                     						<div class="col-md-12">
@@ -218,5 +323,7 @@
 {% endblock %}
 
 {% block javascripts %}	
+ 
+
 	<script src="{{ absolute_url(asset('assets/js/module/pedido/nuevo.js')) }}"></script>
 {% endblock %}
