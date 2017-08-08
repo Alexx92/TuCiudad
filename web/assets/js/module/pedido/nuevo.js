@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    window.onload = modal(1);
 
     // bloqueo de letras para un imput con la clase val_mun
     $('.val_num').keypress(function(e) {
@@ -66,6 +67,7 @@ $(document).ready(function() {
             $('#lista_producto').html("Ingrese mas caracteres para la busqueda");
         }
     });
+    //guardar contacto ingresado en modal
     $('#guardar_contacto').on('click', function() {
         var contacto_pri_nomb = $('#contacto_pri_nomb').val();
         var contacto_seg_nomb = $('#contacto_seg_nomb').val();
@@ -97,15 +99,158 @@ $(document).ready(function() {
             });
         });
     });
+    //Seleccion de opciones asignada al producto
+    $('#opciones').on('change', function() {
+        var id_opcion = $(this).val();
+        var id_detalle = $('#detalle').val();
+        $("input#dimensiones").val("");
+        $("input#medida").val("");
+        var combo = document.getElementById("opciones");
+        var selected = combo.options[combo.selectedIndex].text;
+        if (selected.indexOf("[") != -1) {
+            $('#viewOpciones').show();
+            $('#divLargo').show();
+            $('#divAncho').show();
+        } else {
+            $('#viewOpciones').hide();
+            $('#divLargo').hide();
+            $('#divAncho').hide();
+            $('#divCalculos').hide();
+            var data = { id_opcion: id_opcion, id_detalle, id_detalle };
+            $.ajax({
+                dataType: 'json',
+                type: "POST",
+                url: Routing.generate('ajax_guardar_opcion_detalleProducto'),
+                data: data,
+            }).done(function(response) {
+                $('#click_opcion').append('<div class="valign-wrapper"><i class="material-icons del_btn_i pointer">remove_circle_outline</i>' + selected + '<input type="number" id="' + response.id_op_det + '" style="width:70px;text-align:center;margin-left:10px;" min="1" value="1" class="gui-input input-sm" onchange="actualizaCantidadOpcion(this.value,this.id)"></div>');
+                $('#valor').val(response.total_pedido);
+                var total = "total" + id_detalle;
+                document.getElementById(total).innerHTML = " " + response.total_pedido;
+                $('#opciones').val($('#opciones > option:first').val());
+                toastr.success('Valor Agregado');
+            }).fail(function(response) {
+                toastr.warning('No ha seleccionado ninguna opcion');
+            });
+        }
+    });
+    //Guardar la opcion con largo y ancho
+    $('#boton-guardar-opcion-dimensiones').on('click', function() {
+        var largo = document.getElementsByName("largo")[0].value;
+        var ancho = document.getElementsByName("ancho")[0].value;
+        var costo = document.getElementsByName("costo")[0].value;
+        var opcion = $('#opciones').val();
+        var id_detalle = $('#detalle').val();
+        var data = { id_detalle: id_detalle, opcion: opcion, largo: largo, ancho: ancho };
+        $.ajax({
+            dataType: 'json',
+            method: 'POST',
+            url: Routing.generate('ajax_agregar_opcionXmedida'),
+            data: data,
+        }).done(function(response) {
 
-
-    $("input[name=radio]").on('click', function() {
-        $("#check").val($(this).val());
-        var boton = document.getElementById("guardar_producto");
-        boton.disabled = false;
+            console.log(response);
+            toastr.success('Datos guardados');
+            // var total = "total" + id_detalle;
+            // document.getElementById(total).innerHTML = " " + response.result;
+        });
     });
 
 });
+//funcion que activa la ventana modal para agregar detalles al producto a cotizar
+function modal(id_detalle) {
+    var data = { id_detalle: id_detalle };
+    $.ajax({
+        dataType: 'json',
+        method: 'POST',
+        url: Routing.generate('ajax_cargar_listado_opciones'),
+        data: data,
+    }).done(function(response) {
+        $('#opciones').html(response.lista_opciones);
+        $('#click_opcion').html(response.lista_opciones_guardadas);
+        $("#detalle").val(id_detalle);
+        $('#myModal2').modal('show');
+        var idTd = "#total" + id_detalle;
+        $("#valor").val($(idTd).text());
+    });
+}
+//funcion que actualiza el total de valor del producto dependiendo de la entrada de largo y ancho
+function actualizaValor() {
+    var id_detalle = $('#detalle').val();
+    var largo = document.getElementsByName("largo")[0].value;
+    var ancho = document.getElementsByName("ancho")[0].value;
+    var textoSelect = document.getElementById("opciones");
+    var selected = textoSelect.options[textoSelect.selectedIndex].text;
+    var data = { largo: largo, ancho: ancho, id_detalle: id_detalle };
+    if (ancho != "" && largo != "") {
+        $('#divCalculos').show();
+        document.getElementById('boton-guardar-opcion-dimensiones').disabled = false; //activa el boton para guardar opcion con dimensiones
+        var ubicacionTipoUnidad = selected.indexOf("[");
+        var ubicacionPrecio1 = selected.indexOf("$");
+        var precio = selected.substring(ubicacionPrecio1 + 1, ubicacionTipoUnidad - 2);
+        // var dimension = Math.ceil(largo * ancho);
+        var dimension = Math.round((largo * ancho) * 100) / 100;
+        var costoTotal = Math.ceil(precio * dimension);
+        var opcion2 = '<form class="form-inline "><div class="form-group col-md-6 "><label class="field"> Dimension Total:<div class="input-group"><input  style="text-align:right;" type="text" class="form-control" id="medida" value="' + dimension + '" disabled="true"><div class="input-group-addon"  disabled="true">' + selected.substr(ubicacionTipoUnidad - 1) + '</div></div></label></div><div class="form-group col-md-6 "><label class="field"> Costo:<div class="input-group"><div class="input-group-addon">$</div><input   type="text" class="form-control" id="costo" value="' + costoTotal + '" disabled="true"></div></label></div></form>';
+        $('#divCalculos').html(opcion2);
+
+    } else {
+        document.getElementById('boton-guardar-opcion-dimensiones').disabled = true;
+    }
+}
+
+//funcion que modifica la cantidad total del detalle 
+function myFunction(val, id) {
+    var cantidad = val;
+    var id_detalle = id;
+    var data = { cantidad: cantidad, id_detalle: id_detalle };
+    $.ajax({
+        dataType: 'json',
+        method: 'POST',
+        url: Routing.generate('ajax_actualizar_cantidad_detalle'),
+        data: data,
+    }).done(function(response) {
+        toastr.success('Datos guardados');
+        var total = "total" + id_detalle;
+        document.getElementById(total).innerHTML = " " + response.result;
+    });
+}
+//funcion que actualiza la cantidad de la opcion seleccionada 
+function actualizaCantidadOpcion(val, id) {
+    var cantidad = val;
+    var id_detalle_opc = id;
+    var id_detalle = $('#detalle').val();
+    console.log(id_detalle);
+    var data = { cantidad: cantidad, id_detalle_opc: id_detalle_opc };
+    $.ajax({
+        dataType: 'json',
+        method: 'POST',
+        url: Routing.generate('ajax_actualizar_cantidad_opciones'),
+        data: data,
+    }).done(function(response) {
+        toastr.success('Datos guardados');
+        var total = "total" + id_detalle;
+        document.getElementById(total).innerHTML = " " + response.result;
+        $('#valor').val(response.result);
+    });
+}
+//funcion que actualiza el valor por detalle al cambiar el valor de la cotizacion
+function myFunctionValCotizacion(val, id) {
+    var valorCotizacion = val;
+    var id_detalle = id;
+    var data = { valorCotizacion: valorCotizacion, id_detalle: id_detalle };
+    $.ajax({
+        dataType: 'json',
+        method: 'POST',
+        url: Routing.generate('ajax_actualizar_valorCotizacion_detalle'),
+        data: data,
+    }).done(function(response) {
+        var total = "total" + id_detalle;
+        document.getElementById(total).innerHTML = " " + response.result;
+        toastr.success('Datos guardados');
+
+    });
+}
 //Carga los contactos en el select
 function cargarContactos() {
     var input = $("#empre_id").val();

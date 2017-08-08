@@ -22,6 +22,20 @@ class DetallepedidoOpcionesproducto
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="cantidad", type="string", length=45, nullable=true)
+     */
+    private $cantidad;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="valor", type="string", length=45, nullable=true)
+     */
+    private $valor;
+
+    /**
      * @var \OpcionesProducto
      *
      * @ORM\ManyToOne(targetEntity="OpcionesProducto")
@@ -51,6 +65,52 @@ class DetallepedidoOpcionesproducto
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set cantidad
+     *
+     * @param string $cantidad
+     * @return DetallepedidoOpcionesproducto
+     */
+    public function setCantidad($cantidad)
+    {
+        $this->cantidad = $cantidad;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidad
+     *
+     * @return string 
+     */
+    public function getCantidad()
+    {
+        return $this->cantidad;
+    }
+
+    /**
+     * Set valor
+     *
+     * @param string $valor
+     * @return DetallepedidoOpcionesproducto
+     */
+    public function setValor($valor)
+    {
+        $this->valor = $valor;
+
+        return $this;
+    }
+
+    /**
+     * Get valor
+     *
+     * @return string 
+     */
+    public function getValor()
+    {
+        return $this->valor;
     }
 
     /**

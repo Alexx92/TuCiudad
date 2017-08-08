@@ -28,6 +28,13 @@ class UnidadMedidaPeso
      */
     private $nombre;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sigla", type="string", length=45, nullable=true)
+     */
+    private $sigla;
+
 
 
     /**
@@ -61,5 +68,28 @@ class UnidadMedidaPeso
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set sigla
+     *
+     * @param string $sigla
+     * @return UnidadMedidaPeso
+     */
+    public function setSigla($sigla)
+    {
+        $this->sigla = $sigla;
+
+        return $this;
+    }
+
+    /**
+     * Get sigla
+     *
+     * @return string 
+     */
+    public function getSigla()
+    {
+        return $this->sigla;
     }
 }

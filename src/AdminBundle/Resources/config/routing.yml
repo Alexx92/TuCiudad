@@ -296,5 +296,41 @@ ajax_busq_datos_producto:
     defaults: { _controller: AdminBundle:Pedido:buscardatosproductos }
     options:
         expose: true
+#ruta ajax actualizar cantidad de productos en detalle
+ajax_actualizar_cantidad_detalle:
+    path:     /ajax/busqueda/pedido/cantidad/
+    defaults: { _controller: AdminBundle:Pedido:actualizaCantidadProductos }
+    options:
+        expose: true
+#ruta ajax actualizar valor de precio cotizacion de detalle
+ajax_actualizar_valorCotizacion_detalle:
+    path:     /ajax/busqueda/pedido/valCotizacion/
+    defaults: { _controller: AdminBundle:Pedido:actualizaPrecioCotizacionProducto }
+    options:
+        expose: true
+#ruta ajax carga el listado de opciones dependiendo del producto y su categoria
+ajax_cargar_listado_opciones:
+    path:     /ajax/busqueda/pedido/cargarOpciones/
+    defaults: { _controller: AdminBundle:Pedido:cargarListadoOpciones}
+    options:
+        expose: true
+#ruta ajax guarda la opcion seleccionada para el producto(detalle_producto)
+ajax_guardar_opcion_detalleProducto:
+    path:     /ajax/busqueda/pedido/guardarOpcionesProducto/
+    defaults: { _controller: AdminBundle:Pedido:guardarOpcionDetalleProducto}
+    options:
+        expose: true
+#ruta ajax guarda la cantidad de la  opcion seleccionada para el producto(detalle_producto)
+ajax_actualizar_cantidad_opciones:
+    path:     /ajax/busqueda/pedido/guardarCantidad/
+    defaults: { _controller: AdminBundle:Pedido:guardarCantidadOpcionesProducto}
+    options:
+        expose: true
+#ruta ajax guarda el valor de la opcion seleccionada para el producto(detalle_producto) por largo y ancho
+ajax_agregar_opcionXmedida:
+    path:     /ajax/busqueda/pedido/guardarOpcionDimension/
+    defaults: { _controller: AdminBundle:Pedido:agregarOpcionDimension}
+    options:
+        expose: true
 
 

@@ -90,7 +90,7 @@ $(document).ready(function() {
             }).done(function(response) {
                 if (response.empreLista != "") {
                     $('#match').html(response.empreLista);
-                    console.log(response.empreLista);
+                    //console.log(response.empreLista);
                     cli_empre();
                     $(".dropdown-toggle").dropdown("toggle");
                 } else {
@@ -148,6 +148,5 @@ function cli_empre() {
         }).fail(function(response) {
             toastr.error('Error al cargar el dato');
         });
-
     });
 }

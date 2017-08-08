@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Login Alta Frontera</title>
+        <link href="{{ absolute_url(asset('assets/css/theme.css')) }}" rel="stylesheet">
+        <link href="{{ absolute_url(asset('assets/css/admin.css')) }}" rel="stylesheet">
+        <link href="{{ absolute_url(asset('assets/css/admin-forms.css')) }}" rel="stylesheet">
+        <style>
+            body{height:100%;}
+            footer{background-color:rgba(0, 0, 0, 0.1)}
+        </style>
+    </head>
+    <body>        
+        <div>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+                <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
+            {% endif %}
+        </div>        
+        {% if app.request.hasPreviousSession %}
+            {% for type, messages in app.session.flashbag.all() %}
+                {% for message in messages %}
+                    <div class="flash-{{ type }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+        <div>
+            {% block fos_user_content %}            
+            {% endblock fos_user_content %}
+        </div>
+        <!-- Begin: Page Footer -->
+        <footer id="content-footer">
+          <div class="row">
+            <div class="col-md-6">
+              <span class="footer-legal">Desarrollado Por: Agencia <a href="tuciudad.cl">tuciudad.cl</a> ©</span>
+            </div>
+            <div class="col-md-6 text-right">
+              <span class="footer-meta"></span>
+            </div>
+          </div>
+        </footer>
+        <!-- End: Page Footer -->
+    </body>
+</html>

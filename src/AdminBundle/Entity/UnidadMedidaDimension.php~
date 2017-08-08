@@ -28,5 +28,12 @@ class UnidadMedidaDimension
      */
     private $nombre;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sigla", type="string", length=45, nullable=true)
+     */
+    private $sigla;
+
 
 }
