@@ -123,7 +123,7 @@ $(document).ready(function() {
                 url: Routing.generate('ajax_guardar_opcion_detalleProducto'),
                 data: data,
             }).done(function(response) {
-                $('#click_opcion').append('<div class="valign-wrapper"><i class="material-icons del_btn_i pointer">remove_circle_outline</i>' + selected + '<input type="number" id="' + response.id_op_det + '" style="width:70px;text-align:center;margin-left:10px;" min="1" value="1" class="gui-input input-sm" onchange="actualizaCantidadOpcion(this.value,this.id)"></div>');
+                $('#click_opcion').append('<div class="valign-wrapper"  id ="' + id_opcion + '" ><i onClick="functionDelete(' + id_opcion + ' )" class="material-icons del_btn_i pointer">remove_circle_outline</i>' + selected + '<input type="number" id="' + response.id_op_det + '" style="width:70px;text-align:center;margin-left:10px;" min="1" value="1" class="gui-input input-sm" onchange="actualizaCantidadOpcion(this.value,this.id)"></div>');
                 $('#valor').val(response.total_pedido);
                 var total = "total" + id_detalle;
                 document.getElementById(total).innerHTML = " " + response.total_pedido;
@@ -139,24 +139,52 @@ $(document).ready(function() {
         var largo = document.getElementsByName("largo")[0].value;
         var ancho = document.getElementsByName("ancho")[0].value;
         var costo = document.getElementsByName("costo")[0].value;
-        var opcion = $('#opciones').val();
+        var id_opcion = $('#opciones').val();
         var id_detalle = $('#detalle').val();
-        var data = { id_detalle: id_detalle, opcion: opcion, largo: largo, ancho: ancho };
+        var data = { id_detalle: id_detalle, id_opcion: id_opcion, largo: largo, ancho: ancho, costo: costo };
         $.ajax({
             dataType: 'json',
             method: 'POST',
             url: Routing.generate('ajax_agregar_opcionXmedida'),
             data: data,
         }).done(function(response) {
-
-            console.log(response);
-            toastr.success('Datos guardados');
-            // var total = "total" + id_detalle;
-            // document.getElementById(total).innerHTML = " " + response.result;
+            if (response.res) {
+                var medida = document.getElementsByName("medida")[0].value;
+                var textoSelect = document.getElementById("opciones");
+                var selected = textoSelect.options[textoSelect.selectedIndex].text;
+                var ubicacionTipoUnidad = selected.indexOf("[");
+                $('#click_opcion').append('<div class="valign-wrapper" id ="' + id_opcion + '"><i onClick="functionDelete(' + id_opcion + ')" class="material-icons del_btn_i pointer">remove_circle_outline</i>' + selected + ', Total medida ' + medida + ' ' + selected.substr(ubicacionTipoUnidad - 1) + ' = $' + costo + '</div>');
+                $('#opciones').val($('#opciones > option:first').val());
+                $('#viewOpciones').hide();
+                var total = "total" + id_detalle;
+                document.getElementById(total).innerHTML = " " + response.total_pedido;
+                $('#valor').val(response.total_pedido);
+                toastr.success('Datos guardados');
+            } else {
+                toastr.error('La opcion y los datos seleccionados ya se encuentran registrados');
+            }
         });
     });
-
 });
+//Elimina la opcion seleccionada del listado 
+function functionDelete(id_opcion) {
+    var btn = $(this);
+    var id_detalle = $('#detalle').val();
+    var data = { id_detalle: id_detalle, id_opcion: id_opcion };
+    console.log(data);
+    $.ajax({
+        dataType: 'json',
+        method: 'POST',
+        url: Routing.generate('ajax_elimina_opcion_producto'),
+        data: data,
+    }).done(function(response) {
+        var total = "total" + id_detalle;
+        document.getElementById(total).innerHTML = " " + response.total_pedido;
+        $('#valor').val(response.total_pedido);
+        $("#" + id_opcion).remove();
+        toastr.success('Opcion eliminada ');
+    });
+}
 //funcion que activa la ventana modal para agregar detalles al producto a cotizar
 function modal(id_detalle) {
     var data = { id_detalle: id_detalle };
@@ -191,14 +219,12 @@ function actualizaValor() {
         // var dimension = Math.ceil(largo * ancho);
         var dimension = Math.round((largo * ancho) * 100) / 100;
         var costoTotal = Math.ceil(precio * dimension);
-        var opcion2 = '<form class="form-inline "><div class="form-group col-md-6 "><label class="field"> Dimension Total:<div class="input-group"><input  style="text-align:right;" type="text" class="form-control" id="medida" value="' + dimension + '" disabled="true"><div class="input-group-addon"  disabled="true">' + selected.substr(ubicacionTipoUnidad - 1) + '</div></div></label></div><div class="form-group col-md-6 "><label class="field"> Costo:<div class="input-group"><div class="input-group-addon">$</div><input   type="text" class="form-control" id="costo" value="' + costoTotal + '" disabled="true"></div></label></div></form>';
+        var opcion2 = '<form class="form-inline "><div class="form-group col-md-6 "><label class="field"> Dimension Total:<div class="input-group"><input  style="text-align:right;" type="text" class="form-control"  name="medida" id="medida" value="' + dimension + '" disabled="true"><div class="input-group-addon"  disabled="true">' + selected.substr(ubicacionTipoUnidad - 1) + '</div></div></label></div><div class="form-group col-md-6 "><label class="field"> Costo:<div class="input-group"><div class="input-group-addon">$</div><input   type="text" class="form-control" name="costo" id="costo" value="' + costoTotal + '" disabled="true"></div></label></div></form>';
         $('#divCalculos').html(opcion2);
-
     } else {
         document.getElementById('boton-guardar-opcion-dimensiones').disabled = true;
     }
 }
-
 //funcion que modifica la cantidad total del detalle 
 function myFunction(val, id) {
     var cantidad = val;

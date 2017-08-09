@@ -57,27 +57,6 @@ class PedidoDetalle
     private $observacion;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="largo", type="string", length=45, nullable=true)
-     */
-    private $largo;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="ancho", type="string", length=45, nullable=true)
-     */
-    private $ancho;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="peso", type="string", length=45, nullable=true)
-     */
-    private $peso;
-
-    /**
      * @var \Pedidos
      *
      * @ORM\ManyToOne(targetEntity="Pedidos")

@@ -119,23 +119,23 @@ $(document).ready(function() {
             }
         });
     });
-    $('.del_btn_i').on('click', function(e) {
-        var btn = $(this);
-        var id = btn.data('id');
-        var data = { id: id };
-        e.preventDefault();
-        $.ajax({
-            dataType: 'json',
-            method: 'POST',
-            url: Routing.generate('ajax_borrar_contacto'),
-            data: data,
-        }).done(function(json) {
-            if (json) {
-                btn.parent().remove();
-                toastr.success('Dato eliminado');
-            }
-        });
-    });
+    // $('.del_btn_i').on('click', function(e) {
+    //     var btn = $(this);
+    //     var id = btn.data('id');
+    //     var data = { id: id };
+    //     e.preventDefault();
+    //     $.ajax({
+    //         dataType: 'json',
+    //         method: 'POST',
+    //         url: Routing.generate('ajax_borrar_contacto'),
+    //         data: data,
+    //     }).done(function(json) {
+    //         if (json) {
+    //             btn.parent().remove();
+    //             toastr.success('Dato eliminado');
+    //         }
+    //     });
+    // });
 
     $("#regiones").on('change', function() {
         var region = $(this);

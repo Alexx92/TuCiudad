@@ -253,10 +253,10 @@
 											</div>
 										</div>
 									</div>									
-									<div  id="prod_empresa" style="display: none;" class="row" >
-										<div class="section-divider mb40" >
-                   					  		<span>Ingreso de productos  / servicios</span>											
-                   						</div>
+										<div  id="prod_empresa" style="display: none;" class="row" >
+											<div class="section-divider mb40" >
+												<span>Ingreso de productos  / servicios</span>											
+											</div>
                                            <div class="form-group col-md-6 " > 
                                                <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar Producto / Servicio</h5>
 												<label class="field append-icon">
@@ -338,7 +338,17 @@
 																					<option value="0" selected>Seleccione</option>
 																				</select>
 																				<i class="arrow"></i>
-																			</label>																																					
+																			</label>	
+																			{# modal																		 #}
+																			<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button>
+
+																			<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+																			<div class="modal-dialog modal-lg">
+																				<div class="modal-content">
+																						
+																				</div>
+																			</div>
+																			</div>																																
 																		</div>																		
 																	</div>		
 																	<div id="viewOpciones" class="row" style="display:none">
@@ -375,7 +385,8 @@
 																			<div class="section-divider mb40"><span></span></div>
 																			<div class="row col-md-offset-1">
 																				<h4>Opciones Seleccionadas</h4>
-																				<div id="click_opcion" class="click_opcion "></div>
+																				<div id="click_opcion" class="click_opcion ">
+																				</div>
 																			</div>
 																			<div class="col-md-4 col-md-offset-4">
 																				<label class="field">

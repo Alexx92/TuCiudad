@@ -57,27 +57,6 @@ class PedidoDetalle
     private $observacion;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="largo", type="string", length=45, nullable=true)
-     */
-    private $largo;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="ancho", type="string", length=45, nullable=true)
-     */
-    private $ancho;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="peso", type="string", length=45, nullable=true)
-     */
-    private $peso;
-
-    /**
      * @var \Pedidos
      *
      * @ORM\ManyToOne(targetEntity="Pedidos")
@@ -222,75 +201,6 @@ class PedidoDetalle
     public function getObservacion()
     {
         return $this->observacion;
-    }
-
-    /**
-     * Set largo
-     *
-     * @param string $largo
-     * @return PedidoDetalle
-     */
-    public function setLargo($largo)
-    {
-        $this->largo = $largo;
-
-        return $this;
-    }
-
-    /**
-     * Get largo
-     *
-     * @return string 
-     */
-    public function getLargo()
-    {
-        return $this->largo;
-    }
-
-    /**
-     * Set ancho
-     *
-     * @param string $ancho
-     * @return PedidoDetalle
-     */
-    public function setAncho($ancho)
-    {
-        $this->ancho = $ancho;
-
-        return $this;
-    }
-
-    /**
-     * Get ancho
-     *
-     * @return string 
-     */
-    public function getAncho()
-    {
-        return $this->ancho;
-    }
-
-    /**
-     * Set peso
-     *
-     * @param string $peso
-     * @return PedidoDetalle
-     */
-    public function setPeso($peso)
-    {
-        $this->peso = $peso;
-
-        return $this;
-    }
-
-    /**
-     * Get peso
-     *
-     * @return string 
-     */
-    public function getPeso()
-    {
-        return $this->peso;
     }
 
     /**

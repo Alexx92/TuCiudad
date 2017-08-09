@@ -332,5 +332,11 @@ ajax_agregar_opcionXmedida:
     defaults: { _controller: AdminBundle:Pedido:agregarOpcionDimension}
     options:
         expose: true
+#ruta ajax elimina opcion seleccionada de producto(detalle_producto) 
+ajax_elimina_opcion_producto:
+    path:     /ajax/busqueda/pedido/eliminaOpcionDetalle/
+    defaults: { _controller: AdminBundle:Pedido:eliminaOpcionDetalleProducto}
+    options:
+        expose: true
 
 
