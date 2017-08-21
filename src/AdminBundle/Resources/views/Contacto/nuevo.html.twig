@@ -19,9 +19,7 @@
                 <!-- Tabs Navigation -->
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#datos-contacto-tab" aria-controls="datos-contacto-tab" role="tab" data-toggle="tab">Datos Contacto</a></li>
-                    {% if data.id is defined %}
-                         <li role="presentation"><a href="#add-contacto-tab" aria-controls="add-contacto-tab" role="tab" data-toggle="tab">Vincular a empresa</a></li>
-                    {% endif %}
+                    <li id="mostrar" style={{data.id is not defined ? "display:none;" : " "}} role="presentation"><a href="#add-contacto-tab" aria-controls="add-contacto-tab" role="tab" data-toggle="tab">Vincular a empresa</a></li>
                 </ul>
                 <!-- Tab Content Panes -->
                 <div class="tab-content">
@@ -32,18 +30,28 @@
                             <div class="row">
                                 <form id="form_nuevo_cliente" class="admin-form" action="{{ url('admin_contacto_guardar') }}" method="post" enctype="multipart/form-data">
                                     <input type="hidden" name="id_contacto" id="id_contacto" value="{{ data.id is defined ? data.id}}" >                                    
+                                    <div class="col-md-12 ">
+                                        <div class="row">
+                                            <div class="form-group col-md-3">                                           
+                                                <label class="field">
+                                                    Run
+                                                    <input type="text" name="contacto_run" id="contacto_run" class="gui-input" value="{{ data.run is defined ? data.run}}" requiered>
+                                                </label>
+                                            </div>                                           
+                                        </div>
+                                    </div>
                                     <div class="col-md-6 col-lg-6">
                                         <div class="row">
-                                            <div class="form-group col-md-6">                                           
+                                            <div class="form-group col-md-6">
                                                 <label class="field">
                                                     Primer Nombre
-                                                    <input type="text" name="contacto_pri_nomb" id="contacto_pri_nomb" class="gui-input" value="{{ data.primer_nombre is defined ? data.primer_nombre}}" required>
+                                                    <input type="text" pattern="[a-z]{1,15}" name="contacto_pri_nomb" id="contacto_pri_nomb" class="gui-input" value="{{ data.primer_nombre is defined ? data.primer_nombre}}" required>
                                                 </label>
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label class="field">
                                                     Segundo Nombre
-                                                    <input type="text" name="contacto_seg_nomb" id="contacto_seg_nomb" class="gui-input" value="{{ data.segundo_nombre is defined ? data.segundo_nombre}}" >
+                                                    <input type="text" name="contacto_seg_nomb" id="contacto_seg_nomb" class="gui-input" value="{{ data.segundo_nombre is defined ? data.segundo_nombre}}">
                                                 </label>
                                             </div>
                                         </div>
@@ -53,13 +61,13 @@
                                             <div class="form-group col-md-6">
                                                 <label class="field">
                                                     Apellido Paterno
-                                                    <input type="text" name="contacto_ape_pate" id="contacto_ape_pate" class="gui-input" value="{{ data.apellido_paterno is defined ? data.apellido_paterno}}" required>
+                                                    <input type="text" name="contacto_ape_pate" id="contacto_ape_pate" class="gui-input" value="{{ data.apellido_paterno is defined ? data.apellido_paterno}}">
                                                 </label>
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label class="field">
                                                     Apellido Materno
-                                                    <input type="text" name="contacto_ape_mate" id="contacto_ape_mate" class="gui-input" value="{{ data.apellido_materno is defined ? data.apellido_materno}}" required>
+                                                    <input type="text" name="contacto_ape_mate" id="contacto_ape_mate" class="gui-input" value="{{ data.apellido_materno is defined ? data.apellido_materno}}">
                                                 </label>
                                             </div>
                                         </div>
@@ -69,23 +77,71 @@
                                             <div class="form-group col-sm-12 col-lg-6">
                                                 <label class="field">
                                                     Email
-                                                    <input type="text" name="contacto_email" id="contacto_email" class="gui-input" value="{{ data.email is defined ? data.email}}" >
+                                                    <input type="text" name="contacto_email" id="contacto_email" class="gui-input" value="{{ data.email is defined ? data.email}}">
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-12 col-lg-6">
                                                 <label class="field">
                                                     Tel&eacute;fono
-                                                    <input type="text" name="contacto_fono" id="contacto_fono" class="gui-input val_num" value="{{ data.telefono is defined ? data.telefono}}" required>
+                                                    <input type="tel" name="contacto_fono" id="contacto_fono" class="gui-input val_num" value="{{ data.telefono is defined ? data.telefono}}" >
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    <div class="form-group col-sm-12 col-lg-6">
-                                        <label class="field">
-                                            Cargo en la empresa
-                                            <input type="text" name="contacto_cargo" id="contacto_cargo" class="gui-input" value="{{ data.cargo is defined ? data.cargo}}" required>
+									<div class="form-group col-sm-12 col-md-3">
+			    						<label class="field">
+											Cargo
                                         </label>
+                                        <label class="field select">
+                                            <select id="cargos" name="cargos" class="form-control" required>
+                                                {% if data.cargo is defined %}<option value={{data.cargo}}>{{cargoNombre}}</option>{% endif %}
+                                                <option value="">Seleccione</option>
+                                                {% for lista_cargos in lista_cargos %}
+                                                    <option id="seleccion" name="seleccion" value={{lista_cargos.id}}>{{lista_cargos.nombre}}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <i class="arrow"></i>
+										</label>                                    
+                            		</div>
+                                    <div class="form-group col-sm-12 col-md-3">
+                                        <!-- Button trigger modal -->
+                                        <button id="btnShowModal" type="button" class="btn btn-primary btn-lg"  data-target="#myModal">
+                                            Crear Cargo
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">Creacion Cargo</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                            <div class="form-group col-sm-12 col-lg-6">
+                                                                <label class="field">
+                                                                    Nombre
+                                                                    <input type="text" name="cargo_nombre" id="cargo_nombre" class="gui-input"  >
+                                                                </label>
+                                                            </div>
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="field">Observaciones</label>
+                                                            <label class="field prepend-icon">
+                                                                <textarea class="gui-textarea" id="cargo_obs" name="cargo_obs"></textarea>
+                                                                <label for="cargo_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" value="Reset" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                    <button id="btnModalGuardarCargo" type="button" class="btn btn-primary">Guardar</button>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                   
+                                       
                                     </div>
                                     <div class="form-group col-sm-12">
                                         <label class="field">Observaciones</label>
@@ -94,25 +150,6 @@
                                             <label for="contacto_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
                                         </label>
                                     </div>
-                                    {% if data.id is not defined %}
-                                        <div id="mostrar" style="display: none;" >
-                                            <div class="col-sm-12">
-                                                <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar empresas</h5>
-                                                <div class="dropdown">
-                                                    <input type="text" id="busq_empre" name="buscar" class="form-control dropdown-toggle" data-toggle="dropdown">
-                                                    <ul id="match" aria-labelledby="busq_empre" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
-                                                </div>
-                                                <div id="cli-emp" class="cli-emp" >
-                                                    <!-- se agregan las empresas para hacer el vinculo -->
-                                                    {% if lista_emprecont is defined %}
-                                                        {% for lista_emprecont in lista_emprecont %}
-                                                            <div class="valign-wrapper"><i class="material-icons del_btn_i pointer" data-id="{{ lista_emprecont.id_contempr }}">remove_circle_outline</i>{{ lista_emprecont.nombre_fkempre }}</div>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>  
-                                    {% endif %}
                                     <!-- imagen -->
                                     {% if data.imagen is defined and data.imagen is not empty %}
                                     <div class="form-group col-sm-12">
@@ -137,12 +174,13 @@
                             <div class="row">
                                 <div class="col-sm-12 text-right">
                                     <button id="guardar_contacto" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
-                                    <button id="cancelar_contacto" class="btn btn-warning ">Cancelar <i class="fa fa-ban"></i></button>
+                                    <a href="{{ url('admin_contacto')}}" class="btn btn-warning " role="button">Cancelar<i class="fa fa-ban"></i></a>
+
                                 </div>
                             </div>
                         </div>
                     </div>
-                     {% if data.id is defined  %}
+                     {# {% if data.id is defined  %} #}
 
                     <div  role="tabpanel" class="tab-pane fade" id="add-contacto-tab">
                             <div class="col-sm-12">
@@ -161,7 +199,7 @@
                                 </div>
                             </div>
                     </div>   
-                    {% endif %}                 
+                    {# {% endif %}                  #}
                 </div>
             </div>
         </div>

@@ -63,6 +63,7 @@ $(document).ready(function() {
             }).done(function(json) {
                 //form[0].reset();
                 //validator.resetForm();
+                $('#mostrar').show();
                 toastr.success('Datos guardados');
             }).fail(function(json) {
                 toastr.error('Error al guardar');
@@ -167,6 +168,9 @@ $(document).ready(function() {
             $("#comuna").show();
         });
     });
+    // $("#cancelar_empresa").on('click', function() {
+    //     location.href = "index.html.twig";
+    // });
 });
 
 function cargar() {

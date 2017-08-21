@@ -131,6 +131,7 @@ class EmpresasController extends Controller
             $empresa->setWeb($web);
             $empresa->setObservacion($obs);
             $empresa->setCoordenadas($coordenadas);
+            $empresa->setEstadoEmpresa($em->getRepository('AdminBundle:EstadoEmpresa')->findOneBy(array('id'=>1)));
             
             // guardar imagen
             if ($imagen)

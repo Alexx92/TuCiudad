@@ -188,7 +188,6 @@ class PersonalController extends Controller
         $data['dni']               = $personal->getDni();
         $data['sexo']              = $personal->getSexo();
         $sexo = ($personal->getSexo() == 1) ? "Hombre" : "Mujer" ;
-        //$date     = $personal->getFechaNacimiento();
         $data['fecha_nacimiento'] = date_format($personal->getFechaNacimiento(), 'd-m-Y');
         
         $data['comuna']            = $personal->getComuna();

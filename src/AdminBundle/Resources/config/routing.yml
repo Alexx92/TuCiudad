@@ -160,32 +160,7 @@ ajax_cargar_area:
     defaults: { _controller: AdminBundle:Personal:cargarArea }
     options:
          expose: true
-#-----------------------Producto-----------------------
-admin_producto:
-    path:     /producto/
-    defaults: { _controller: AdminBundle:Producto:productoIndex }
 
-cargar_producto_tabla:
-    path:     /producto/tabla/
-    defaults: { _controller: AdminBundle:Producto:productoCargartabla }
-
-admin_producto_nuevo:
-    path:     /producto/nuevo/
-    defaults: { _controller: AdminBundle:Producto:productoNuevo }
-
-admin_producto_guardar:
-    path:     /producto/guardar/
-    defaults: { _controller: AdminBundle:Producto:productoGuardar }
-
-admin_producto_editar:
-    path:     /producto/editar/{id}
-    defaults: { _controller: AdminBundle:Producto:productoEditar }
-
-admin_producto_eliminar:
-    path:     /producto/eliminar/
-    defaults: { _controller: AdminBundle:Producto:productoEliminar }
-    options:
-        expose: true
 
 #-----------------------Categorias-----------------------
 admin_categorias:
@@ -213,22 +188,9 @@ admin_categorias_eliminar:
     defaults: { _controller: AdminBundle:Categorias:categoriasEliminar }
     options:
         expose: true
-#ruta ajax buscar categorias
-ajax_autocomplete_categoria: 
-    path:     /ajax/autocomplete/producto/data/
-    defaults: { _controller: AdminBundle:Producto:buscarData }
-    options:
-        expose: true
-# ruta ajax guardar relaciones producto-categoria
-ajax_guardar_categoria:
-    path:     /ajax/contacto/categoria/save/
-    defaults: { _controller: AdminBundle:Producto:ajax_guardar_categoria }
-    options:
-        expose: true
-# ruta ajax para quitar categorias viculadas a producto
-ajax_borrar_categoria:
-    path:     /ajax/contacto/categoria/delete/
-    defaults: { _controller: AdminBundle:Producto:ajax_borrar_categoria }
+ajax_guardar_categoria_producto:
+    path:     /categorias/productoGuardar/
+    defaults: { _controller: AdminBundle:Categorias:categoriasGuardarProducto }
     options:
         expose: true
 
@@ -338,5 +300,110 @@ ajax_elimina_opcion_producto:
     defaults: { _controller: AdminBundle:Pedido:eliminaOpcionDetalleProducto}
     options:
         expose: true
+#ruta ajax carga las opciones de unidad para OpcionProducto 
+ajax_cargar_opciones_unidad_producto:
+    path:     /ajax/busqueda/pedido/cargaOpcionesUnidades/
+    defaults: { _controller: AdminBundle:Pedido:cargaOpcionesUnidadesOpcionProducto}
+    options:
+        expose: true
 
+# #ruta ajax carga las categorias de producto
+# ajax_cargar_categorias_producto:
+#     path:     /ajax/busqueda/pedido/cargaTodasCategoriasProducto/
+#     defaults: { _controller: AdminBundle:Pedido:cargaCategoriasProducto}
+#     options:
+#         expose: true
+#ruta ajax guarda pedido detalle
+ajax_guardar_detalle_pedido:
+    path:     /ajax/busqueda/pedido/guardaPedidoDet/
+    defaults: { _controller: AdminBundle:Pedido:guardaPedidoDetalle}
+    options:
+        expose: true
+#----------------------------Opciones Producto------------------------------------
+admin_producto:
+    path:     /producto/
+    defaults: { _controller: AdminBundle:Producto:productoIndex }
+
+cargar_producto_tabla:
+    path:     /producto/tabla/
+    defaults: { _controller: AdminBundle:Producto:productoCargartabla }
+
+admin_producto_nuevo:
+    path:     /producto/nuevo/
+    defaults: { _controller: AdminBundle:Producto:productoNuevo }
+
+admin_producto_guardar:
+    path:     /producto/guardar/
+    defaults: { _controller: AdminBundle:Producto:productoGuardar }
+
+admin_producto_editar:
+    path:     /producto/editar/{id}
+    defaults: { _controller: AdminBundle:Producto:productoEditar }
+
+admin_producto_eliminar:
+    path:     /producto/eliminar/
+    defaults: { _controller: AdminBundle:Producto:productoEliminar }
+    options:
+        expose: true
+        
+#ruta ajax Guardar OpcionProducto nueva
+admin_opcion_guardar:
+    path:     /opcionesProducto/guardar/
+    defaults: { _controller: AdminBundle:OpcionesProducto:opcionesProductoGuardar}
+   
+#ruta ajax Guardar OpcionProducto nueva
+ajax_guarda_new_opcion_producto:
+    path:     /ajax/busqueda/opcionesProducto/guardar/
+    defaults: { _controller: AdminBundle:OpcionesProducto:ajaxOpcionesProductoGuardar}
+    options:
+        expose: true
+#ruta ajax carga las categorias de producto por id_producto
+ajax_cargar_categorias_producto_id:
+    path:     /ajax/busqueda/producto/cargaTodasCategoriasProducto/
+    defaults: { _controller: AdminBundle:Producto:cargaCategoriasProductoId}
+    options:
+        expose: true
+#ruta ajax carga las categorias de producto por id_detalle
+ajax_cargar_categorias_producto_idDetalle:
+    path:     /ajax/busqueda/producto/cargaTodasCategoriasProducto/
+    defaults: { _controller: AdminBundle:Producto:cargaCategoriasProductoIdDetalle}
+    options:
+        expose: true
+#ruta ajax buscar categorias
+ajax_autocomplete_categoria: 
+    path:     /ajax/autocomplete/producto/data/
+    defaults: { _controller: AdminBundle:Producto:buscarData }
+    options:
+        expose: true
+# ruta ajax guardar relaciones producto-categoria
+ajax_guardar_categoria:
+    path:     /ajax/contacto/categoria/save/
+    defaults: { _controller: AdminBundle:Producto:ajax_guardar_categoria }
+    options:
+        expose: true
+# ruta ajax para quitar categorias viculadas a producto
+ajax_borrar_categoria:
+    path:     /ajax/producto/categoria/delete/
+    defaults: { _controller: AdminBundle:Producto:ajax_borrar_categoria }
+    options:
+        expose: true
+# ruta ajax cargar opciones de la categria del producto
+ajax_cargar_opciones:
+    path:     /ajax/producto/cargarOpcion/
+    defaults: { _controller: AdminBundle:Producto:cargarTodasOpciones }
+    options:
+        expose: true
+#----------------------------------Cargo------------------------------------------
+#ruta ajax Guardar Cargo
+guardar_cargo:
+    path:     /ajax/cargo/guardar/
+    defaults: { _controller: AdminBundle:Cargo:cargoGuardar}
+    options:
+        expose: true
+#ruta ajax Guardar Cargo
+ajax_guardar_cargo:
+    path:     /ajax/cargo/guardarModal/
+    defaults: { _controller: AdminBundle:Cargo:ajaxCargoGuardar}
+    options:
+        expose: true
 

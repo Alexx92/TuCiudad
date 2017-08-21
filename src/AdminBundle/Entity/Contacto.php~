@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Contacto
  *
- * @ORM\Table(name="contacto")
+ * @ORM\Table(name="contacto", indexes={@ORM\Index(name="fk_contacto_cargo1_idx", columns={"cargo_id"})})
  * @ORM\Entity
  */
 class Contacto
@@ -73,13 +73,6 @@ class Contacto
     /**
      * @var string
      *
-     * @ORM\Column(name="cargo", type="string", length=200, nullable=true)
-     */
-    private $cargo;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="observacion", type="string", length=300, nullable=true)
      */
     private $observacion;
@@ -104,6 +97,16 @@ class Contacto
      * @ORM\Column(name="estado", type="integer", nullable=true)
      */
     private $estado;
+
+    /**
+     * @var \Cargo
+     *
+     * @ORM\ManyToOne(targetEntity="Cargo")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="cargo_id", referencedColumnName="id")
+     * })
+     */
+    private $cargo;
 
 
 }

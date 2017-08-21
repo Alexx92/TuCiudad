@@ -26,29 +26,29 @@
                         <div class="admin-form theme-default theme-info">
                             <div class="panel heading-border panel-default panel-info">
                                 <div class="panel-body bg-light">
-                                    <form id="form_nuevo_personal" class="" action="{{ url('admin_personal_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
+                                    <form id="form_nuevo_personal" class="" action="{{ url('admin_personal_guardar') }}" method="post" enctype="multipart/form-data"  data-toggle="validator">
                                         <div class="section-divider mb40">
                                             <span>Datos del personal</span>
                                         </div>
                                         
                                         <input type="hidden" name="personal_id" id="personal_id" value="{{ data.id is defined ? data.id}}" >                          
-                                        
-                                        <div class="row">
+                                        <div class="row">                                                                        
                                             <div class="form-group col-sm-12 col-lg-3">
                                                 <label class="field">
                                                     Primer Nombre
                                                     <input type="text" name="primer_nombre" id="primer_nombre" class="gui-input" value="{{data.primer_nombre is defined ? data.primer_nombre}}" required>
                                                 </label>
                                             </div>
+                                            
                                             <div class="form-group col-sm-12 col-lg-3">
                                                 <label class="field">
                                                     Segundo Nombre
-                                                    <input type="text" name="segundo_nombre" id="segundo_nombre" class="gui-input" value="{{data.segundo_nombre is defined ? data.segundo_nombre}}" >
+                                                    <input type="text" name="segundo_nombre" id="segundo_nombre" class="gui-input" value="{{data.segundo_nombre is defined ? data.segundo_nombre}}">
                                                 </label>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3">
+                                            <div class="form-group  col-sm-12 col-md-3">
                                                 <label class="field">
-                                                    Apellido Paterno
+                                                    Apellido Paterno 
                                                     <input type="text" name="apellido_paterno" id="apellido_paterno" class="gui-input" value="{{data.apellido_paterno is defined ? data.apellido_paterno}}" required>
                                                 </label>
                                             </div>
@@ -58,19 +58,22 @@
                                                     <input type="text" name="apellido_materno" id="apellido_materno" class="gui-input" value="{{data.apellido_materno is defined ? data.apellido_materno}}" required>
                                                 </label>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3"> <!-- Date input -->
-                                                <label class="field"  for="fecha_nacimiento">
-                                                    Fecha Nacimiento                                                
-                                                    <input  type="text" name="fecha_nacimiento"  id="fecha_nacimiento"  class="gui-input" value="{{data.fecha_nacimiento is defined ? data.fecha_nacimiento }}"  required>
-                                                </label>
-                                            </div>
-                                            
                                             <div class="form-group col-sm-12 col-md-3">
                                                 <label class="field">
                                                     Cedula de Identidad
                                                     <input type="text" name="dni" id="dni" class="gui-input val_num" value="{{data.dni is defined ? data.dni}}" required>
                                                 </label>
                                             </div>
+                                            
+                                            <div class="form-group col-sm-12 col-md-3"> <!-- Date input -->
+                                                <label class="field"  for="fecha_nacimiento">
+                                                    Fecha Nacimiento
+                                                    <div class="input-group date">
+                                                        <input  type="text" name="fecha_nacimiento"  id="fecha_nacimiento"  class="gui-input" value="{{data.fecha_nacimiento is defined ? data.fecha_nacimiento }}"  required>
+                                                        <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                                    </div>
+                                                </label>
+                                            </div>                                          
                                             <div class="form-group col-sm-12 col-md-3">
                                                 <label class="field">
                                                     Sexo
@@ -109,7 +112,7 @@
 													</label>
 												</div>
 												<input type="hidden" name="id_provincia" id="id_provincia" value="{{ data.provincia is defined ? data.provincia}}" >							
-												<div id="provincia" class="form-group col-sm-12 col-md-3" style="display: none" >
+												<div id="provincia" class="form-group col-sm-12 col-md-3" style={{data.provincia is not defined ? "display:none;" : " "}}>
 													<label class="field">
 														Provincia
                                                     </label>
@@ -128,7 +131,7 @@
 													</label>
 												</div>
 												<input type="hidden" name="id_comuna" id="id_comuna" value="{{ data.comuna is defined ? data.comuna}}" >							
-												<div  id="comuna" class="form-group col-sm-12 col-md-3" style="display: none">
+												<div  id="comuna" class="form-group col-sm-12 col-md-3" style={{data.comuna is not defined ? "display:none;" : " "}}>
 													<label class="field">
 														Comuna
                                                     </label>
@@ -196,7 +199,7 @@
                                                     Email
                                                     <input type="email" name="email" id="email" class="gui-input" value="{{data.email is defined ? data.email}}" required>
                                                 </label>
-                                            </div>
+                                            </div>                                         
                                             <div class="form-group col-sm-12 col-md-3">
                                                 <label class="field">
                                                     Skype
@@ -228,7 +231,7 @@
 													</label>
                                                 </div>
                                                 <input type="hidden" name="id_area" id="id_area" value="{{ data.area is defined ? data.area}}" >							
-												<div id="area" class="form-group col-sm-12 col-md-3"  style="display:none">
+												<div id="area" class="form-group col-sm-12 col-md-3"  style={{data.area is not defined ? "display:none;" : " "}}>
 													<label class="field">
 														Area
                                                     </label>
@@ -284,7 +287,7 @@
                                 </div>
                                 <div class="panel-footer text-right">
                                     <button id="guardar_personal" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
-                                    <button id="" class="btn btn-warning ">Cancelar <i class="fa fa-ban"></i></button>
+                                    <a href="{{ url('admin_personal') }}" class="btn btn-warning " role="button">Cancelar<i class="fa fa-ban"></i></a>
                                 </div>
                             </div>
                         </div>

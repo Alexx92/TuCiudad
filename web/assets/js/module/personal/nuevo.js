@@ -46,11 +46,10 @@ $(document).ready(function() {
             highlight: function(element, errorClass, validClass) {
                 $(element).closest('.field').addClass(errorClass).removeClass(validClass);
             },
-            //unhighlight: function(element, errorClass, validClass) {
-            //    $(element).closest('.field').removeClass(errorClass).addClass(validClass);
-            //}
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).closest('.field').removeClass(errorClass).addClass(validClass);
+            }
         });
-
         if (form.valid(true)) {
             var datos = new FormData(form[0]);
             var validator = form.validate();
@@ -73,10 +72,7 @@ $(document).ready(function() {
             toastr.warning('Complete todos los campos requeridos');
         }
     });
-
-
     // configuracion del dropdown de busqueda de empresas
-
     // busqueda de empresas por ajax
     //$("#busq_cont").on('keyup', function() {
     //    var input = $(this).val();
@@ -160,29 +156,12 @@ $(document).ready(function() {
             $("#area").show();
         });
     });
-});
+    $("#cancelar").on('click', function() {
 
-
+    });
+})
 
 function cargar() {
-    var drop1 = $('#id_comuna').val();
-    // var drop2 = $('#id_provincia').val();
-    // var drop3 = $('#id_region').val();
-    // var data = { id_comuna: drop1, id_provincia: drop2 };
-    if (drop1 != "") {
-        $("#comuna").show();
-        $("#provincia").show();
-        $("#area").show();
-        //  $.ajax({
-        //      dataType: 'json',
-        //      method: 'POST',
-        //      url: Routing.generate('ajax_cargar_datos_localizacion'),
-        //      data: data,
-        //  }).done(function(response) {
-        //      $("#comunas").html(response.nameComuna);
-        //      $("#provincias").html(response.nameProvincia);
-        //  });
-    }
     $(document).ready(function() {
         var date_input = $('input[name="fecha_nacimiento"]'); //our fecha_nacimiento input has the name "date"
         var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
@@ -198,8 +177,6 @@ function cargar() {
         date_input.datepicker(options);
     })
 }
-
-
 // funcion unir empresa-cliente
 function conta_lista() {
     var id_empre = $('#lista_conta').data('cont');

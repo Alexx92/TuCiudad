@@ -21,20 +21,15 @@ $(document).ready(function() {
             validClass: "state-success",
             errorElement: "em",
             rules: {
-                nombre_contacto: {
+                contacto_pri_nomb: {
                     required: true
                 },
-                apellido_contacto: {
-                    required: true
-                }
+
             },
             messages: {
-                nombre_contacto: {
-                    required: 'Ingrese un nombre valido'
+                contacto_pri_nomb: {
+                    required: "Ingrese un nombre valido"
                 },
-                apellido_contacto: {
-                    required: 'Ingrese un apellido valido'
-                }
             },
             errorPlacement: function(element, errorClass, validClass) {
                 $(element).closest('.field').addClass(errorClass).removeClass(validClass);
@@ -42,9 +37,9 @@ $(document).ready(function() {
             highlight: function(element, errorClass, validClass) {
                 $(element).closest('.field').addClass(errorClass).removeClass(validClass);
             },
-            //unhighlight: function(element, errorClass, validClass) {
-            //    $(element).closest('.field').removeClass(errorClass).addClass(validClass);
-            //}
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).closest('.field').removeClass(errorClass).addClass(validClass);
+            }
         });
         if (form.valid(true)) {
             var datos = new FormData(form[0]);
@@ -122,7 +117,30 @@ $(document).ready(function() {
             }
         });
     });
-
+    // js ajax abrir modal crear cargo
+    $('#btnShowModal').on('click', function(e) {
+        $('#cargo_nombre').val("");
+        $('#cargo_obs').val("");
+        $('#myModal').modal('show');
+    });
+    // js ajax modal guardar cargo
+    $('#btnModalGuardarCargo').on('click', function(e) {
+        var nombre = $('#cargo_nombre').val();
+        var obs = $('#cargo_obs').val();
+        var data = { nombre: nombre, obs: obs };
+        console.log(data);
+        e.preventDefault();
+        $.ajax({
+            dataType: 'json',
+            method: 'POST',
+            url: Routing.generate('ajax_guardar_cargo'),
+            data: data,
+        }).done(function(response) {
+            $('#cargos').html(response.lista_cargos);
+            $('#myModal').modal('hide');
+            toastr.success('Datos Guardados');
+        });
+    });
 });
 
 // funcion unir empresa-cliente

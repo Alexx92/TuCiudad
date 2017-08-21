@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Contacto
  *
- * @ORM\Table(name="contacto")
+ * @ORM\Table(name="contacto", indexes={@ORM\Index(name="fk_contacto_cargo1_idx", columns={"cargo_id"})})
  * @ORM\Entity
  */
 class Contacto
@@ -33,6 +33,7 @@ class Contacto
      *
      * @ORM\Column(name="primer_nombre", type="string", length=30, nullable=true)
      */
+    
     private $primerNombre;
 
     /**
@@ -73,13 +74,6 @@ class Contacto
     /**
      * @var string
      *
-     * @ORM\Column(name="cargo", type="string", length=200, nullable=true)
-     */
-    private $cargo;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="observacion", type="string", length=300, nullable=true)
      */
     private $observacion;
@@ -104,6 +98,16 @@ class Contacto
      * @ORM\Column(name="estado", type="integer", nullable=true)
      */
     private $estado;
+
+    /**
+     * @var \Cargo
+     *
+     * @ORM\ManyToOne(targetEntity="Cargo")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="cargo_id", referencedColumnName="id")
+     * })
+     */
+    private $cargo;
 
 
 
@@ -279,29 +283,6 @@ class Contacto
     }
 
     /**
-     * Set cargo
-     *
-     * @param string $cargo
-     * @return Contacto
-     */
-    public function setCargo($cargo)
-    {
-        $this->cargo = $cargo;
-
-        return $this;
-    }
-
-    /**
-     * Get cargo
-     *
-     * @return string 
-     */
-    public function getCargo()
-    {
-        return $this->cargo;
-    }
-
-    /**
      * Set observacion
      *
      * @param string $observacion
@@ -391,5 +372,28 @@ class Contacto
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set cargo
+     *
+     * @param \AdminBundle\Entity\Cargo $cargo
+     * @return Contacto
+     */
+    public function setCargo(\AdminBundle\Entity\Cargo $cargo = null)
+    {
+        $this->cargo = $cargo;
+
+        return $this;
+    }
+
+    /**
+     * Get cargo
+     *
+     * @return \AdminBundle\Entity\Cargo 
+     */
+    public function getCargo()
+    {
+        return $this->cargo;
     }
 }

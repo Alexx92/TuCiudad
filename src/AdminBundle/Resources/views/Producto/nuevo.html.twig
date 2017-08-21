@@ -20,9 +20,9 @@
                 <!-- Tabs Navigation -->
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#datos-vendedor-tab" aria-controls="datos-vendedor-tab" role="tab" data-toggle="tab">Datos Producto / Servicio</a></li>
-                    {% if data.id is defined %}
-                    <li role="presentation"><a href="#add-categoria-tab" aria-controls="add-categoria-tab" role="tab" data-toggle="tab">Vincular a Categoria</a></li>
-                 {% endif %}
+                    {# {% if data.id is defined %} #}
+                    <li id="add-categoria" style={{data.id is not defined ? "display:none;" : " "}}  role="presentation"><a href="#add-categoria-tab" aria-controls="add-categoria-tab" role="tab" data-toggle="tab">Opciones Producto</a></li>
+                 {# {% endif %} #}
                 </ul>
                  
                 <!-- Tab Content Panes -->
@@ -54,7 +54,7 @@
                                             <div class="form-group col-sm-12 col-md-3">
                                                 <label class="field">
                                                     Precio
-                                                    <input type="text" name="prod_valor" id="prod_valor" class="gui-input" value="{{data.prod_valor is defined ? data.prod_valor}}" required>
+                                                    <input type="number" name="prod_valor" min="1" id="prod_valor" class="gui-input" value="{{data.prod_valor is defined ? data.prod_valor}}" required>
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-12 col-lg-3">
@@ -63,30 +63,108 @@
                                                     <input type="text" name="prod_descp" id="prod_descp" class="gui-input" value="{{data.prod_descp is defined ? data.prod_descp}}">
                                                 </label>
                                             </div>                                                                             
-                                            <div class="form-group col-md-2">
-                                                <label class="field">
-                                                    Tiempo de producción 
-                                                    <div class="input-group">                                               
-                                                        <input style="text-align: right;" type="number" name="time" id="time" class="gui-input" value="{{data.time is defined ? data.time}}" required>
-                                                        <div class="input-group-addon">Horas</div>
-                                                    </div>    
-                                                </label>
-                                            </div>                                                                                                                          
-                                        </div>     
-                                        <div class="row">
-                                            <div class="form-group col-sm-9">                                              
-                                                <input type="hidden" name="check" id="check" value="{{ data.tipo is defined ?  data.tipo}}" >                         
-                                                <blockquote>
-                                                    <p>Escoja una opcion para identificar el ingreso</p> 
-                                                    <label class="radio-inline">
-                                                        <input type="radio" name="radio" id="radio1" value="1" required> Producto
-                                                    </label>
-                                                    <label class="radio-inline">
+                                            <div class="form-group col-sm-12">
+                                                <div class="form-group col-sm-4">
+                                                    <input type="hidden" name="check" id="check" value="{{ data.tipo is defined ?  data.tipo}}" >                         
+                                                    <blockquote>
+                                                        <p>Escoja una opcion para identificar el ingreso</p>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="radio" id="radio1" value="1" required> Producto
+                                                        </label>
+                                                        <label class="radio-inline">
                                                             <input type="radio" name="radio" id="radio2" value="2"required> Servicio
-                                                    </label>     
-                                                </blockquote>                                         
+                                                        </label>
+                                                    </blockquote>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label class="field">
+                                                        Tiempo de producción 
+                                                        <div class="input-group">                                               
+                                                            <input style="text-align: right;" type="number" min="0" name="time" id="time" class="gui-input" value="{{data.time is defined ? data.time}}">
+                                                            <div class="input-group-addon">Horas</div>
+                                                        </div>
+                                                    </label>
+                                                </div>
                                             </div>
-                                        </div>                                                                      
+                                        </div>
+                                        {% if data.id is not defined  %}
+                                            <div id="primera_categoria" class="row">
+                                                <div class=" form-group col-sm-12">
+                                                    <div id="area" class="form-group col-sm-3"}>
+                                                        <label class="field">
+                                                            Categoria
+                                                        </label>
+                                                        <label class="field select">
+                                                            <select id="selectCat" name="selectCat" class="form-control" required>
+                                                              
+                                                                <option value="">Seleccione </option>
+                                                                    {% for listaCategorias in listaCategorias %}
+                                                                        <option id="seleccion" name="seleccion" value={{listaCategorias.id}}>{{listaCategorias.Nombre}}</option>
+                                                                    {% endfor %}
+                                                            </select>
+                                                            <i class="arrow"></i>		
+                                                        </label>                            
+                                                    </div>
+                                                    <div class="form-group col-sm-3">
+                                                        <!-- Button trigger modal -->
+                                                        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                                                            Agregar Categoria
+                                                        </button>
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                        <h4 class="modal-title" id="myModalLabel">Ingreso de Categoria</h4>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="panel">
+                                                                            <div class="panel-body bg-light">
+                                                                                <form id="form_nueva_categoria" class="" action="{{ url('admin_categorias_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
+                                                                                    <div class="section-divider mb40">
+                                                                                        <span>Datos de la Categoria</span>
+                                                                                    </div>                                                                                    
+                                                                                    <div class="row">
+                                                                                        <div class="form-group col-sm-12 col-lg-6">
+                                                                                            <label class="field">
+                                                                                                Nombre
+                                                                                                <input type="text" name="cat_nombre" id="cat_nombre" class="gui-input">
+                                                                                            </label>
+                                                                                        </div>   
+                                                                                        <div class="form-group col-sm-12 col-lg-6">
+                                                                                            <label class="field">
+                                                                                                Fecha Ingreso                                                   
+                                                                                                <input type="text" name="cat_fechaIngreso" disabled="true" id="cat_fechaIngreso" class="gui-input" value="{{fecha|date("m/d/Y") }}">
+                                                                                            </label>
+                                                                                        </div>                                                                                        
+                                                                                    </div>                                                                                 
+                                                                                    <!-- imagen ingreso-->
+                                                                                    <div class="row">
+                                                                                        <div class="input-field col-sm-5">
+                                                                                            <label class="field prepend-icon append-button file">
+                                                                                                <span class="button btn-primary">Elija un archivo</span>
+                                                                                                <input type="file" class="gui-file" name="cat_imagen" id="cat_imagen" onChange="document.getElementById('upload_prod_i').value = this.value;">
+                                                                                                <input type="text" class="gui-input" id="upload_prod_i" name="upload_prod_i">
+                                                                                                <label class="field-icon"><i class="fa fa-upload"></i></label>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>                                                                          																					
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button id="btnGuardarCategoria" type="button" class="btn btn-succes">Guardar</button>
+                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div><!--Fin Modal-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}                                                                                                         
                                         <div class="row">
                                             <div class="form-group col-sm-12">
                                                 <label class="field">Observaciones</label>
@@ -96,28 +174,6 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            {% if data.id is not defined %}
-                                                 {# Si crea un producto y se guarda en ajax activa la etiqueta div "mostrar" #}      
-                                                <div id="mostrar" style="display: none;">
-                                                    <div class="form-group col-sm-12 col-md-3">
-                                                        <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar Categorias</h5>
-                                                        <div class="dropdown">
-                                                            <input type="text" id="busq_cat" name="buscar" class="form-control dropdown-toggle" data-toggle="dropdown">
-                                                            <ul id="match" aria-labelledby="busq_cat" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
-                                                        </div>
-                                                        <div id="cli-cat" class="cli-cat" >
-                                                            <!-- se agregan las empresas para hacer el vinculo -->
-                                                            {% if liscat is defined %}                                               
-                                                                {% for lcat in liscat %}
-                                                                    <div class="valign-wrapper"><i class="material-icons del_btn_i pointer" data-id="{{ lcat.id }}">remove_circle_outline</i>{{ lcat.nombre }}</div>
-                                                                {% endfor %}
-                                                            {% endif %}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                             {% endif %}
-                                        </div> 
                                         <!-- imagen carga-->
                                         {% if data.imagen is defined and data.imagen is not empty %}
                                         <div class="row">
@@ -135,8 +191,7 @@
                                                     <span class="button btn-primary">Elija un archivo</span>
                                                     <input type="file" class="gui-file" name="prod_imagen" id="prod_imagen" onChange="document.getElementById('upload_prod_i').value = this.value;">
                                                     <input type="text" class="gui-input" id="upload_prod_i" name="upload_prod_i">
-                                                    <label class="field-icon"><i class="fa fa-upload"></i>
-                                                    </label>
+                                                    <label class="field-icon"><i class="fa fa-upload"></i></label>
                                                 </label>
                                             </div>
                                         </div>
@@ -144,37 +199,154 @@
                                 </div>
                                 <div class="panel-footer text-right">
                                     <button  id="guardar_producto" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
-                                    <button id="" class="btn btn-warning ">Cancelar <i class="fa fa-ban"></i></button>
+                                    <a href="{{ url('admin_producto') }}" class="btn btn-warning " role="button">Cancelar<i class="fa fa-ban"></i></a>
+
                                 </div>
                             </div>
                         </div>
                     </div>                   
-                    {% if data is defined %}
+                    {# {% if data is defined %} #}
 					<div role="tabpanel" class="tab-pane fade" id="add-categoria-tab" >
 						<div class="admin-form theme-default theme-info">
 							<div class="panel heading-border panel-default panel-info">
                     			<div class="panel-body bg-light">
-                        			 <div class="form-group col-sm-12">
-                                                        <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar Categorias</h5>
-                                                        <div class="dropdown">
-                                                            <input type="text" id="busq_cat" name="buscar" class="form-control dropdown-toggle" data-toggle="dropdown">
-                                                            <ul id="match" aria-labelledby="busq_cat" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
-                                                        </div>
-                                                        <div id="cli-cat" class="cli-cat" >
-                                                            <!-- se agregan las empresas para hacer el vinculo -->
-                                                            {% if liscat is defined %}                                               
-                                                                {% for lcat in liscat %}
-                                                                    <div class="valign-wrapper"><i class="material-icons del_btn_i pointer" data-id="{{ lcat.id }}">remove_circle_outline</i>{{ lcat.nombre }}</div>
-                                                                {% endfor %}
-                                                            {% endif %}
-                                                        </div>
-                                                    </div>
-                                                    
+                                    <div class="row">
+                                        <div class="form-group col-sm-6">
+                                            <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar Categorias</h5>
+                                            <div class="dropdown">
+                                                <input type="text" id="busq_cat" name="buscar" class="form-control dropdown-toggle" data-toggle="dropdown">
+                                                <ul id="match" aria-labelledby="busq_cat" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
+                                            </div>
+                                            <div id="cli-cat" class="cli-cat" >
+                                                <!-- se agregan las empresas para hacer el vinculo -->
+                                                {% if liscat is defined %}
+                                                        {% for lcat in liscat %}
+                                                            <div class="valign-wrapper"><i class="material-icons del_btn_i pointer" data-id="{{ lcat.id }}">remove_circle_outline</i>{{ lcat.nombre }}</div>
+                                                        {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                       <div class="row">
+                                            <div class="form-group col-sm-12 ">
+                                                <h5><i class="material-icons">view_list</i>Listado de opciones accesibles por categoria seleccionada</h5>
+                                                <div class="form-group col-sm-12 col-md-offset-1" id="opciones_accesibles">
+                                                </div>
+                                            </div>
+											<div class="form-group col-sm-12 col-md-4 col-md-offset-1">
+												<label class="field">
+													Opciones producto
+												</label>
+												<label class="field select">
+                                                    <select id="opciones" name="opciones" class="form-control" required>
+                                                        <option value="0" selected>Seleccione</option>
+                                                    </select>
+                                                    <i class="arrow"></i>
+										    	</label>																																																			
+											</div>	
+											<div class="form-group col-sm-12 col-md-4">
+												<!-- Button trigger modal -->
+<!-- style      -->								<button id="botonMoldal3" type="button" class="btn btn-primary btn-lg"  data-target="#myModal3">
+													Agregar Opcion
+												</button>
+												<!-- Modal -->
+												<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="true"  >
+													<div class="modal-dialog">
+														<div class="modal-content">
+												    		<div class="modal-header">
+																<h4 class="modal-title" id="myModalLabel3">Creacion de Opcion</h4>
+													        </div>
+														<div class="modal-body">
+														    <div class="panel">
+																<div class="panel-heading">
+																	<h5 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
+																	<div class="row">																	    
+																		<div class="col-md-12">
+																			<div class="row">
+																				<div class="form-group col-md-6">
+																					<label class="field">
+																						Nombre
+															        					<input type="text" name="opcion_nombre" id="opcion_nombre" class="gui-input" >
+																					</label>
+																				</div>
+																				<div class="form-group col-md-6">
+																					<label class="field">
+																						Valor
+																	    				<div class="input-group">
+																							<div class="input-group-addon">$</div>
+																							<input type="number" min="1" name="opcion_valor" id="opcion_valor" class="form-control">
+																		    	    	</div>
+																				    </label>
+																				</div>
+																			</div>
+																			<div class="row">																															
+																				<div class="form-group col-md-12">
+																					<h4>Seleccione alternativa </h4> 
+																						<div class="form-group col-md-6">
+																							<label><input type="radio" name="unidad" id="unidad1" value="1"> Medida</label><br>
+																							<label><input type="radio" name="unidad" id="unidad2" value="2"> Peso</label><br>
+																							<label><input  type="radio" name="unidad" id="unidad3"value="3" checked> Otro</label>																															
+																						</div>
+																			    		<div id="opcionSelect" class="form-group col-md-6" style="display:none">                                              
+																				        	<label class="field">
+																								Unidad
+																							</label>
+																							<label class="field select">
+																					    		<select id="opcion_unidades" name="opcion_unidades" class="form-control">
+																				    				<option value="">Seleccione unidad</option>																																	
+																								</select>
+																						    	<i class="arrow"></i>
+																							</label>
+																						</div>																																
+																			    </div>
+																			</div>  																																
+																		</div>
+																		<div class="form-group col-md-6 col-md-offset-1">
+																			<label class="field">
+																				Categoria Opcion
+																			</label>
+																			<label class="field select">
+                                                                                <select id="opcion_categorias" name="opcion_categorias" class="form-control">
+                                                                                    <option value="" >Seleccione</option>
+                                                                                <select>
+																				<i class="arrow"></i>
+																			</label>
+																		</div>
+					            										<div class="form-group col-sm-12">
+																			<label class="field">Observaciones</label>
+																				<label class="field prepend-icon">
+																					<textarea class="gui-textarea" id="opcion_obs" name="opcion_obs"></textarea>
+																					<label for="opcion_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
+																				</label>
+																		</div>
+																		<!-- imagen ingreso-->
+																		<!-- <div class="col-md-12">
+																			<div class="input-field col-md-6">
+																				<label class="field prepend-icon append-button file">
+																					<span class="button btn-primary">Elija un archivo</span>
+																					<input type="file" class="gui-file" name="cat_imagen" id="cat_imagen" onChange="document.getElementById('upload_prod_i').value = this.value;">
+																					<input type="text" class="gui-input" id="upload_prod_i" name="upload_prod_i">
+																					<label class="field-icon"><i class="fa fa-upload"></i></label>
+																				</label>
+																			</div>
+																		</div>																																					    -->
+																	</div>																										
+																</div>																									
+															</div>
+															<div class="modal-footer">
+																<button id="botonGuardarModal3" type="button" class="btn btn-primary">Guardar Opcion</button>
+																<button id="botonCancelarModal3" type="button" class="btn btn-default" >Close</button>
+															</div>
+														</div>
+													</div>
+												</div><!--Fin Modal-->
+											</div>
+										</div>
                         		</div>
                         	</div>
                         </div>
                 	</div>
-                	{% endif %}      
+                	{# {% endif %}       #}
                 </div>
             </div>
         </div>

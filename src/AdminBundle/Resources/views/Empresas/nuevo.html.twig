@@ -19,9 +19,7 @@
 				<!-- Tabs Navigation -->
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#datos-empresa-tab" aria-controls="datos-empresa-tab" role="tab" data-toggle="tab">Datos Empresa</a></li>
-                    {% if data is defined %}
-                    <li role="presentation"><a href="#add-empresa-tab" aria-controls="add-empresa-tab" role="tab" data-toggle="tab">Vincular a contacto</a></li>
-                    {% endif %}
+                    <li id="mostrar" style={{data.id is not defined? "display:none;"}} role="presentation"><a href="#add-empresa-tab" aria-controls="add-empresa-tab" role="tab" data-toggle="tab">Vincular a contacto</a></li>
                 </ul>
 				<!-- Tab Content Panes -->
 				<div class="tab-content">
@@ -37,49 +35,55 @@
 										<input type="hidden" name="empre_id" id="empre_id" value="{{ data.id is defined ? data.id}}" >							
 										
 										<div class="row">
-											<div class="form-group col-sm-12 col-lg-6">
-												<label class="field">
-													Nombre de fantas&iacute;a
-												    <input type="text" name="empre_nombre" id="empre_nombre" class="gui-input" value="{{data.nombre is defined ? data.nombre}}" required>
-												</label>
-											</div>										
-											<div class="form-group col-sm-12 col-lg-6">
-												<label class="field">
-													Razon Social
-												    <input type="text" name="empre_razon_soc" id="empre_razon_soc" class="gui-input" value="{{data.rsocial is defined ? data.rsocial}}" required>
-												</label>
-											</div>										
-											<div class="form-group col-sm-12 col-md-6">
-												<label class="field">
-													Rut / Run
-												    <input type="text" name="empre_rut" id="empre_rut" class="gui-input val_num" value="{{data.rut is defined ? data.rut}}" required>
-												</label>
+											<div class="form-group col-sm-12">
+												<div class="form-group  col-lg-4">
+													<label class="field">
+														Rut
+														<input type="text" name="empre_rut" id="empre_rut" class="gui-input val_num" value="{{data.rut is defined ? data.rut}}" >
+													</label>
+												</div>
+												<div class="form-group col-lg-4">
+													<label class="field">
+														Nombre de fantas&iacute;a
+														<input type="text" name="empre_nombre" id="empre_nombre" class="gui-input" value="{{data.nombre is defined ? data.nombre}}" required>
+													</label>
+												</div>										
+												<div class="form-group col-lg-4">
+													<label class="field">
+														Razon Social
+														<input type="text" name="empre_razon_soc" id="empre_razon_soc" class="gui-input" value="{{data.rsocial is defined ? data.rsocial}}" >
+													</label>
+												</div>	
 											</div>
+																					
 										</div>										
 										<div class="section-divider mb40">
-                    					  	<span>Datos de Contacto</span>
-                    					</div>										
+                    					  	<span>Datos de Localizacion</span>
+                    					</div>
 											<div class="row">{# divs dependientes si la empresa no esta cargada#}
-												<input type="hidden" name="id_region" id="id_region" value="{{ data.region is defined ? data.region}}" >							
+												<input type="hidden" name="id_region" id="id_region" value="{{ data.region is defined ? data.region}}">
 												<div class="form-group col-sm-12 col-md-3">
-													<label class="field">
+													<label class="field ">
 														Region
+													</label>
+													<label class=" field select">
 														<select id="regiones" name="regiones" class="form-control" required>
 														{% if data.region is defined  %}
-															<option value="{{data.region is defined? data.region}}"> {{ data.region is defined? nombreRegion }}</option> 
+															<option value="{{data.region is defined? data.region}}"> {{ data.region is defined? nombreRegion }}</option>
 														{% endif %}
-															<option value="">Seleccione Region</option> 
-
+															<option value="">Seleccione Region</option>
 															{% for lista_regiones in lista_regiones %}
 																<option id="seleccion" name="seleccion" value={{lista_regiones.regIdPk}}>{{lista_regiones.regRomano ~" "~ lista_regiones.regNombre}}</option>
 															{% endfor %}
 														</select>
 													</label>
 												</div>
-												<input type="hidden" name="id_provincia" id="id_provincia" value="{{ data.provincia is defined ? data.provincia}}" >							
-												<div id="provincia" class="form-group col-sm-12 col-md-3" style="display: none" >
+												<input type="hidden" name="id_provincia" id="id_provincia" value="{{ data.provincia is defined ? data.provincia}}">
+												<div id="provincia" class="form-group col-sm-12 col-md-3" style="display: none">
 													<label class="field">
 														Provincia
+													</label>
+													<label class=" field select">
 														<select id="provincias" name="provincias" class="form-control" required>
 															{% if data.provincia is defined  %}
 																<option value="{{data.provincia is defined? data.provincia}}"> {{ data.provincia is defined? nombreProvincia }}</option> 
@@ -95,6 +99,8 @@
 												<div  id="comuna" class="form-group col-sm-12 col-md-3" style="display: none">
 													<label class="field">
 														Comuna
+													</label>
+													<label class=" field select">
 														<select id="comunas" name="comunas" class="form-control" required>
 															{% if data.comuna is defined  %}
 																<option value="{{data.comuna is defined? data.comuna}}"> {{ data.comuna is defined? nombreComuna }}</option> 
@@ -172,7 +178,7 @@
 												    <input type="text" name="empre_gmap" id="empre_gmap" class="gui-input" value="{{data.coordenadas is defined ? data.coordenadas}}">
 												</label>
 											</div>
-										</div>
+										</div>										
 										<div class="row">
 											<div class="form-group col-sm-12">
 												<label class="field">Observaciones</label>
@@ -208,13 +214,11 @@
                         		</div>
                         		<div class="panel-footer text-right">
                         			<button id="guardar_empresa" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
-                        			<button id="cancelar_empresa" class="btn btn-warning ">Cancelar <i class="fa fa-ban"></i></button>
+									<a href="{{ url('admin_empresa')}}" class="btn btn-warning " role="button">Cancelar<i class="fa fa-ban"></i></a>
                         		</div>
                         	</div>
                         </div>
-					</div>
-					
-					{% if data is defined %}
+					</div>					
 					<div role="tabpanel" class="tab-pane fade" id="add-empresa-tab">
 						<div class="admin-form theme-default theme-info">
 							<div class="panel heading-border panel-default panel-info">
@@ -229,7 +233,7 @@
 							    			<div class="panel">
 							    			    <div class="panel-body">
                             						<!-- se agregan las empresas para hacer el vinculo -->
-							    			        <div id="contactos_div" class="cli-emp" >
+							    			        <div id="contactos_div" class="cli-emp">
                             						    {% if lista_contempre is defined %}
                             						        {% for lista_contempre in lista_contempre %}
                             				            		<div class="valign-wrapper"><i class="material-icons del_btn_i pointer" data-id="{{ lista_contempre.id_contacto }}">remove_circle_outline</i>{{ lista_contempre.pri_nombre_fkcont }} {{ lista_contempre.seg_nombre_fkcont }} {{ lista_contempre.apellido_pate_fkcont }} {{ lista_contempre.apellido_mate_fkcont }}</div>
@@ -244,7 +248,6 @@
                         	</div>
                         </div>
                 	</div>
-                	{% endif %}
                 </div>
 			</div>
 		</div>
@@ -253,6 +256,6 @@
 {% endblock %}
 
 {% block javascripts %}
-<script src="{{ absolute_url(asset('assets/js/rut/jquery.rut.js')) }}"></script>
+	<script src="{{ absolute_url(asset('assets/js/rut/jquery.rut.js')) }}"></script>
 	<script src="{{ absolute_url(asset('assets/js/module/empresa/nuevo.js')) }}"></script>
 {% endblock %}

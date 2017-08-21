@@ -321,21 +321,22 @@ class PedidoController extends Controller
                         if (isset($result['unidadMedidaPeso']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaPeso')->findOneBy(array('id'=>$result['unidadMedidaPeso']))) {
                             $nombreUnidad= 'x ['.$opcion->getSigla().']';
                         }else{
-                            $listaOpcionesGuardadas .= '<div class="valign-wrapper"  id ="'.$result['idOpcion'].'"><i onClick="functionDelete('.$result['idOpcion'].')" class="material-icons del_btn_i pointer">remove_circle_outline</i>   '.$result['nombre'].'  $ '.$result['valor'].' '.$nombreUnidad.'<input type="number" id="'.$result['id'].'" style="width:70px;text-align:center;margin-left:10px;" min="1" value="'.$result['cantidad'].'" class="gui-input input-sm" onchange="actualizaCantidadOpcion(this.value,this.id)"></div>';
+                            $listaOpcionesGuardadas .= '<div class="valign-wrapper"  id ="'.$result['idOpcion'].'"><i onClick="functionDelete('.$result['idOpcion'].')" class="material-icons del_btn_i pointer">remove_circle_outline</i>   '.$result['nombre'].'  $ '.$result['valor'].',  Unidades : <input type="number" id="'.$result['id'].'" style="width:70px;text-align:center;margin-left:10px;" min="1" value="'.$result['cantidad'].'" class="gui-input input-sm" onchange="actualizaCantidadOpcion(this.value,this.id)"></div>';
                         }
                     }
                 }
+        $valorModificado = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('id'=>$id_detalle));
         $response = new JsonResponse();
-        $response->setData(array('lista_opciones' => $lista_opciones,'lista_opciones_guardadas' => $listaOpcionesGuardadas));
+        $response->setData(array('lista_opciones' => $lista_opciones,'lista_opciones_guardadas' => $listaOpcionesGuardadas,'valorModificado'=>$valorModificado->getValorModificado(),'cantidad'=>$valorModificado->getCantidad()));
         return $response;
     }
     /*Encargado de Buscar nombre de producto*/
     public function buscardatosproductosAction(Request $request)
     {
-        $id_prod = $request->get('id_producto');
-        $id_empresa   = $request->get('id_empresa');
-        $id_contacto   = $request->get('id_contacto');
-        $id_pedido  = ($request->get('id_pedido', false)) ? $request->get('id_pedido'): 0;
+        $id_prod     = $request->get('id_producto');
+        $id_empresa  = $request->get('id_empresa');
+        $id_contacto = $request->get('id_contacto');
+        $id_pedido   = ($request->get('id_pedido', false)) ? $request->get('id_pedido'): 0;
         /*Creacion de pedido*/
         $user = $this->getUser();//se obtiene el usuario del sistema
         $user_n = $user->getUserName();// obtencion de username del usuario actual
@@ -402,8 +403,8 @@ class PedidoController extends Controller
                     $producto .= '<td title="NOmbre">'.$value->getNombre().'</td>';
                     $producto .= '<td title="Descripcion">'.$value->getDescripcion().'</td>';
                     $producto .= '<td class="text-right td-width-30"title="Valor Unitario Base">'.$value->getValorUnitario().'</td>';
-                    $producto .= '<td class="text-right td-width-30" title="Cantidad"><input style="width: 50px;" name="newCantidad" id="'.$id_detalle.'" type="number" min="1" class="text-right" value="'.$pedido_detalle->getCantidad().'" onchange="myFunction(this.value, this.id)"></td>';
-                    $producto .= '<td class="text-right td-width-50" title="Valor Cotizacion"><input style="width: 100px;" name="totalac" id="'.$id_detalle.'" type="number" min="1" class="text-right" value="'.$pedido_detalle->getTotal().'" onchange="myFunctionValCotizacion(this.value, this.id)"></td>';
+                    $producto .= '<td class="text-right td-width-30" title="Cantidad"><input style="width: 50px;" name="newCantidad" id="nc'.$id_detalle.'" type="number" min="1" class="text-right" value="'.$pedido_detalle->getCantidad().'" onchange="myFunction(this.value, this.id)"></td>';
+                    $producto .= '<td class="text-right td-width-50" title="Valor Cotizacion"><input style="width: 100px;" name="totalac" id="vm'.$id_detalle.'" type="number" min="1" class="text-right" value="'.$pedido_detalle->getTotal().'" onchange="myFunctionValCotizacion(this.value, this.id)"></td>';
                     $producto .= '<td class="text-right td-width-100" title="Total por producto" id="total'.$id_detalle.'">'.$pedido_detalle->getTotal().'</td>';
                     $producto .= '<td class="text-right td-width-50" ><a id="'.$id_detalle.'" onclick="modal(this.id)"><i class="material-icons">mode_edit</i></a></td>';
                     $producto .= '</tr>';
@@ -450,7 +451,7 @@ class PedidoController extends Controller
     //Funcion que actualiza la cantidad de una opcion especifica por producto
     public function guardarCantidadOpcionesProductoAction(Request $request)
     {
-        $cantidad = $request->get('cantidad');
+        $cantidad       = $request->get('cantidad');
         $id_detalle_opc = $request->get('id_detalle_opc');
         $em = $this->getDoctrine()->getManager();        
         $detalle_opciones = $em->getRepository('AdminBundle:DetallepedidoOpcionesproducto')->findOneBy(array('id'=>$id_detalle_opc));
@@ -459,8 +460,8 @@ class PedidoController extends Controller
 
         /*Inicio calculo valor a sumar en detalle_pedido y pedidos*/
             $valOPAntiguo = $detalle_opciones->getCantidad()*$detalle_opciones->getValor();
-            $valOPNuevo = $cantidad*$detalle_opciones->getValor();
-            $valorASumar = $valOPNuevo-$valOPAntiguo;
+            $valOPNuevo   = $cantidad*$detalle_opciones->getValor();
+            $valorASumar  = $valOPNuevo-$valOPAntiguo;
         /*Fin*/
 
         $valor = $detalle->getTotal()+($valorASumar*$detalle->getCantidad());
@@ -480,7 +481,7 @@ class PedidoController extends Controller
     //Funcion que actualizala cantidad de productos de pedido
     public function actualizaCantidadProductosAction(Request $request)
     {
-        $cantidad = $request->get('cantidad');
+        $cantidad   = $request->get('cantidad');
         $id_detalle = $request->get('id_detalle');
         $em = $this->getDoctrine()->getManager();
         $detalle = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('id'=>$id_detalle));      
@@ -524,7 +525,7 @@ class PedidoController extends Controller
     /*Funcion que guarda la opcion del producto (producto_detalle)*/
     public function guardarOpcionDetalleProductoAction(Request $request)
     {
-        $id_opcion = $request->get('id_opcion');
+        $id_opcion  = $request->get('id_opcion');
         $id_detalle = $request->get('id_detalle');
         $em = $this->getDoctrine()->getManager();
         $detalle = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('id'=>$id_detalle));
@@ -584,8 +585,8 @@ class PedidoController extends Controller
         /* INICIO captacion variables  por POST*/
             $id_opcion  = $request->get('id_opcion');
             $id_detalle = $request->get('id_detalle');
-            $largo   = $request->get('largo');
-            $ancho   = $request->get('ancho');
+            $largo      = $request->get('largo');
+            $ancho      = $request->get('ancho');
             $costo      = $request->get('costo');
         /*FIN*/
         $em = $this->getDoctrine()->getManager();//declaracion de doctrine
@@ -618,6 +619,76 @@ class PedidoController extends Controller
         $response = new JsonResponse();
         $response->setData(array('res'=>$res,'total_pedido'=>$detalle_pedido->getTotal(),'id_op_det'=>$detalleP_opcionesP->getId()));
         return $response;
+    }
+    /*Funcion que carga las unidades de las opciones(producto_detalle)*/
+    public function cargaOpcionesUnidadesOpcionProductoAction(Request $request)
+    {        
+        $valor  = $request->get('valorChek');
+        $em = $this->getDoctrine()->getManager();//declaracion de doctrine
+        $lista_contactos="";
+        if ($valor==1) {
+            if ($unidades = $em->getRepository('AdminBundle:UnidadMedidaDimension')->findAll()){  
+                foreach ($unidades as $result) {
+                    if($lista_contactos==''){
+                        $lista_contactos .= '<option value="">Seleccione</option>';
+                    }
+                    $lista_contactos .= '<option value="'.$result->getId().'">'.$result->getNombre(). ' ['.$result->getSigla().']</option>';
+                }
+            }        
+        }else{
+             if ($unidades = $em->getRepository('AdminBundle:UnidadMedidaPeso')->findAll()){  
+                foreach ($unidades as $result) {
+                    if($lista_contactos==''){
+                        $lista_contactos .= '<option value="">Seleccione</option>';
+                    }
+                    $lista_contactos .= '<option value="'.$result->getId().'">'.$result->getNombre(). '  ['.$result->getSigla().']</option>';
+                }
+            }  
+        }       
+        $response = new JsonResponse();
+        $response->setData(array('lista_opciones'=>$lista_contactos));
+        return $response;
+    }
+    // public function cargaCategoriasProductoAction(Request $request)
+    // {
+    //     $id_detalle  = $request->get('id_detalle');
+
+    //     $em = $this->getDoctrine()->getManager();//declaracion de doctrine
+    //     $detalle = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('id'=>$id_detalle));
+
+    //     $lista_categorias="";        
+    //     if ($categorias = $em->getRepository('AdminBundle:ProductoCategoria')->findBy(array('fkProducto'=>$detalle->getFkProducto()->getId()))){  
+    //         foreach ($categorias as $result) {
+    //             if($lista_categorias==''){
+    //                    $lista_categorias .= '<option value="">Seleccione</option>';
+    //                 }                   
+    //             $lista_categorias .= '<option value="'.$result->getFkCategoria()->getId().'">'.$result->getFkCategoria()->getNombre(). '</option>';
+    //         }
+    //     }        
+        
+    //     $response = new JsonResponse();
+    //     $response->setData(array('lista_categorias'=>$lista_categorias));
+    //     return $response;
+    // }
+    public function guardaPedidoDetalleAction(Request $request)
+    {
+        $result = false;
+        $id_detalle    = $request->get('id_detalle');
+        $observaciones = $request->get('observaciones');
+
+        $em = $this->getDoctrine()->getManager();//declaracion de doctrine
+        $detalle = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('id'=>$id_detalle));
+        $detalle->setObservacion($observaciones);
+
+        $em->persist($detalle);
+        $em->flush();
+        $result = true;
+        echo json_encode(array('result' => $result));
+        exit;
+
+        // $response = new JsonResponse();
+        // $response->setData(array());
+        // return $response;
     }
 
     // ajax guardar relaciones pedido-producto

@@ -38,6 +38,13 @@ class OpcionesProducto
     /**
      * @var string
      *
+     * @ORM\Column(name="descripcion", type="string", length=200, nullable=true)
+     */
+    private $descripcion;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="imagen", type="string", length=200, nullable=true)
      */
     private $imagen;
@@ -128,6 +135,29 @@ class OpcionesProducto
     public function getValor()
     {
         return $this->valor;
+    }
+
+    /**
+     * Set descripcion
+     *
+     * @param string $descripcion
+     * @return OpcionesProducto
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string 
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
     }
 
     /**

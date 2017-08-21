@@ -27,11 +27,16 @@ class ProductoController extends Controller
     public function productoNuevoAction()
     {
         $titulo  = 'Nuevo Producto / Servicio';
-         
 
+        $em = $this->getDoctrine()->getManager();        
+        $listaCategorias = $em->getRepository('AdminBundle:Categorias')->findAll();
+        $fecha = new \DateTime(date("d-m-Y H:i:s"));
+        
         return $this->render('AdminBundle:Producto:nuevo.html.twig',array(
             'titulo'          =>  $titulo,
             'liscat'          =>  null,
+            'listaCategorias' =>  $listaCategorias,
+            'fecha'           => $fecha,
             'menu'            => 'nuevo',
             'menu_o_con'      => 'producto',
             'submenu'         => 'producto_nuevo'
@@ -83,7 +88,7 @@ class ProductoController extends Controller
             $prod_descp       = ucfirst($request->get('prod_descp'));
             $prod_valor       = $request->get('prod_valor');
             /*valor de id de select categoria*/
-            //$valselect        = $request->get('selectcat');
+             $valselect        = $request->get('selectCat');
             $valorCheck       = $request->get('check');
             $tiempoProduccion = $request->get('time');
 
@@ -94,8 +99,8 @@ class ProductoController extends Controller
             if( !$producto = $em->getRepository('AdminBundle:Producto')->findOneBy(array( 'id' => $id )) )
             {
                 $producto = new Producto();
-                $producto->setEstado(1);                
-                $producto->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));            
+                $producto->setEstado(1);
+                $producto->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));
             }
 
             $producto->setNombre($prod_nombre);
@@ -115,6 +120,17 @@ class ProductoController extends Controller
             $em->persist($producto);
             $em->flush();       
             
+            if (!$categoria_producto = $em->getRepository('AdminBundle:ProductoCategoria')->findOneBy(array('fkProducto'=>$producto->getId(),'fkCategoria'=>$valselect))) {
+                $categoria_producto = new ProductoCategoria();
+                $categoria_producto->setFkCategoria($em->getRepository('AdminBundle:Categorias')->findOneBy(array('id'=>$valselect)));
+                $categoria_producto->setFkProducto($producto);
+                $em->persist($categoria_producto);
+                $em->flush();  
+                
+            }
+
+
+
             $result = true;
 
             $id_newb = $producto->getId();
@@ -289,7 +305,102 @@ class ProductoController extends Controller
             $em->flush();
         }
         echo json_encode(array(true));
-       // dump($id);
         exit;
+    }
+    //cargar todas las opciones por la categoria del producto
+    public function cargarTodasOpcionesAction(Request $request)
+    {
+        $prod_id = $request->get('prod_id');
+     
+        $em = $this->getDoctrine()->getManager();//declaracion de doctrine
+
+
+        // $detalleProducto = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('id'=>$prod_id));
+        $dql= " SELECT  op.id, op.nombre, op.valor,IDENTITY(op.unidadMedidaDimension, 'id') AS unidadMedidaDimension, IDENTITY(op.unidadMedidaPeso,'id') AS unidadMedidaPeso
+                FROM AdminBundle:ProductoCategoria pc  INNER JOIN AdminBundle:OpcionesProducto op WITH pc.fkCategoria = op.categorias
+                where pc.fkProducto=:id_producto";   
+        $results= $em->createQuery($dql)
+                    ->setParameter('id_producto', $prod_id)
+                    ->getResult(); 
+        $lista_opciones = '';
+        foreach ($results as $result) {
+            $nombreUnidad ="";           
+            if (isset($result['unidadMedidaDimension']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaDimension')->findOneBy(array('id'=>$result['unidadMedidaDimension']))) {
+               $nombreUnidad= ' x ['.$opcion->getSigla().']';
+            } else {
+                if (isset($result['unidadMedidaPeso']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaPeso')->findOneBy(array('id'=>$result['unidadMedidaPeso']))) {
+                     $nombreUnidad= 'x ['.$opcion->getSigla().']';
+                }
+            }
+            $lista_opciones .= '<li value="'.$result['id'].'">'.$result['nombre'].', $ '.$result['valor'].' '.$nombreUnidad.'</li>';
+        }
+
+        $query = $em->createQuery(''
+            . 'SELECT c.id, c.nombre, c.valor '
+            . 'FROM AdminBundle:OpcionesProducto c '
+            . 'ORDER BY c.id ASC'
+        );
+        $results = $query->getResult();      
+        $lista_all_opciones='';        
+        foreach ($results as $result) {            
+            $nombreUnidad ="";
+            if ($lista_all_opciones == '') {
+                $lista_all_opciones.='<option value="">Seleccione</option>';                        
+            }
+            if (isset($result['unidadMedidaDimension']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaDimension')->findOneBy(array('id'=>$result['unidadMedidaDimension']))) {
+               $nombreUnidad= ' x ['.$opcion->getSigla().']';
+            } else {
+                if (isset($result['unidadMedidaPeso']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaPeso')->findOneBy(array('id'=>$result['unidadMedidaPeso']))) {
+                     $nombreUnidad= 'x ['.$opcion->getSigla().']';
+                }
+            }            
+            $lista_all_opciones .= '<option value="'.$result['id'].'">'.$result['nombre'].', $ '.$result['valor'].' '.$nombreUnidad.'</option>';
+        }    
+
+        $response = new JsonResponse();
+        $response->setData(array('lista_opciones'=>$lista_opciones,'lista_all_opciones'=>$lista_all_opciones));
+        return $response;
+    }
+    //carga todas las categorias por id_producto
+    public function cargaCategoriasProductoIdAction(Request $request)
+    {
+        $id_producto  = $request->get('prod_id');
+
+        $em = $this->getDoctrine()->getManager();//declaracion de doctrine
+        $detalle = $em->getRepository('AdminBundle:Producto')->findOneBy(array('id'=>$id_producto));
+
+        $lista_categorias="";        
+        if ($categorias = $em->getRepository('AdminBundle:ProductoCategoria')->findBy(array('fkProducto'=>$detalle->getId()))){  
+            foreach ($categorias as $result) {
+                if($lista_categorias==''){
+                       $lista_categorias .= '<option value="">Seleccione</option>';
+                    }                   
+                $lista_categorias .= '<option value="'.$result->getFkCategoria()->getId().'">'.$result->getFkCategoria()->getNombre(). '</option>';
+            }
+        }        
+        $response = new JsonResponse();
+        $response->setData(array('lista_categorias'=>$lista_categorias));
+        return $response;
+    }
+       public function cargaCategoriasProductoIdDetalleAction(Request $request)
+    {
+        $id_detalle  = $request->get('id_detalle');
+
+        $em = $this->getDoctrine()->getManager();//declaracion de doctrine
+        $detalle = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('id'=>$id_detalle));
+
+        $lista_categorias="";        
+        if ($categorias = $em->getRepository('AdminBundle:ProductoCategoria')->findBy(array('fkProducto'=>$detalle->getFkProducto()->getId()))){  
+            foreach ($categorias as $result) {
+                if($lista_categorias==''){
+                       $lista_categorias .= '<option value="">Seleccione</option>';
+                    }                   
+                $lista_categorias .= '<option value="'.$result->getFkCategoria()->getId().'">'.$result->getFkCategoria()->getNombre(). '</option>';
+            }
+        }        
+        
+        $response = new JsonResponse();
+        $response->setData(array('lista_categorias'=>$lista_categorias));
+        return $response;
     }
 }

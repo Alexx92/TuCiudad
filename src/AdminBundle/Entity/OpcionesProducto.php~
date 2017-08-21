@@ -38,6 +38,13 @@ class OpcionesProducto
     /**
      * @var string
      *
+     * @ORM\Column(name="descripcion", type="string", length=200, nullable=true)
+     */
+    private $descripcion;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="imagen", type="string", length=200, nullable=true)
      */
     private $imagen;

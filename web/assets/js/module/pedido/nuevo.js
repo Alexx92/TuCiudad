@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    window.onload = modal(1);
+    // window.onload = modal(162);
 
     // bloqueo de letras para un imput con la clase val_mun
     $('.val_num').keypress(function(e) {
@@ -123,7 +123,7 @@ $(document).ready(function() {
                 url: Routing.generate('ajax_guardar_opcion_detalleProducto'),
                 data: data,
             }).done(function(response) {
-                $('#click_opcion').append('<div class="valign-wrapper"  id ="' + id_opcion + '" ><i onClick="functionDelete(' + id_opcion + ' )" class="material-icons del_btn_i pointer">remove_circle_outline</i>' + selected + '<input type="number" id="' + response.id_op_det + '" style="width:70px;text-align:center;margin-left:10px;" min="1" value="1" class="gui-input input-sm" onchange="actualizaCantidadOpcion(this.value,this.id)"></div>');
+                $('#click_opcion').append('<div class="valign-wrapper"  id ="' + id_opcion + '" ><i onClick="functionDelete(' + id_opcion + ' )" class="material-icons del_btn_i pointer">remove_circle_outline</i>' + selected + ' Unidades: <input type="number" id="' + response.id_op_det + '" style="width:70px;text-align:center;margin-left:10px;" min="1" value="1" class="gui-input input-sm" onchange="actualizaCantidadOpcion(this.value,this.id)"></div>');
                 $('#valor').val(response.total_pedido);
                 var total = "total" + id_detalle;
                 document.getElementById(total).innerHTML = " " + response.total_pedido;
@@ -165,13 +165,101 @@ $(document).ready(function() {
             }
         });
     });
+    //abrir ventana modal3 de creacion opcion-producto
+    $('#botonMoldal3').on('click', function() {
+        var id_detalle = $('#detalle').val();
+        var data = { id_detalle: id_detalle };
+        $.ajax({
+            dataType: 'json',
+            method: 'POST',
+            url: Routing.generate('ajax_cargar_categorias_producto_idDetalle'),
+            data: data,
+        }).done(function(response) {
+            $('#opcion_categorias').html(response.lista_categorias);
+        });
+        $('#myModal3').modal('show');
+    });
+    //cerrar ventana modal de creacion opcion-producto
+    $('#botonCancelarModal3').on('click', function() {
+        $('#myModal3').modal('hide');
+    });
+    //Guardar datos crear opcion producto
+    $('#botonGuardarModal3').on('click', function() {
+        var nombre = $('#opcion_nombre').val();
+        var valor = $('#opcion_valor').val();
+        var id_select = $('#opcion_unidades').val();
+        var id_categoria = $('#opcion_categorias').val();
+        // var observaciones = document.getElementById("opcion_obs").value;
+        var observaciones = $('#opcion_obs').val();
+        if (nombre != "" && valor != "" && id_categoria != "") {
+            var data = { nombre: nombre, valor: valor, id_select: id_select, id_categoria: id_categoria, observaciones: observaciones };
+            $.ajax({
+                dataType: 'json',
+                method: 'POST',
+                url: Routing.generate('ajax_guarda_new_opcion_producto'),
+                data: data,
+            }).done(function(response) {
+                toastr.success('Datos Guardados');
+                $('#myModal3').modal('hide');
+                var id_detalle = $('#detalle').val();
+                var data = { id_detalle: id_detalle };
+                $.ajax({
+                    dataType: 'json',
+                    method: 'POST',
+                    url: Routing.generate('ajax_cargar_listado_opciones'),
+                    data: data,
+                }).done(function(response) {
+                    $('#opciones').html(response.lista_opciones);
+                    toastr.success('Datos Guardados');
+                });
+            });
+        } else {
+            toastr.warning('Complete los campos');
+        }
+    });
+    //Guardar datos crear opcion producto
+    $('#botonGuardarModal2').on('click', function() {
+        var observaciones = $('#obs').val();
+        var id_detalle = $('#detalle').val();
+        data = { id_detalle: id_detalle, observaciones: observaciones };
+        $.ajax({
+            dataType: 'json',
+            method: 'POST',
+            url: Routing.generate('ajax_guardar_detalle_pedido'),
+            data: data,
+        }).done(function(json) {
+            $('#myModal2').modal('hide');
+            toastr.success('Datos Guardados');
+
+        });
+
+
+    });
+    //Toma el valor del check y devuelve la lista de opciones de unidad 
+    $("input[name=unidad]").on('change', function() {
+        var valorChek = $(this).val();
+        if (valorChek == 1 || valorChek == 2) {
+            var data = { valorChek: valorChek };
+            $.ajax({
+                dataType: 'json',
+                method: 'POST',
+                url: Routing.generate('ajax_cargar_opciones_unidad_producto'),
+                data: data,
+            }).done(function(response) {
+                $('#opcion_unidades').html(response.lista_opciones);
+                $('#opcionSelect').show();
+            });
+        } else {
+            $('#opcionSelect').hide();
+            $('#opcion_unidades').val(" ");
+        }
+    });
 });
 //Elimina la opcion seleccionada del listado 
 function functionDelete(id_opcion) {
     var btn = $(this);
     var id_detalle = $('#detalle').val();
     var data = { id_detalle: id_detalle, id_opcion: id_opcion };
-    console.log(data);
     $.ajax({
         dataType: 'json',
         method: 'POST',
@@ -199,7 +287,11 @@ function modal(id_detalle) {
         $("#detalle").val(id_detalle);
         $('#myModal2').modal('show');
         var idTd = "#total" + id_detalle;
-        $("#valor").val($(idTd).text());
+        $("#valor").val($(idTd).text()); //le pasa el valor total de la fila en el valor de la ventana modal
+        $("input[name=cantidad]").attr("id", "c" + id_detalle); //se le cambia el id al input i se le asigna el numero de detalle
+        document.getElementById("c" + id_detalle).value = response.cantidad; // al input con el id creado se le pasa el valor de cantidad
+        $("input[name=valor_m]").attr("id", "m" + id_detalle); //se le cambia el id al input y se le asigna el numero de detalle
+        document.getElementById("m" + id_detalle).value = response.valorModificado; // al input con el id creado se le pasa el valor modificado
     });
 }
 //funcion que actualiza el total de valor del producto dependiendo de la entrada de largo y ancho
@@ -216,7 +308,6 @@ function actualizaValor() {
         var ubicacionTipoUnidad = selected.indexOf("[");
         var ubicacionPrecio1 = selected.indexOf("$");
         var precio = selected.substring(ubicacionPrecio1 + 1, ubicacionTipoUnidad - 2);
-        // var dimension = Math.ceil(largo * ancho);
         var dimension = Math.round((largo * ancho) * 100) / 100;
         var costoTotal = Math.ceil(precio * dimension);
         var opcion2 = '<form class="form-inline "><div class="form-group col-md-6 "><label class="field"> Dimension Total:<div class="input-group"><input  style="text-align:right;" type="text" class="form-control"  name="medida" id="medida" value="' + dimension + '" disabled="true"><div class="input-group-addon"  disabled="true">' + selected.substr(ubicacionTipoUnidad - 1) + '</div></div></label></div><div class="form-group col-md-6 "><label class="field"> Costo:<div class="input-group"><div class="input-group-addon">$</div><input   type="text" class="form-control" name="costo" id="costo" value="' + costoTotal + '" disabled="true"></div></label></div></form>';
@@ -228,7 +319,7 @@ function actualizaValor() {
 //funcion que modifica la cantidad total del detalle 
 function myFunction(val, id) {
     var cantidad = val;
-    var id_detalle = id;
+    var id_detalle = (id.indexOf("c") != -1) ? id.substring(id.indexOf("c") + 1) : id; //me aseguro de que tome el valor de la id proveniente de la ventana modal
     var data = { cantidad: cantidad, id_detalle: id_detalle };
     $.ajax({
         dataType: 'json',
@@ -239,6 +330,8 @@ function myFunction(val, id) {
         toastr.success('Datos guardados');
         var total = "total" + id_detalle;
         document.getElementById(total).innerHTML = " " + response.result;
+        $("#valor").val(response.result); //le pasa el valor total de la fila en el valor de la ventana modal
+        document.getElementById("nc" + id_detalle).value = cantidad;
     });
 }
 //funcion que actualiza la cantidad de la opcion seleccionada 
@@ -246,7 +339,6 @@ function actualizaCantidadOpcion(val, id) {
     var cantidad = val;
     var id_detalle_opc = id;
     var id_detalle = $('#detalle').val();
-    console.log(id_detalle);
     var data = { cantidad: cantidad, id_detalle_opc: id_detalle_opc };
     $.ajax({
         dataType: 'json',
@@ -262,8 +354,8 @@ function actualizaCantidadOpcion(val, id) {
 }
 //funcion que actualiza el valor por detalle al cambiar el valor de la cotizacion
 function myFunctionValCotizacion(val, id) {
+    var id_detalle = (id.indexOf("m") != -1) ? id.substring(id.indexOf("m") + 1) : id; //me aseguro de que tome el valor de la id proveniente de la ventana modal    
     var valorCotizacion = val;
-    var id_detalle = id;
     var data = { valorCotizacion: valorCotizacion, id_detalle: id_detalle };
     $.ajax({
         dataType: 'json',
@@ -273,8 +365,9 @@ function myFunctionValCotizacion(val, id) {
     }).done(function(response) {
         var total = "total" + id_detalle;
         document.getElementById(total).innerHTML = " " + response.result;
+        $("#valor").val(response.result); //le pasa el valor total de la fila en el valor de la ventana modal
+        document.getElementById("vm" + id_detalle).value = valorCotizacion;
         toastr.success('Datos guardados');
-
     });
 }
 //Carga los contactos en el select

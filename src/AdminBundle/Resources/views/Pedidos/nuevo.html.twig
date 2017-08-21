@@ -147,106 +147,105 @@
 											</div>				
 											<div class="form-group col-sm-6">							
 												<!-- Button trigger modal -->											
-												<button type="button"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+<!-- style      -->								<button style ="margin-top:18px;" type="button"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
 													Ingresar Contacto
 												</button>
-											</div>
-
-											<!-- Modal -->
-											<div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-												<div class="modal-dialog modal-lg">
-													<div class="modal-content">
-														<div class="modal-header">
-															<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-																<h5 class="header2"><i class="material-icons">person_add</i> Nuevo Contacto</h5>
+												<!-- Modal -->
+												<div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+													<div class="modal-dialog modal-lg">
+														<div class="modal-content">
+															<div class="modal-header">
+																<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+																	<h5 class="header2"><i class="material-icons">person_add</i> Nuevo Contacto</h5>
+															</div>
+															<div class="modal-body">
+																<div class="panel">
+																	<div class="panel-heading">
+																		<h5 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
+																	<form id="form_nuevo_cliente" class="modalForm" action="" method="post" enctype="multipart/form-data">
+																		<div class="row">
+																			<div class="col-md-6 col-lg-6">
+																				<div class="row">																				
+																					<div class="form-group col-md-6">                                           
+																						<label class="field">
+																							Run
+																							<input type="text" name="contacto_run" id="contacto_run" class="gui-input" value="" required>
+																						</label>
+																					</div>																				
+																				</div>
+																			</div>  
+																		</div>
+																		<div class="row">																	    
+																			<div class="col-md-6 col-lg-6">
+																				<div class="row">																				
+																					<div class="form-group col-md-6">                                           
+																						<label class="field">
+																							Primer Nombre
+																							<input type="text" name="contacto_pri_nomb" id="contacto_pri_nomb" class="gui-input" value="" required>
+																						</label>
+																					</div>
+																					<div class="form-group col-md-6">
+																						<label class="field">
+																							Segundo Nombre
+																							<input type="text" name="contacto_seg_nomb" id="contacto_seg_nomb" class="gui-input" value="" >
+																						</label>
+																					</div>
+																				</div>
+																			</div>                                    
+																			<div class="col-md-6 col-lg-6">
+																				<div class="row">
+																					<div class="form-group col-md-6">
+																						<label class="field">																						Apellido Paterno
+																							<input type="text" name="contacto_ape_pate" id="contacto_ape_pate" class="gui-input" value="" required>
+																						</label>
+																					</div>
+																					<div class="form-group col-md-6">
+																						<label class="field">
+																							Apellido Materno
+																							<input type="text" name="contacto_ape_mate" id="contacto_ape_mate" class="gui-input" value="" required>
+																						</label>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-md-6 col-lg-6">
+																				<div class="row">
+																					<div class="form-group col-sm-12 col-lg-6">
+																						<label class="field">
+																							Email
+																							<input type="text" name="contacto_email" id="contacto_email" class="gui-input" value="" >
+																						</label>
+																					</div>
+																					<div class="form-group col-sm-12 col-lg-6">
+																						<label class="field">
+																							Tel&eacute;fono		
+																							<input type="text" name="contacto_fono" id="contacto_fono" class="gui-input val_num" value="" required>
+																						</label>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="form-group col-sm-12 col-lg-6">
+																				<label class="field">
+																					Cargo en la empresa
+																					<input type="text" name="contacto_cargo" id="contacto_cargo" class="gui-input" value="" required>
+																				</label>
+																			</div>
+																			<div class="form-group col-sm-12">
+																				<label class="field">Observaciones</label>
+																				<label class="field prepend-icon">
+																					<textarea class="gui-textarea" id="contacto_obs" name="contacto_obs"></textarea>
+																					<label for="contacto_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
+																				</label>
+																			</div>													   
+																		</div>																
+																	</form>	
+																</div>																
+															</div>																												
 														</div>
-														<div class="modal-body">
-															<div class="panel">
-																<div class="panel-heading">
-																	<h5 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
-																<form id="form_nuevo_cliente" class="modalForm" action="" method="post" enctype="multipart/form-data">
-																	<div class="row">
-																		<div class="col-md-6 col-lg-6">
-																			<div class="row">																				
-																				<div class="form-group col-md-6">                                           
-																					<label class="field">
-																						Run
-																						<input type="text" name="contacto_run" id="contacto_run" class="gui-input" value="" required>
-																					</label>
-																				</div>																				
-																			</div>
-																		</div>  
-																	</div>
-																	<div class="row">																	    
-																		<div class="col-md-6 col-lg-6">
-																			<div class="row">																				
-																				<div class="form-group col-md-6">                                           
-																					<label class="field">
-																						Primer Nombre
-																						<input type="text" name="contacto_pri_nomb" id="contacto_pri_nomb" class="gui-input" value="" required>
-																					</label>
-																				</div>
-																				<div class="form-group col-md-6">
-																					<label class="field">
-																						Segundo Nombre
-																						<input type="text" name="contacto_seg_nomb" id="contacto_seg_nomb" class="gui-input" value="" >
-																					</label>
-																				</div>
-																			</div>
-																		</div>                                    
-																		<div class="col-md-6 col-lg-6">
-																			<div class="row">
-																				<div class="form-group col-md-6">
-																					<label class="field">																						Apellido Paterno
-																						<input type="text" name="contacto_ape_pate" id="contacto_ape_pate" class="gui-input" value="" required>
-																					</label>
-																				</div>
-																				<div class="form-group col-md-6">
-																					<label class="field">
-																						Apellido Materno
-																						<input type="text" name="contacto_ape_mate" id="contacto_ape_mate" class="gui-input" value="" required>
-																					</label>
-																				</div>
-																			</div>
-																		</div>
-																		<div class="col-md-6 col-lg-6">
-																			<div class="row">
-																				<div class="form-group col-sm-12 col-lg-6">
-																					<label class="field">
-																						Email
-																						<input type="text" name="contacto_email" id="contacto_email" class="gui-input" value="" >
-																					</label>
-																				</div>
-																				<div class="form-group col-sm-12 col-lg-6">
-																					<label class="field">
-																						Tel&eacute;fono		
-																						<input type="text" name="contacto_fono" id="contacto_fono" class="gui-input val_num" value="" required>
-																					</label>
-																				</div>
-																			</div>
-																		</div>
-																		<div class="form-group col-sm-12 col-lg-6">
-																			<label class="field">
-																				Cargo en la empresa
-																				<input type="text" name="contacto_cargo" id="contacto_cargo" class="gui-input" value="" required>
-																			</label>
-																		</div>
-																		<div class="form-group col-sm-12">
-																			<label class="field">Observaciones</label>
-																			<label class="field prepend-icon">
-																				<textarea class="gui-textarea" id="contacto_obs" name="contacto_obs"></textarea>
-																				<label for="contacto_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
-																			</label>
-																		</div>													   
-																	</div>																
-																</form>	
-															</div>																
-														</div>																												
-													</div>
-													<div class="modal-footer">
-														<div class="col-sm-12 text-right">
-															<button id="guardar_contacto" type="submit" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
-															<button id="cancelar_contacto" class="btn btn-warning ">Cancelar <i class="fa fa-ban"></i></button>
+														<div class="modal-footer">
+															<div class="col-sm-12 text-right">
+																<button id="guardar_contacto" type="submit" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
+																<button id="cancelar_contacto" class="btn btn-warning ">Cancelar <i class="fa fa-ban"></i></button>
+															</div>
 														</div>
 													</div>
 												</div>
@@ -301,7 +300,7 @@
 											</div>
 										</div>
 										<!-- Modal -->
-											<div class="modal fade bs-example-modal-lg" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+											<div class="modal fade bs-example-modal-lg" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="overflow-y: scroll;">
 												<div class="modal-dialog modal-lg">
 													<div class="modal-content">
 														<div class="modal-header">
@@ -329,7 +328,7 @@
 																		</div>
 																	</div>
 																	<div class="row">
-																		<div class="form-group col-sm-12 col-md-6 col-md-offset-2">
+																		<div class="form-group col-sm-12 col-md-6 col-md-offset-1">
 																			<label class="field">
 																				Opciones producto
 																			</label>
@@ -338,18 +337,107 @@
 																					<option value="0" selected>Seleccione</option>
 																				</select>
 																				<i class="arrow"></i>
-																			</label>	
-																			{# modal																		 #}
-																			<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button>
-
-																			<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-																			<div class="modal-dialog modal-lg">
-																				<div class="modal-content">
-																						
-																				</div>
+																			</label>																																																			
+																		</div>	
+																		<div class="form-group col-sm-12 col-md-4">
+																				<!-- Button trigger modal -->
+<!-- style      -->																<button id="botonMoldal3"  style ="margin-top:50px;" type="button" class="btn btn-primary btn-lg"  data-target="#myModal3">
+																					Agregar Opcion
+																				</button>
+																				<!-- Modal -->
+																				<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="true"  >
+																					<div class="modal-dialog">
+																						<div class="modal-content">
+																							<div class="modal-header">
+																								<h4 class="modal-title" id="myModalLabel3">Creacion de Opcion</h4>
+																							</div>
+																							<div class="modal-body">
+																								<div class="panel">
+																									<div class="panel-heading">
+																										<h5 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
+																												<div class="row">																	    
+																													<div class="col-md-12">
+																														<div class="row">
+																															<div class="form-group col-md-6">
+																																<label class="field">
+																																	Nombre
+																																	<input type="text" name="opcion_nombre" id="opcion_nombre" class="gui-input" >
+																																</label>
+																															</div>
+																															<div class="form-group col-md-6">
+																																<label class="field">
+																																	Valor
+																																	<div class="input-group">
+																																		<div class="input-group-addon">$</div>
+																																		<input type="number" min="1" name="opcion_valor" id="opcion_valor" class="form-control">
+																																	</div>
+																																</label>
+																															</div>
+																														</div>
+																														<div class="row">																															
+																															<div class="form-group col-md-12">
+																																<h4>Seleccione alternativa </h4> 
+																																<div class="form-group col-md-6">
+																																	<label><input type="radio" name="unidad" id="unidad1" value="1"> Medida</label><br>
+																																	<label><input type="radio" name="unidad" id="unidad2" value="2"> Peso</label><br>
+																																	<label><input  type="radio" name="unidad" id="unidad3"value="3" checked> Otro</label>																															
+																																</div>
+																																<div id="opcionSelect" class="form-group col-md-6" style="display:none">                                              
+																																	<label class="field">
+																																		Unidad
+																																	</label>
+																																	<label class="field select">
+																																		<select id="opcion_unidades" name="opcion_unidades" class="form-control">
+																																			<option value="">Seleccione unidad</option>																																	
+																																		</select>
+																																		<i class="arrow"></i>
+																																	</label>
+																																</div>																																
+																															</div>
+																														</div>  																																
+																													</div>
+																													<div class="form-group col-md-6 col-md-offset-1">                                              
+																														<label class="field">
+																															Categoria Opcion
+																														</label>
+																														<label class="field select">
+																															<select id="opcion_categorias" name="opcion_categorias" class="form-control">
+																																<option value="" >Seleccione</option>																																	
+																															</select>
+																															<i class="arrow"></i>
+																														</label>
+																													</div>
+																													<div class="form-group col-sm-12">
+																														<label class="field">Observaciones</label>
+																														<label class="field prepend-icon">
+																															<textarea class="gui-textarea" id="opcion_obs" name="opcion_obs"></textarea>
+																															<label for="opcion_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
+																														</label>
+																													</div>	
+																														<!-- imagen ingreso-->
+																													<!-- <div class="col-md-12">
+																														<div class="input-field col-md-6">
+																															<label class="field prepend-icon append-button file">
+																																<span class="button btn-primary">Elija un archivo</span>
+																																<input type="file" class="gui-file" name="cat_imagen" id="cat_imagen" onChange="document.getElementById('upload_prod_i').value = this.value;">
+																																<input type="text" class="gui-input" id="upload_prod_i" name="upload_prod_i">
+																																<label class="field-icon"><i class="fa fa-upload"></i>
+																																</label>
+																															</label>
+																														</div>
+																													</div>																																					    -->
+																												</div>																
+																										
+																								</div>																									
+																							</div>
+																							<div class="modal-footer">
+																								<button id="botonGuardarModal3" type="button" class="btn btn-primary">Guardar Opcion</button>
+																								<button id="botonCancelarModal3" type="button" class="btn btn-default" >Close</button>
+																							</div>
+																						</div>
+																					</div>
+																				</div><!--Fin Modal-->
 																			</div>
-																			</div>																																
-																		</div>																		
 																	</div>		
 																	<div id="viewOpciones" class="row" style="display:none">
 																		<div class="col-md-12">	
@@ -380,17 +468,40 @@
 																		</div>
 																	</div>
 																	<div class="row">
-																		<div class="col-md-6 col-lg-12">
+																		<div class="col-md-12 col-lg-12">
 																			<h4><i class="material-icons">playlist_add_check</i> Detalle de Producto</h4>
 																			<div class="section-divider mb40"><span></span></div>
 																			<div class="row col-md-offset-1">
 																				<h4>Opciones Seleccionadas</h4>
-																				<div id="click_opcion" class="click_opcion ">
+																				<div id="click_opcion" class="click_opcion col-md-offset-1 ">
 																				</div>
-																			</div>
-																			<div class="col-md-4 col-md-offset-4">
+																			</div>																			
+																		</div>
+																		<div class="col-md-12 col-md-offset-1">
+																			<h4>Valores</h4>
+																			<div class="col-md-2 col-md-offset-1 ">
 																				<label class="field">
-																					Valor Total:
+																					Cantidad:
+																					<input type="number" min="1" name="cantidad"  class="gui-input" id="" onchange="myFunction(this.value, this.id)" >
+																				</label>
+																			</div>
+																			
+																			<div class="col-md-2">																				
+																				<label class="field">
+																					Modificado:
+																					<input type="number" min="1" name="valor_m"  class="gui-input" onchange="myFunctionValCotizacion(this.value, this.id)">
+																				</label>
+																			</div>
+																																						
+																			<div class="col-md-2">
+																				<label class="field">
+																					Opciones:
+																					<input type="text" name="valor_o" id="valor_o" class="gui-input" disabled="true">
+																				</label>
+																			</div>																			
+																			<div class="col-md-2">
+																				<label class="field">
+																					Total:
 																					<input type="text" name="valor" id="valor" class="gui-input" disabled="true">
 																				</label>
 																			</div>
@@ -402,7 +513,7 @@
 													</div>
 													<div class="modal-footer">
 														<div class="col-sm-12 text-right">
-															<button type="button" class="btn btn-primary">Guardar Cambios</button>
+															<button id="botonGuardarModal2" type="button" class="btn btn-primary">Guardar Cambios</button>
 															<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 														</div>
 													</div>

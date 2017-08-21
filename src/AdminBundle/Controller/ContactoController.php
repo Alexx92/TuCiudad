@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use AdminBundle\Entity\Contacto;
 use AdminBundle\Entity\Empresa;
 use AdminBundle\Entity\ContacEmpre;
+use AdminBundle\Entity\Cargo;
 
 use \stdClass;
 
@@ -27,10 +28,13 @@ class ContactoController extends Controller
     public function contactoNuevoAction()
     {
         $titulo  = 'Nuevo Contacto';
-
+        $em = $this->getDoctrine()->getManager();
+        
+        $lista_cargos = $em->getRepository('AdminBundle:Cargo')->findAll();        
         return $this->render('AdminBundle:Contacto:nuevo.html.twig',array(
             'titulo'          =>  $titulo,
             'menu'            => 'nuevo',
+            'lista_cargos'    => $lista_cargos,
             'menu_o_con'      => 'contacto',
             'submenu'         => 'contacto_nuevo'
         ));
@@ -83,7 +87,7 @@ class ContactoController extends Controller
             $apellido_materno   = ucfirst($request->get('contacto_ape_mate'));
             $email              = $request->get('contacto_email');
             $telefono           = $request->get('contacto_fono');
-            $cargo              = ucfirst($request->get('contacto_cargo'));
+            $cargo              = ucfirst($request->get('cargos'));
             $observacion        = ucfirst($request->get('contacto_obs'));
             $imagen             = ($request->files->get('contacto_img', false))? $request->files->get('contacto_img'): null;
 
@@ -93,17 +97,15 @@ class ContactoController extends Controller
             {
                 $contacto = new Contacto();
                 $contacto->setEstado(1);
-                $contacto->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));
-                
+                $contacto->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));                
             }
-
             $contacto->setPrimerNombre($primer_nombre);
             $contacto->setSegundoNombre($segundo_nombre);
             $contacto->setApellidoPaterno($apellido_paterno);
             $contacto->setApellidoMaterno($apellido_materno);
             $contacto->setCorreo($email);
             $contacto->setTelefono($telefono);
-            $contacto->setCargo($cargo);
+            $contacto->setCargo($em->getRepository('AdminBundle:Cargo')->findOneBy(array('id'=>$cargo)));
             $contacto->setObservacion($observacion);
             
 
@@ -150,7 +152,7 @@ class ContactoController extends Controller
         $data['apellido_materno']  = $contacto->getApellidoMaterno();
         $data['email']             = $contacto->getCorreo();
         $data['telefono']          = $contacto->getTelefono();
-        $data['cargo']             = $contacto->getCargo();
+        $data['cargo']             = $contacto->getCargo()->getId();
         $data['observacion']       = $contacto->getObservacion();
         $data['imagen']            = $contacto->getImagen();
 
@@ -161,22 +163,21 @@ class ContactoController extends Controller
         {
             foreach($cont_empre as $value)
             {
-                $datos = new stdClass();
-                
+                $datos = new stdClass();                
                 $datos->id_contempr     = $value->getId();
-                $datos->nombre_fkempre  = $value->getFkEmpresa()->getNombre();
-                //$datos->id_fkcont       = $value->getFkContacto()->getId();
-                //$datos->id_fkempre      = $value->getFkEmpresa()->getId();
-                
+                $datos->nombre_fkempre  = $value->getFkEmpresa()->getNombre();                               
                 $lista_emprecont[]  = $datos;
-
             }
         }
-
+        $cargoNombre = $em->getRepository('AdminBundle:Cargo')->findOneBy(array('id'=>$contacto->getCargo()));
+        $lista_cargos = $em->getRepository('AdminBundle:Cargo')->findAll();        
+        
         return $this->render('AdminBundle:Contacto:nuevo.html.twig',array(
             'titulo'          => $titulo,
             'data'            => $data,
+            'cargoNombre'     => $cargoNombre->getNombre(),
             'lista_emprecont' => $lista_emprecont,
+            'lista_cargos'    => $lista_cargos,            
             'menu'            => 'nuevo',
             'submenu'         => 'contacto_nuevo',
             'form'            => 'activo',
@@ -245,7 +246,6 @@ class ContactoController extends Controller
             $empreLista .= '<li class="ele" role="presentation"><span role="menuitem" data-id="'.$result['id'].'" data-name="'.$result['nombre'].'">'.$result['nombre'].'</span></li>';
         }
 
- 
         $response = new JsonResponse();
         $response->setData(array('empreLista' => $empreLista));
         

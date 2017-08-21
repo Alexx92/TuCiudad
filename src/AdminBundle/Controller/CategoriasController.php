@@ -69,23 +69,18 @@ class CategoriasController extends Controller
     public function CategoriasGuardarAction(Request $request)
     {
         $result = false;
-
         if( $request->getMethod() == 'POST' )
         {
             // captura de datos desde el formulario
             $id               = ($request->get('cat_id', false)) ? $request->get('cat_id'): 0;
             $cat_nombre       = ucfirst($request->get('cat_nombre'));
-            //$cat_fecha      = $request->get('cat_fecha');
-
             $imagen           = ($request->files->get('cat_imagen', false))? $request->files->get('cat_imagen'): null;
-
             $em = $this->getDoctrine()->getManager();
-
             if( !$Categorias = $em->getRepository('AdminBundle:Categorias')->findOneBy(array( 'id' => $id )) )
             {
                 $Categorias = new Categorias();
                 $Categorias->setEstado(1);                
-                $Categorias->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));                
+                $Categorias->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));
             }
             $Categorias->setNombre($cat_nombre);
             // guardar imagen
@@ -105,6 +100,44 @@ class CategoriasController extends Controller
 
         echo json_encode(array('result' => $result));
         exit;
+    }
+    // guarda nuevo Categoria en Producto
+    public function categoriasGuardarProductoAction(Request $request)
+    {
+             // captura de datos desde el formulario
+             $id               = ($request->get('cat_id', false)) ? $request->get('cat_id'): 0;
+             
+            $cat_nombre       = ucfirst($request->get('cat_nombre'));
+            $imagen           = ($request->files->get('cat_imagen', false))? $request->files->get('cat_imagen'): null;
+            $em = $this->getDoctrine()->getManager();
+            if( !$Categorias = $em->getRepository('AdminBundle:Categorias')->findOneBy(array( 'id' => $id )) )
+            {
+                $Categorias = new Categorias();
+                $Categorias->setEstado(1);
+                $Categorias->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));
+            }
+            $Categorias->setNombre($cat_nombre);
+            // guardar imagen
+            if ($imagen)
+            {
+                $dir_image = $this->subirImagen($imagen);
+                $Categorias->setImagen($dir_image);
+            }
+
+            $em->persist($Categorias);
+            $em->flush();    
+
+            $lista_categorias = $em->getRepository('AdminBundle:Categorias')->findAll();
+            $listadoXcas="";        
+            foreach ($lista_categorias as $result) {
+                if($listadoXcas==''){
+                       $listadoXcas .= '<option value="">Seleccione</option>';
+                }                   
+                $listadoXcas .= '<option value="'.$result->getId().'">'.$result->getNombre().'</option>';
+            }
+            $response = new JsonResponse();
+            $response->setData(array('listadoXcas' => $listadoXcas));            
+            return $response;
     }
 
     // cargar formulario para editar

@@ -34,9 +34,9 @@ $(document).ready(function() {
             highlight: function(element, errorClass, validClass) {
                 $(element).closest('.field').addClass(errorClass).removeClass(validClass);
             },
-            //unhighlight: function(element, errorClass, validClass) {
-            //    $(element).closest('.field').removeClass(errorClass).addClass(validClass);
-            //}
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).closest('.field').removeClass(errorClass).addClass(validClass);
+            }
         });
 
         if (form.valid(true)) {
@@ -55,9 +55,17 @@ $(document).ready(function() {
                 idproducto = id_edit;
                 $("#prod_id").attr('value', id_edit);
                 $("#mostrar").show(); //activa el div una vez realiza el guardado add-categoria-tab
-                $("#add-categoria-tab").show();
+                $("#add-categoria").show();
+                $("#primera_categoria").hide();
+                var opcion_seleccionada = $("#selectCat option:selected").text();
+
+
+                $('#cli-cat').append('<div class="valign-wrapper"><i class="material-icons del_btn_i pointer">remove_circle_outline</i>' + opcion_seleccionada + '</div>');
+
                 // console.log(idproducto);
                 toastr.success('Datos guardados  ');
+                // $("#add-categoria-tab").show();
+
             }).fail(function(json) {
                 toastr.error('Error al guardar');
             });
@@ -82,6 +90,7 @@ $(document).ready(function() {
                 data: data
             }).done(function(response) {
                 if (response.catLista != "") {
+                    // console.log(response.catLista);
                     $('#match').html(response.catLista);
                     cli_cat();
                     $(".dropdown-toggle").dropdown("toggle");
@@ -109,6 +118,7 @@ $(document).ready(function() {
         }).done(function(json) {
             if (json) {
                 btn.parent().remove();
+                cargarOpciones();
                 toastr.success('Dato eliminado');
             }
         });
@@ -118,6 +128,113 @@ $(document).ready(function() {
         $("#check").val($(this).val());
         var boton = document.getElementById("guardar_producto");
         boton.disabled = false;
+    });
+
+    $('#add-categoria').on('click', function() {
+        var prod_id = $('#prod_id').val();
+        var data = { prod_id: prod_id };
+        console.log(data);
+        $.ajax({
+            dataType: 'json',
+            method: 'POST',
+            url: Routing.generate('ajax_cargar_opciones'),
+            data: data,
+        }).done(function(response) {
+            if (response.lista_opciones != "") {
+                $('#opciones_accesibles').html(response.lista_opciones);
+            } else {
+                $('#opciones_accesibles').html("<li>No hay opciones ya que no se ha seleccionado categoria o la categoria no tiene opciones asociadas </li>");
+            }
+            $('#opciones').html(response.lista_all_opciones);
+        });
+    });
+    $('#botonCancelarModal3').on('click', function() {
+        $('#myModal3').modal('hide');
+    });
+    $('#botonMoldal3').on('click', function() {
+        cargarOpciones();
+        var prod_id = $('#prod_id').val();
+        var data = { prod_id: prod_id };
+        $.ajax({ //cargar todas las categoras del producto 
+            dataType: 'json',
+            method: 'POST',
+            url: Routing.generate('ajax_cargar_categorias_producto_id'),
+            data: data,
+        }).done(function(response) {
+            $('#opcion_categorias').html(response.lista_categorias);
+        });
+        $('#myModal3').modal('show');
+    });
+    //Toma el valor del check y devuelve la lista de opciones de unidad 
+    $("input[name=unidad]").on('change', function() {
+        var valorChek = $(this).val();
+        if (valorChek == 1 || valorChek == 2) {
+            var data = { valorChek: valorChek };
+            $.ajax({
+                dataType: 'json',
+                method: 'POST',
+                url: Routing.generate('ajax_cargar_opciones_unidad_producto'),
+                data: data,
+            }).done(function(response) {
+                $('#opcion_unidades').html(response.lista_opciones);
+                $('#opcionSelect').show();
+            });
+        } else {
+            $('#opcionSelect').hide();
+            $('#opcion_unidades').val(" ");
+        }
+    });
+    $('#botonGuardarModal3').on('click', function() {
+        var nombre = $('#opcion_nombre').val();
+        var valor = $('#opcion_valor').val();
+        var id_select = $('#opcion_unidades').val();
+        var id_categoria = $('#opcion_categorias').val();
+        var observaciones = $('#opcion_obs').val();
+        if (nombre != "" && valor != "" && id_categoria != "") {
+            var data = { nombre: nombre, valor: valor, id_select: id_select, id_categoria: id_categoria, observaciones: observaciones };
+            $.ajax({
+                dataType: 'json',
+                method: 'POST',
+                url: Routing.generate('ajax_guarda_new_opcion_producto'),
+                data: data,
+            }).done(function(response) {
+                $('#myModal3').modal('hide');
+                var id_detalle = $('#detalle').val();
+                var data = { id_detalle: id_detalle };
+                $.ajax({
+                    dataType: 'json',
+                    method: 'POST',
+                    url: Routing.generate('ajax_cargar_listado_opciones'),
+                    data: data,
+                }).done(function(response) {
+                    $('#opciones').html(response.lista_opciones);
+                    toastr.success('Datos Guardados');
+                });
+            });
+        } else {
+            toastr.warning('Complete los campos');
+        }
+    });
+    $('#btnGuardarCategoria').on('click', function() {
+        var cat_nombre = $('#cat_nombre').val();
+        var cat_imagen = $('#cat_imagen').val();
+        if (cat_nombre != "") {
+            var data = { cat_nombre: cat_nombre, cat_imagen: cat_imagen };
+            $.ajax({
+                dataType: 'json',
+                method: 'POST',
+                url: Routing.generate('ajax_guardar_categoria_producto'),
+                data: data,
+            }).done(function(response) {
+                $('#myModal').modal('hide');
+                $('#selectCat').html(response.listadoXcas);
+                $('#cat_nombre').val("");
+                $('#cat_imagen').val("");
+                toastr.success('Datos Guardados');
+            });
+        } else {
+            toastr.warning('Complete los campos');
+        }
     });
 
     /* $("#guardar_producto").click(function() {
@@ -131,6 +248,24 @@ $(document).ready(function() {
 
 });
 
+function cargarOpciones() {
+    var prod_id = $('#prod_id').val();
+    var data = { prod_id: prod_id };
+    $.ajax({ //cargarr todas las opciones de producto
+        dataType: 'json',
+        method: 'POST',
+        url: Routing.generate('ajax_cargar_opciones'),
+        data: data,
+    }).done(function(response) {
+        if (response.lista_opciones != "") {
+            $('#opciones_accesibles').html(response.lista_opciones);
+        } else {
+            $('#opciones_accesibles').html("<li>No hay opciones ya que no se ha seleccionado categoria</li>");
+        }
+        $('#opciones').html(response.lista_all_opciones);
+    });
+}
+
 function cargar() {
     var check = $("#check").val();
     if (check != "") {
@@ -143,7 +278,7 @@ function cargar() {
 }
 // funcion unir cateforia-producto
 function cli_cat() {
-    var data_cont = $('#match').data('prod_id');
+    var data_cont = $('#prod_id').val();
     if (data_cont == null) { //consulta valor de la id, por si es un producto creado en la misma ventana 
         data_cont = idproducto //id producto es una variable global en el script
     }
@@ -152,7 +287,6 @@ function cli_cat() {
         var idcat = span.data('id');
         var nempre = span.data('name');
         var data = { idcat: idcat, id_cont: data_cont };
-        // console.log(data);
         //$('#cli-cat').append('<div class="valign-wrapper"><i class="material-icons del_btn_i pointer">remove_circle_outline</i><input type="text" class="form-control" name="namecat" value="' + idcat + '">' + nempre + '</div>');
         $.ajax({
             type: "POST",
@@ -162,6 +296,9 @@ function cli_cat() {
         }).done(function(response) {
             $('#cli-cat').append('<div class="valign-wrapper"><i class="material-icons del_btn_i pointer">remove_circle_outline</i>' + nempre + '</div>');
             // $('#cli-cat').append('<div class="valign-wrapper"><i class="material-icons del_btn_i pointer">remove_circle_outline</i><input type="text" class="form-control" name="namecat" value="' + idcat + '">' + nempre + '</div>');
+
+            cargarOpciones();
+            toastr.success('Datos Guardados');
 
         }).fail(function(response) {
             toastr.error('Error al cargar el dato');
