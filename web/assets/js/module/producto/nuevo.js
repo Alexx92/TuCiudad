@@ -151,7 +151,11 @@ $(document).ready(function() {
     $('#botonCancelarModal3').on('click', function() {
         $('#myModal3').modal('hide');
     });
+    $('#btnModalAgregarCat').on('click', function() {
+        $('#myModal').modal('show');
+    });
     $('#botonMoldal3').on('click', function() {
+        $("#form-new-opcion")[0].reset();
         cargarOpciones();
         var prod_id = $('#prod_id').val();
         var data = { prod_id: prod_id };
@@ -167,6 +171,7 @@ $(document).ready(function() {
     });
     //Toma el valor del check y devuelve la lista de opciones de unidad 
     $("input[name=unidad]").on('change', function() {
+
         var valorChek = $(this).val();
         if (valorChek == 1 || valorChek == 2) {
             var data = { valorChek: valorChek };
@@ -184,56 +189,162 @@ $(document).ready(function() {
             $('#opcion_unidades').val(" ");
         }
     });
-    $('#botonGuardarModal3').on('click', function() {
-        var nombre = $('#opcion_nombre').val();
-        var valor = $('#opcion_valor').val();
-        var id_select = $('#opcion_unidades').val();
-        var id_categoria = $('#opcion_categorias').val();
-        var observaciones = $('#opcion_obs').val();
-        if (nombre != "" && valor != "" && id_categoria != "") {
-            var data = { nombre: nombre, valor: valor, id_select: id_select, id_categoria: id_categoria, observaciones: observaciones };
+    $('#btnModalGuardarOpcion').on('click', function(e) {
+        e.preventDefault();
+        var form = $('#form-new-opcion');
+        form.validate({
+            errorClass: "state-error",
+            validClass: "state-success",
+            errorElement: "em",
+            rules: {
+                opcion_nombre: {
+                    required: true
+                },
+                opcion_valor: {
+                    required: true
+                },
+                opcion_categorias: {
+                    required: true
+                }
+            },
+            messages: {
+                opcion_nombre: {
+                    required: 'Ingrese un nombre valido'
+                },
+                opcion_valor: {
+                    required: 'Ingrese un valor numerico valido'
+                },
+                opcion_categorias: {
+                    required: 'Seleccione'
+                }
+            },
+            errorPlacement: function(element, errorClass, validClass) {
+                $(element).closest('.field').addClass(errorClass).removeClass(validClass);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).closest('.field').addClass(errorClass).removeClass(validClass);
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).closest('.field').removeClass(errorClass).addClass(validClass);
+            }
+        });
+
+        if (form.valid(true)) {
+            var datos = new FormData($("#form-new-opcion")[0]);
+            console.log(datos);
+            var validator = form.validate();
             $.ajax({
+                url: form.attr('action'),
+                data: datos,
                 dataType: 'json',
-                method: 'POST',
-                url: Routing.generate('ajax_guarda_new_opcion_producto'),
-                data: data,
+                method: form.attr('method'),
+                contentType: false,
+                processData: false,
+                cache: false
             }).done(function(response) {
+                cargarOpciones();
+                toastr.success('Datos Guardados');
                 $('#myModal3').modal('hide');
-                var id_detalle = $('#detalle').val();
-                var data = { id_detalle: id_detalle };
-                $.ajax({
-                    dataType: 'json',
-                    method: 'POST',
-                    url: Routing.generate('ajax_cargar_listado_opciones'),
-                    data: data,
-                }).done(function(response) {
-                    $('#opciones').html(response.lista_opciones);
-                    toastr.success('Datos Guardados');
-                });
+                $("#form-new-opcion")[0].reset();
+                toastr.success('Datos guardados ;) ');
+            }).fail(function(response) {
+                toastr.error('Error al guardar');
             });
         } else {
-            toastr.warning('Complete los campos');
+            toastr.warning('Complete todos los campos requeridos');
         }
+
+        // --------------------------------------------
+        // var nombre = $('#opcion_nombre').val();
+        // var valor = $('#opcion_valor').val();
+        // var id_select = $('#opcion_unidades').val();
+        // var id_categoria = $('#opcion_categorias').val();
+        // var observaciones = $('#opcion_obs').val();
+        // if (nombre != "" && valor != "" && id_categoria != "") {
+        //     var data = { nombre: nombre, valor: valor, id_select: id_select, id_categoria: id_categoria, observaciones: observaciones };
+        //     $.ajax({
+        //         dataType: 'json',
+        //         method: 'POST',
+        //         url: Routing.generate('ajax_guarda_new_opcion_producto'),
+        //         data: data,
+        //     }).done(function(response) {
+        //         cargarOpciones();
+        //         toastr.success('Datos Guardados');
+        //         $('#myModal3').modal('hide');
+        //         $("#form-new-opcion")[0].reset();
+        //     });
+        // } else {
+        //     toastr.warning('Complete los campos');
+        // }
     });
-    $('#btnGuardarCategoria').on('click', function() {
-        var cat_nombre = $('#cat_nombre').val();
-        var cat_imagen = $('#cat_imagen').val();
-        if (cat_nombre != "") {
-            var data = { cat_nombre: cat_nombre, cat_imagen: cat_imagen };
+    // $('#btnGuardarCategoria').on('click', function() {
+    //     var cat_nombre = $('#cat_nombre').val();
+    //     var cat_imagen = $('#cat_imagen').val();
+    //     if (cat_nombre != "") {
+    //         var data = { cat_nombre: cat_nombre, cat_imagen: cat_imagen };
+    //         $.ajax({
+    //             dataType: 'json',
+    //             method: 'POST',
+    //             url: Routing.generate('ajax_guardar_categoria_producto'),
+    //             data: data,
+    //         }).done(function(response) {
+    //             $('#myModal').modal('hide');
+    //             $('#selectCat').html(response.listadoXcas);
+    //             $('#form_nueva_categoria')[0].reset();
+    //             toastr.success('Datos Guardados');
+    //         });
+    //     } else {
+    //         toastr.warning('Complete los campos');
+    //     }
+    // });
+    $('#btnGuardarCategoria').click(function(e) {
+        e.preventDefault();
+        var form = $('#form-nueva-categoria');
+        form.validate({
+            errorClass: "state-error",
+            validClass: "state-success",
+            errorElement: "em",
+            rules: {
+                cat_nombre: {
+                    required: true
+                }
+            },
+            messages: {
+                cat_nombre: {
+                    required: 'Ingrese un nombre valido'
+                }
+            },
+            errorPlacement: function(element, errorClass, validClass) {
+                $(element).closest('.field').addClass(errorClass).removeClass(validClass);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).closest('.field').addClass(errorClass).removeClass(validClass);
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).closest('.field').removeClass(errorClass).addClass(validClass);
+            }
+        });
+        if (form.valid(true)) {
+            var datos = new FormData(form[0]);
+            var validator = form.validate();
             $.ajax({
+                url: form.attr('action'),
+                data: datos,
                 dataType: 'json',
-                method: 'POST',
-                url: Routing.generate('ajax_guardar_categoria_producto'),
-                data: data,
+                method: form.attr('method'),
+                contentType: false,
+                processData: false,
+                cache: false
             }).done(function(response) {
                 $('#myModal').modal('hide');
                 $('#selectCat').html(response.listadoXcas);
-                $('#cat_nombre').val("");
-                $('#cat_imagen').val("");
+                $('#form_nueva_categoria')[0].reset();
                 toastr.success('Datos Guardados');
+            }).fail(function(json) {
+                toastr.error('Error al guardar');
             });
         } else {
-            toastr.warning('Complete los campos');
+            toastr.warning('Complete todos los campos requeridos');
         }
     });
 

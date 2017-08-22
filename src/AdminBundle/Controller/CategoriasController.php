@@ -74,6 +74,8 @@ class CategoriasController extends Controller
             // captura de datos desde el formulario
             $id               = ($request->get('cat_id', false)) ? $request->get('cat_id'): 0;
             $cat_nombre       = ucfirst($request->get('cat_nombre'));
+        
+            $obs       = ucfirst($request->get('cat_obs'));
             $imagen           = ($request->files->get('cat_imagen', false))? $request->files->get('cat_imagen'): null;
             $em = $this->getDoctrine()->getManager();
             if( !$Categorias = $em->getRepository('AdminBundle:Categorias')->findOneBy(array( 'id' => $id )) )
@@ -83,6 +85,7 @@ class CategoriasController extends Controller
                 $Categorias->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));
             }
             $Categorias->setNombre($cat_nombre);
+            $Categorias->setObservacion($obs);
             // guardar imagen
             if ($imagen)
             {
@@ -98,8 +101,17 @@ class CategoriasController extends Controller
 
         }
 
-        echo json_encode(array('result' => $result));
-        exit;
+        $lista_categorias = $em->getRepository('AdminBundle:Categorias')->findAll();
+        $listadoXcas="";        
+        foreach ($lista_categorias as $result) {
+            if($listadoXcas==''){
+                   $listadoXcas .= '<option value="">Seleccione</option>';
+            }                   
+            $listadoXcas .= '<option value="'.$result->getId().'">'.$result->getNombre().'</option>';
+        }
+        $response = new JsonResponse();
+        $response->setData(array('listadoXcas' => $listadoXcas));            
+        return $response;
     }
     // guarda nuevo Categoria en Producto
     public function categoriasGuardarProductoAction(Request $request)

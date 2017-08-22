@@ -367,10 +367,10 @@ class ProductoController extends Controller
         $id_producto  = $request->get('prod_id');
 
         $em = $this->getDoctrine()->getManager();//declaracion de doctrine
-        $detalle = $em->getRepository('AdminBundle:Producto')->findOneBy(array('id'=>$id_producto));
+       // $detalle = $em->getRepository('AdminBundle:Producto')->findOneBy(array('id'=>$id_producto));
 
         $lista_categorias="";        
-        if ($categorias = $em->getRepository('AdminBundle:ProductoCategoria')->findBy(array('fkProducto'=>$detalle->getId()))){  
+        if ($categorias = $em->getRepository('AdminBundle:ProductoCategoria')->findBy(array('fkProducto'=>$id_producto))){  
             foreach ($categorias as $result) {
                 if($lista_categorias==''){
                        $lista_categorias .= '<option value="">Seleccione</option>';
@@ -382,6 +382,7 @@ class ProductoController extends Controller
         $response->setData(array('lista_categorias'=>$lista_categorias));
         return $response;
     }
+        //carga todas las categorias por id_detallePedido
        public function cargaCategoriasProductoIdDetalleAction(Request $request)
     {
         $id_detalle  = $request->get('id_detalle');

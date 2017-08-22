@@ -17,14 +17,14 @@ $(document).ready(function() {
             validClass: "state-success",
             errorElement: "em",
             rules: {
-                empre_nombre: {
+                cat_nombre: {
                     required: true
-                }
+                },
             },
             messages: {
-                empre_nombre: {
+                cat_nombre: {
                     required: 'Ingrese un nombre valido'
-                }
+                },
             },
             errorPlacement: function(element, errorClass, validClass) {
                 $(element).closest('.field').addClass(errorClass).removeClass(validClass);
@@ -32,11 +32,10 @@ $(document).ready(function() {
             highlight: function(element, errorClass, validClass) {
                 $(element).closest('.field').addClass(errorClass).removeClass(validClass);
             },
-            //unhighlight: function(element, errorClass, validClass) {
-            //    $(element).closest('.field').removeClass(errorClass).addClass(validClass);
-            //}
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).closest('.field').removeClass(errorClass).addClass(validClass);
+            }
         });
-
         if (form.valid(true)) {
             var datos = new FormData(form[0]);
             var validator = form.validate();
@@ -48,11 +47,11 @@ $(document).ready(function() {
                 contentType: false,
                 processData: false,
                 cache: false
-            }).done(function(json) {
+            }).done(function(response) {
                 //form[0].reset();
                 //validator.resetForm();
                 toastr.success('Datos guardados');
-            }).fail(function(json) {
+            }).fail(function(response) {
                 toastr.error('Error al guardar');
             });
         } else {

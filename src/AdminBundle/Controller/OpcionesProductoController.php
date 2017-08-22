@@ -42,27 +42,21 @@ class OpcionesProductoController extends Controller
         {
             // captura de datos desde el formulario
             $id                 = ($request->get('id_contacto', false)) ? $request->get('id_contacto'): 0;
-            $nombre      = ucfirst($request->get('contacto_pri_nomb'));
-            $valor     = ucfirst($request->get('contacto_seg_nomb'));           
+            $nombre             = ucfirst($request->get('opcion_nombre'));
+            $valor              = $request->get('opcion_valor');
+            $observacion        = $request->get('opcion_obs');    
             $imagen             = ($request->files->get('contacto_img', false))? $request->files->get('contacto_img'): null;
-
+            $id_unidades   = $request->get('opcion_unidades');
+            $id_categoria   = $request->get('opcion_categorias');
             $em = $this->getDoctrine()->getManager();
-
             if( !$opcionProducto = $em->getRepository('AdminBundle:OpcionesProducto')->findOneBy(array( 'id' => $id )) )
             {
-                $opcionProducto = new opcionProducto();
-                $opcionProducto->setEstado(1);
-                $opcionProducto->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));                
+                $opcionProducto = new OpcionesProducto();                
             }
-
-            $opcionProducto->setPrimerNombre($primer_nombre);
-            $opcionProducto->setSegundoNombre($segundo_nombre);
-            $opcionProducto->setApellidoPaterno($apellido_paterno);
-            $opcionProducto->setApellidoMaterno($apellido_materno);
-            $opcionProducto->setCorreo($email);
-            $opcionProducto->setTelefono($telefono);
-            $opcionProducto->setCargo($cargo);
-            $opcionProducto->setObservacion($observacion);            
+            $opcionProducto->setNombre($nombre);
+            $opcionProducto->setValor($valor);
+            $opcionProducto->setCategorias($em->getRepository('AdminBundle:Categorias')->findOneBy(array('id'=>$id_categoria)));
+            $opcionProducto->setDescripcion($observacion);
 
             // guardar imagen
             if ($imagen)
@@ -70,10 +64,8 @@ class OpcionesProductoController extends Controller
                 $dir_image = $this->subirImagen($imagen);
                 $opcionProducto->setImagen($dir_image);
             }
-
             $em->persist($opcionProducto);
             $em->flush();
-            
             $result = true;
             $id_new = $opcionProducto->getId();
         }
@@ -110,4 +102,25 @@ class OpcionesProductoController extends Controller
         
         return $response;
     }
+        // subir imagenes
+        private function subirImagen($imagen)
+        {
+            $result = null;
+            if($imagen)
+            {
+                $obj = array(
+                    'filesize'      => $imagen->getClientSize(),
+                    'filetype'      => $imagen->getClientMimeType(),
+                    'fileextension' => $imagen->getClientOriginalExtension(),
+                    'filenewname'   => uniqid().".".$imagen->getClientOriginalExtension(),
+                    'filenewpath'   => __DIR__.'/../../../web/uploads/opcionesProducto'
+                );
+                if($obj['filetype'] == 'image/png' || $obj['filetype'] == 'image/jpeg')
+                {
+                    $imagen->move($obj['filenewpath'], $obj['filenewname']);
+                    $result = $obj['filenewname'];
+                }
+            }
+            return $result;
+        }
 }
