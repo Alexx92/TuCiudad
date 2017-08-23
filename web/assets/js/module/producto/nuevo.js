@@ -130,7 +130,7 @@ $(document).ready(function() {
     });
     $('#botonMoldalAgregarOpcion').on('click', function() {
         $("#form-new-opcion")[0].reset();
-        cargarOpciones();
+        // cargarOpciones();
         var prod_id = $('#prod_id').val();
         var data = { prod_id: prod_id };
         $.ajax({ //cargar todas las categoras del producto 
@@ -298,13 +298,10 @@ function cargarOpciones() {
         url: Routing.generate('ajax_cargar_opciones'),
         data: data,
     }).done(function(response) {
-        if (response.lista_opciones != "") {
-            $('#opciones_accesibles').html(response.lista_opciones);
-        } else {
-            $('#opciones_accesibles').html("<li>No hay opciones ya que no se ha seleccionado categoria</li>");
-        }
-        $('#cli-cat').html(response.listaAllCategoriasProducto);
-        //$('#opciones').html(response.lista_all_opciones);
+        var texto = (response.lista_opciones == '') ? "<li>No hay opciones ya que no se ha seleccionado categoria</li>" : response.lista_opciones;
+        $('#opciones_accesibles').html(texto);
+        var texto2 = (response.listaAllCategoriasProducto == '') ? "<li>No se han seleccionado categorias</li>" : response.listaAllCategoriasProducto;
+        $('#cli-cat').html(texto2);
     });
 }
 
@@ -344,17 +341,24 @@ function cli_cat() {
 function functionDelete(id_opcion) {
     var id = id_opcion
     var data = { id: id };
-    console.log(data);
     $.ajax({
         dataType: 'json',
         method: 'POST',
         url: Routing.generate('ajax_borrar_categoria'),
         data: data,
-    }).done(function(json) {
-        if (json) {
+    }).done(function(response) {
+        if (response) {
             // btn.parent().remove();
-            cargarOpciones();
-            toastr.success('Dato eliminado');
+            if (response.isvalid == true) {
+                cargarOpciones();
+                toastr.success('Dato eliminado');
+            } else {
+                toastr.warning('Un producto debe tener almenos una categoria');
+            }
+        } else {
+            toastr.error('No se realizo la eliminacion');
+
         }
+
     });
 }

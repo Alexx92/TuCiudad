@@ -392,15 +392,15 @@ admin_opcion_guardar:
 #         expose: true
 #----------------------------------Cargo------------------------------------------
 #ruta ajax Guardar Cargo
-guardar_cargo:
+admin_cargo_guardar:
     path:     /ajax/cargo/guardar/
     defaults: { _controller: AdminBundle:Cargo:cargoGuardar}
     options:
         expose: true
-#ruta ajax Guardar Cargo
-ajax_guardar_cargo:
-    path:     /ajax/cargo/guardarModal/
-    defaults: { _controller: AdminBundle:Cargo:ajaxCargoGuardar}
-    options:
-        expose: true
+# #ruta ajax Guardar Cargo
+# ajax_guardar_cargo:
+#     path:     /ajax/cargo/guardarModal/
+#     defaults: { _controller: AdminBundle:Cargo:ajaxCargoGuardar}
+#     options:
+#         expose: true
 

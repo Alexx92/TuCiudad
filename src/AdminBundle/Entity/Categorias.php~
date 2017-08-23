@@ -36,6 +36,13 @@ class Categorias
     private $imagen;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion", type="string", length=200, nullable=true)
+     */
+    private $observacion;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=true)

@@ -36,35 +36,33 @@
                                             <div class="form-group col-sm-12 col-lg-3">
                                                 <label class="field">
                                                     Primer Nombre
-                                                    <input type="text" name="primer_nombre" id="primer_nombre" class="gui-input" value="{{data.primer_nombre is defined ? data.primer_nombre}}" required>
+                                                    <input type="text" name="primer_nombre" id="primer_nombre" class="gui-input" value="{{data.primer_nombre is defined ? data.primer_nombre}}" autocomplete="off" required>
                                                 </label>
-                                            </div>
-                                            
+                                            </div>                                            
                                             <div class="form-group col-sm-12 col-lg-3">
                                                 <label class="field">
                                                     Segundo Nombre
-                                                    <input type="text" name="segundo_nombre" id="segundo_nombre" class="gui-input" value="{{data.segundo_nombre is defined ? data.segundo_nombre}}">
+                                                    <input type="text" name="segundo_nombre" id="segundo_nombre" class="gui-input" value="{{data.segundo_nombre is defined ? data.segundo_nombre}}" autocomplete="off">
                                                 </label>
                                             </div>
                                             <div class="form-group  col-sm-12 col-md-3">
                                                 <label class="field">
                                                     Apellido Paterno 
-                                                    <input type="text" name="apellido_paterno" id="apellido_paterno" class="gui-input" value="{{data.apellido_paterno is defined ? data.apellido_paterno}}" required>
+                                                    <input type="text" name="apellido_paterno" id="apellido_paterno" class="gui-input" value="{{data.apellido_paterno is defined ? data.apellido_paterno}}" autocomplete="off" required>
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3">
                                                 <label class="field">
                                                     Apellido Materno
-                                                    <input type="text" name="apellido_materno" id="apellido_materno" class="gui-input" value="{{data.apellido_materno is defined ? data.apellido_materno}}" required>
+                                                    <input type="text" name="apellido_materno" id="apellido_materno" class="gui-input" value="{{data.apellido_materno is defined ? data.apellido_materno}}" autocomplete="off" required>
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3">
                                                 <label class="field">
                                                     Cedula de Identidad
-                                                    <input type="text" name="dni" id="dni" class="gui-input val_num" value="{{data.dni is defined ? data.dni}}" required>
+                                                    <input type="text" name="dni" id="dni" class="gui-input val_num" value="{{data.dni is defined ? data.dni}}" autocomplete="off" required>
                                                 </label>
-                                            </div>
-                                            
+                                            </div>                                            
                                             <div class="form-group col-sm-12 col-md-3"> <!-- Date input -->
                                                 <label class="field"  for="fecha_nacimiento">
                                                     Fecha Nacimiento
@@ -291,38 +289,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    {#{% if edicion == 'true' %}
-                    <div role="tabpanel" class="tab-pane fade" id="add-empresa-tab">
-                        <div class="admin-form theme-default theme-info">
-                            <div class="panel heading-border panel-default panel-info">
-                                <div class="panel-body bg-light">
-                                    <div class="col-sm-12">
-                                        <h5><i class="material-icons" style="vertical-align: bottom;">person_add</i> Agregar contactos</h5>
-                                        <div class="dropdown">                            
-                                            <input type="text" id="busq_cont" name="buscar2" class="form-control dropdown-toggle" data-toggle="dropdown" aria-expanded="true">                            
-                                            <ul id="lista_conta" aria-labelledby="busq_cont" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
-                                        </div>
-                                        <div class="admin-form">
-                                            <div class="panel">
-                                                <div class="panel-body">
-                                                    <!-- se agregan las empresas para hacer el vinculo -->
-                                                    <div id="contactos_div" class="cli-emp" >
-                                                        {% if lista_contempre is defined %}
-                                                            {% for lista_contempre in lista_contempre %}
-                                                                <div class="valign-wrapper"><i class="material-icons del_btn_i pointer" data-id="{{ lista_contempre.id_contacto }}">remove_circle_outline</i>{{ lista_contempre.pri_nombre_fkcont }} {{ lista_contempre.seg_nombre_fkcont }} {{ lista_contempre.apellido_pate_fkcont }} {{ lista_contempre.apellido_mate_fkcont }}</div>
-                                                            {% endfor %}
-                                                        {% endif %}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}#}
+                    </div>                    
                 </div>
             </div>
         </div>

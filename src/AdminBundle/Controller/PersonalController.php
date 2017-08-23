@@ -78,10 +78,11 @@ class PersonalController extends Controller
         ));
     }
 
-    // guarda nuevo contacto
+    // guarda nuevo personal
     public function personalGuardarAction(Request $request)
     {
         $result = false;
+        $valid = false;//Retorna respuesta a script en caso de existir en la base de datos un run igual
 
         if( $request->getMethod() == 'POST' )
         {                  
@@ -114,55 +115,57 @@ class PersonalController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            if( !$contacto = $em->getRepository('AdminBundle:Personal')->findOneBy(array( 'id' => $id )) )
-            {
-                $contacto = new Personal();
-                $contacto->setEstado(1);                
-                $contacto->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));         
-                $contacto->setEstadoPersonal($em->getRepository('AdminBundle:EstadoPersonal')->findOneBy(array('id'=>2)));       
+            if( !$personal = $em->getRepository('AdminBundle:Personal')->findOneBy(array( 'id' => $id )) )
+            {//se trata de una persona nueva
+                $personal = new Personal();
+                $personal->setEstado(1);
+                $personal->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));
+                $personal->setEstadoPersonal($em->getRepository('AdminBundle:EstadoPersonal')->findOneBy(array('id'=>2)));
             }
-            //$objArea = $em->getRepository('AdminBundle:Area')->findOneBy(array('id'=>$area));
+            if (!$personal = $em->getRepository('AdminBundle:Personal')->findOneBy(array( 'dni' => $dni ))) {//valida que no alla una persona con el mismo rut
+                $valid = true; //actualizo la variable que valida el ingreso                
+                $personal->setArea($em->getRepository('AdminBundle:Area')->findOneBy(array('id'=>$area)));
+                $personal->setPrimerNombre($primer_nombre);
+                $personal->setSegundoNombre($segundo_nombre);
+                $personal->setApellidoPaterno($apellido_paterno);
+                $personal->setApellidoMaterno($apellido_materno);
+                $personal->setDni($dni);
+                $personal->setSexo($sexo);
+                $personal->setFechaNacimiento($fecha_nacimiento);                
+                $personal->setComuna($comuna);
+                $personal->setProvincia($provincia);
+                $personal->setRegion($region);
+                $personal->setDirVillaPbla($dir_villa_pobl);
+                $personal->setDirCalle($dir_calle);
+                $personal->setDirNumeroCasa($dir_numero_casa);
+                $personal->setDirNumeroDepartamento($dir_numero_depto);
+                $personal->setDirNumeroPiso($dir_numero_piso);                
+                $personal->setTelefono($telefono);
+                $personal->setCelular($celular);
+                $personal->setCorreo($email);
+                $personal->setSkype($skype);                    
+                $personal->setObservacion($observacion);    
+                // guardar imagen
+                if ($imagen)
+                {
+                    $dir_image = $this->subirImagen($imagen);
+                    $personal->setImagen($dir_image);
+                }    
+                $em->persist($personal);
+                $em->flush();
+    
+                $result = true;
+            }
+
             
-            $contacto->setArea($em->getRepository('AdminBundle:Area')->findOneBy(array('id'=>$area)));
-            $contacto->setPrimerNombre($primer_nombre);
-            $contacto->setSegundoNombre($segundo_nombre);
-            $contacto->setApellidoPaterno($apellido_paterno);
-            $contacto->setApellidoMaterno($apellido_materno);
-            $contacto->setDni($dni);
-            $contacto->setSexo($sexo);
-            $contacto->setFechaNacimiento($fecha_nacimiento);                
-            $contacto->setComuna($comuna);
-            $contacto->setProvincia($provincia);
-            $contacto->setRegion($region);
-            $contacto->setDirVillaPbla($dir_villa_pobl);
-            $contacto->setDirCalle($dir_calle);
-            $contacto->setDirNumeroCasa($dir_numero_casa);
-            $contacto->setDirNumeroDepartamento($dir_numero_depto);
-            $contacto->setDirNumeroPiso($dir_numero_piso);                
-            $contacto->setTelefono($telefono);
-            $contacto->setCelular($celular);
-            $contacto->setCorreo($email);
-            $contacto->setSkype($skype);
-                
-            $contacto->setObservacion($observacion);
-
-            // guardar imagen
-            if ($imagen)
-            {
-                $dir_image = $this->subirImagen($imagen);
-                $contacto->setImagen($dir_image);
-            }
-
-            $em->persist($contacto);
-            $em->flush();
-
-            $result = true;
 
         }
-
-        //return $this->redirectToRoute('admin_contacto_nuevo');
-        echo json_encode(array('result' => $result));
-        exit;
+        $response = new JsonResponse();
+        $response->setData(array('result' => $result,'valid'=>$valid));        
+        return $response;
+        // //return $this->redirectToRoute('admin_contacto_nuevo');
+        // echo json_encode(array('result' => $result));
+        // exit;
     }
 
     // cargar formulario para editar

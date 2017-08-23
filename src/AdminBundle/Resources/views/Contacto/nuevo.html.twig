@@ -12,7 +12,6 @@
             </div>
         </div>
         <!-- bloque superior fin-->
-
         <!-- contenido -->
         <div class="row">
             <div role="tab-block">
@@ -23,165 +22,207 @@
                 </ul>
                 <!-- Tab Content Panes -->
                 <div class="tab-content">
-
                     <div role="tabpanel" class="tab-pane fade active in" id="datos-contacto-tab">
-                        <div class="col-sm-12">
-                            <h5 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
-                            <div class="row">
-                                <form id="form_nuevo_cliente" class="admin-form" action="{{ url('admin_contacto_guardar') }}" method="post" enctype="multipart/form-data">
-                                    <input type="hidden" name="id_contacto" id="id_contacto" value="{{ data.id is defined ? data.id}}" >                                    
-                                    <div class="col-md-12 ">
-                                        <div class="row">
-                                            <div class="form-group col-md-3">                                           
-                                                <label class="field">
-                                                    Run
-                                                    <input type="text" name="contacto_run" id="contacto_run" class="gui-input" value="{{ data.run is defined ? data.run}}" requiered>
-                                                </label>
-                                            </div>                                           
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-6">
-                                        <div class="row">
-                                            <div class="form-group col-md-6">
-                                                <label class="field">
-                                                    Primer Nombre
-                                                    <input type="text" pattern="[a-z]{1,15}" name="contacto_pri_nomb" id="contacto_pri_nomb" class="gui-input" value="{{ data.primer_nombre is defined ? data.primer_nombre}}" required>
-                                                </label>
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label class="field">
-                                                    Segundo Nombre
-                                                    <input type="text" name="contacto_seg_nomb" id="contacto_seg_nomb" class="gui-input" value="{{ data.segundo_nombre is defined ? data.segundo_nombre}}">
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>                                    
-                                    <div class="col-md-6 col-lg-6">
-                                        <div class="row">
-                                            <div class="form-group col-md-6">
-                                                <label class="field">
-                                                    Apellido Paterno
-                                                    <input type="text" name="contacto_ape_pate" id="contacto_ape_pate" class="gui-input" value="{{ data.apellido_paterno is defined ? data.apellido_paterno}}">
-                                                </label>
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label class="field">
-                                                    Apellido Materno
-                                                    <input type="text" name="contacto_ape_mate" id="contacto_ape_mate" class="gui-input" value="{{ data.apellido_materno is defined ? data.apellido_materno}}">
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-6">
-                                        <div class="row">
-                                            <div class="form-group col-sm-12 col-lg-6">
-                                                <label class="field">
-                                                    Email
-                                                    <input type="text" name="contacto_email" id="contacto_email" class="gui-input" value="{{ data.email is defined ? data.email}}">
-                                                </label>
-                                            </div>
-                                            <div class="form-group col-sm-12 col-lg-6">
-                                                <label class="field">
-                                                    Tel&eacute;fono
-                                                    <input type="tel" name="contacto_fono" id="contacto_fono" class="gui-input val_num" value="{{ data.telefono is defined ? data.telefono}}" >
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-									<div class="form-group col-sm-12 col-md-3">
-			    						<label class="field">
-											Cargo
-                                        </label>
-                                        <label class="field select">
-                                            <select id="cargos" name="cargos" class="form-control" required>
-                                                {% if data.cargo is defined %}<option value={{data.cargo}}>{{cargoNombre}}</option>{% endif %}
-                                                <option value="">Seleccione</option>
-                                                {% for lista_cargos in lista_cargos %}
-                                                    <option id="seleccion" name="seleccion" value={{lista_cargos.id}}>{{lista_cargos.nombre}}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <i class="arrow"></i>
-										</label>                                    
-                            		</div>
-                                    <div class="form-group col-sm-12 col-md-3">
-                                        <!-- Button trigger modal -->
-                                        <button id="btnShowModal" type="button" class="btn btn-primary btn-lg"  data-target="#myModal">
-                                            Crear Cargo
-                                        </button>
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                    <h4 class="modal-title" id="myModalLabel">Creacion Cargo</h4>
+                        <div class="admin-form theme-default theme-info">
+                            <div class="panel heading-border panel-default panel-info">
+                                <div class="panel-body bg-light">
+                                    <h5 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
+                                    <div class="row">
+                                        <form id="form_nuevo_cliente" class="admin-form" action="{{ url('admin_contacto_guardar') }}" method="post" enctype="multipart/form-data">
+                                            <input type="hidden" name="id_contacto" id="id_contacto" value="{{ data.id is defined ? data.id}}" >                                    
+                                            <div class="col-md-12 ">
+                                                <div class="row">
+                                                    <div class="form-group col-md-3">                                           
+                                                        <label class="field">
+                                                            Run
+                                                            <input type="text" name="contacto_run" id="contacto_run" class="gui-input" value="{{ data.run is defined ? data.run}}" requiered>
+                                                        </label>
+                                                    </div>                                           
                                                 </div>
-                                                <div class="modal-body">
-                                                    <div class="row">
-                                                            <div class="form-group col-sm-12 col-lg-6">
-                                                                <label class="field">
-                                                                    Nombre
-                                                                    <input type="text" name="cargo_nombre" id="cargo_nombre" class="gui-input"  >
-                                                                </label>
-                                                            </div>
-                                                        <div class="form-group col-sm-12">
-                                                            <label class="field">Observaciones</label>
-                                                            <label class="field prepend-icon">
-                                                                <textarea class="gui-textarea" id="cargo_obs" name="cargo_obs"></textarea>
-                                                                <label for="cargo_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
-                                                            </label>
-                                                        </div>
+                                            </div>
+                                            <div class="col-md-6 col-lg-6">
+                                                <div class="row">
+                                                    <div class="form-group col-md-6">
+                                                        <label class="field">
+                                                            Primer Nombre
+                                                            <input type="text" pattern="[a-z]{1,15}" name="contacto_pri_nomb" id="contacto_pri_nomb" class="gui-input" value="{{ data.primer_nombre is defined ? data.primer_nombre}}" required>
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label class="field">
+                                                            Segundo Nombre
+                                                            <input type="text" name="contacto_seg_nomb" id="contacto_seg_nomb" class="gui-input" value="{{ data.segundo_nombre is defined ? data.segundo_nombre}}">
+                                                        </label>
                                                     </div>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" value="Reset" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                                                    <button id="btnModalGuardarCargo" type="button" class="btn btn-primary">Guardar</button>
-                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-lg-6">
+                                                <div class="row">
+                                                    <div class="form-group col-md-6">
+                                                        <label class="field">
+                                                            Apellido Paterno
+                                                            <input type="text" name="contacto_ape_pate" id="contacto_ape_pate" class="gui-input" value="{{ data.apellido_paterno is defined ? data.apellido_paterno}}">
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label class="field">
+                                                            Apellido Materno
+                                                            <input type="text" name="contacto_ape_mate" id="contacto_ape_mate" class="gui-input" value="{{ data.apellido_materno is defined ? data.apellido_materno}}">
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                   
-                                       
-                                    </div>
-                                    <div class="form-group col-sm-12">
-                                        <label class="field">Observaciones</label>
-                                        <label class="field prepend-icon">
-                                            <textarea class="gui-textarea" id="contacto_obs" name="contacto_obs">{{ data.observacion is defined ? data.observacion}}</textarea>
-                                            <label for="contacto_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
-                                        </label>
-                                    </div>
-                                    <!-- imagen -->
-                                    {% if data.imagen is defined and data.imagen is not empty %}
-                                    <div class="form-group col-sm-12">
-                                        <div >
-                                            <img style="max-width: 100%;" src="{{ absolute_url(asset('uploads/contacto/'~data.imagen)) }}" alt="">
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                    <!-- imagen -->
-                                    <div class="input-field col-sm-3">
-                                        <label class="field">Imagen adjunta</label>
-                                        <label class="field prepend-icon append-button file">
-                                            <span class="button btn-primary">Elija un archivo</span>
-                                            <input type="file" class="gui-file" name="contacto_img" id="contacto_img" onChange="document.getElementById('uploader1').value = this.value;">
-                                            <input type="text" class="gui-input" id="uploader1" name="uploader1">
-                                            <label class="field-icon"><i class="fa fa-upload"></i>
-                                            </label>
-                                        </label>
-                                    </div>
-                                </form>                            
-                            </div> 
-                            <div class="row">
-                                <div class="col-sm-12 text-right">
+                                            <div class="col-md-6 col-lg-6">
+                                                <div class="row">
+                                                    <div class="form-group col-sm-12 col-lg-6">
+                                                        <label class="field">
+                                                            Email
+                                                            <input type="text" name="contacto_email" id="contacto_email" class="gui-input" value="{{ data.email is defined ? data.email}}">
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-lg-6">
+                                                        <label class="field">
+                                                            Tel&eacute;fono
+                                                            <input type="tel" name="contacto_fono" id="contacto_fono" class="gui-input val_num" value="{{ data.telefono is defined ? data.telefono}}" >
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-3">
+                                                <label class="field">
+                                                    Cargo
+                                                </label>
+                                                <label class="field select">
+                                                    <select id="cargos" name="cargos" class="form-control" required>
+                                                        {% if data.cargo is defined %}<option value={{data.cargo}}>{{cargoNombre}}</option>{% endif %}
+                                                        <option value="">Seleccione</option>
+                                                        {% for lista_cargos in lista_cargos %}
+                                                            <option id="seleccion" name="seleccion" value={{lista_cargos.id}}>{{lista_cargos.nombre}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <i class="arrow"></i>
+                                                </label>                                    
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-3">
+                                                <!-- Button trigger modal -->
+                                                <button id="btnShowModal" type="button" class="btn btn-primary btn-lg"  data-target="#myModal">
+                                                    Crear Cargo
+                                                </button>       
+                                                {# <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                <h4 class="modal-title" id="myModalLabel">Ingreso de Categoria</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="panel">                                                                        
+                                                                    <div class="panel-body bg-light"> 
+                                                                        <h5><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
+                                                                        <form id="form-new-cargo" name="form-new-cargo" class="" action="{{ url('admin_cargo_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
+                                                                            <div class="row">
+                                                                                <div class="form-group col-sm-12 col-lg-6">
+                                                                                    <label class="field">
+                                                                                        Nombre
+                                                                                        <input type="text" name="cargo_nombre" id="cargo_nombre" class="gui-input">
+                                                                                    </label>
+                                                                                </div>                                                                    
+                                                                            </div>
+                                                                            <div class="form-group col-sm-12">
+                                                                                <label class="field">Observaciones</label>
+                                                                                <label class="field prepend-icon">
+                                                                                    <textarea class="gui-textarea" id="cat_obs" name="cat_obs"></textarea>
+                                                                                    <label for="cat_obs" class="field-icon"><i class="fa fa-comments"></i></label>
+                                                                                </label>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>                                                                        
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button id="btnModalGuardarCargo" type="button" class="btn btn-primary">Guardar</button>
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                                </div> 
+                                                            </div>                                                                                                                                                                                  
+                                                        </div>
+                                                    </div>
+                                                </div><!--Fin Modal-->                                        #}
+                                            </div>
+                                            <div class="form-group col-sm-12">
+                                                <label class="field">Observaciones</label>
+                                                <label class="field prepend-icon">
+                                                    <textarea class="gui-textarea" id="contacto_obs" name="contacto_obs">{{ data.observacion is defined ? data.observacion}}</textarea>
+                                                    <label for="contacto_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
+                                                </label>
+                                            </div>
+                                            <!-- imagen -->
+                                            {% if data.imagen is defined and data.imagen is not empty %}
+                                            <div class="form-group col-sm-12">
+                                                <div >
+                                                    <img style="max-width: 100%;" src="{{ absolute_url(asset('uploads/contacto/'~data.imagen)) }}" alt="">
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                            <!-- imagen -->
+                                            <div class="input-field col-sm-3">
+                                                <label class="field">Imagen adjunta</label>
+                                                <label class="field prepend-icon append-button file">
+                                                    <span class="button btn-primary">Elija un archivo</span>
+                                                    <input type="file" class="gui-file" name="contacto_img" id="contacto_img" onChange="document.getElementById('uploader1').value = this.value;">
+                                                    <input type="text" class="gui-input" id="uploader1" name="uploader1">
+                                                    <label class="field-icon"><i class="fa fa-upload"></i>
+                                                    </label>
+                                                </label>
+                                            </div>
+                                        </form>
+                                        {# Modal form cargo. Form fuera de principal por problemas entre formularios #}
+                                        <!--Modal-->
+                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                           <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" id="myModalLabel">Ingreso de Categoria</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="panel">                                                                        
+                                                            <div class="panel-body bg-light"> 
+                                                                <h5><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
+                                                                <form id="form-new-cargo" name="form-new-cargo" class="" action="{{ url('admin_cargo_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
+                                                                    <div class="row">
+                                                                        <div class="form-group col-sm-12 col-lg-6">
+                                                                            <label class="field">
+                                                                                Nombre
+                                                                                <input type="text" name="cargo_nombre" id="cargo_nombre" class="gui-input">
+                                                                            </label>
+                                                                        </div>                                                                    
+                                                                    </div>
+                                                                    <div class="form-group col-sm-12">
+                                                                        <label class="field">Observaciones</label>
+                                                                        <label class="field prepend-icon">
+                                                                            <textarea class="gui-textarea" id="cat_obs" name="cat_obs"></textarea>
+                                                                            <label for="cat_obs" class="field-icon"><i class="fa fa-comments"></i></label>
+                                                                        </label>
+                                                                    </div>
+                                                                </form>
+                                                            </div>                                                                        
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button id="btnModalGuardarCargo" type="button" class="btn btn-primary">Guardar</button>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                        </div> 
+                                                    </div>                                                                                                                                                                                  
+                                                </div>
+                                            </div>
+                                        </div><!--Fin Modal-->                                                              
+                                    </div>                                   
+                                </div> 
+                                <div class="panel-footer text-right">
                                     <button id="guardar_contacto" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
                                     <a href="{{ url('admin_contacto')}}" class="btn btn-warning " role="button">Cancelar<i class="fa fa-ban"></i></a>
-
-                                </div>
+                                </div>                           
                             </div>
-                        </div>
+                        </div>                   
                     </div>
-                     {# {% if data.id is defined  %} #}
-
                     <div  role="tabpanel" class="tab-pane fade" id="add-contacto-tab">
                             <div class="col-sm-12">
                                 <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar empresas</h5>
@@ -198,8 +239,7 @@
                                     {% endif %}
                                 </div>
                             </div>
-                    </div>   
-                    {# {% endif %}                  #}
+                    </div>
                 </div>
             </div>
         </div>

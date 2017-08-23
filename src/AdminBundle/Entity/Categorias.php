@@ -36,6 +36,13 @@ class Categorias
     private $imagen;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion", type="string", length=200, nullable=true)
+     */
+    private $observacion;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=true)
@@ -105,6 +112,29 @@ class Categorias
     public function getImagen()
     {
         return $this->imagen;
+    }
+
+    /**
+     * Set observacion
+     *
+     * @param string $observacion
+     * @return Categorias
+     */
+    public function setObservacion($observacion)
+    {
+        $this->observacion = $observacion;
+
+        return $this;
+    }
+
+    /**
+     * Get observacion
+     *
+     * @return string 
+     */
+    public function getObservacion()
+    {
+        return $this->observacion;
     }
 
     /**

@@ -33,7 +33,6 @@ class Contacto
      *
      * @ORM\Column(name="primer_nombre", type="string", length=30, nullable=true)
      */
-    
     private $primerNombre;
 
     /**
@@ -70,6 +69,13 @@ class Contacto
      * @ORM\Column(name="telefono", type="string", length=20, nullable=true)
      */
     private $telefono;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="celular", type="string", length=45, nullable=true)
+     */
+    private $celular;
 
     /**
      * @var string
@@ -280,6 +286,29 @@ class Contacto
     public function getTelefono()
     {
         return $this->telefono;
+    }
+
+    /**
+     * Set celular
+     *
+     * @param string $celular
+     * @return Contacto
+     */
+    public function setCelular($celular)
+    {
+        $this->celular = $celular;
+
+        return $this;
+    }
+
+    /**
+     * Get celular
+     *
+     * @return string 
+     */
+    public function getCelular()
+    {
+        return $this->celular;
     }
 
     /**

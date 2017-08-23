@@ -4,15 +4,15 @@ $(document).ready(function() {
 
 
     // verifica si el rut ingresado es valido
-    $('#empre_rut').rut({
-            formatOn: 'keypress blur',
-            validateOn: 'keypress blur'
-        }).on('rutInvalido', function() {
-            $('#empre_rut').addClass("state-error malo").removeClass("state-success").attr('aria-invalid', 'true');
-        })
-        .on('rutValido', function() {
-            $('#empre_rut').addClass("state-success").removeClass("state-error malo").attr('aria-invalid', 'false');
-        });
+    // $('#dni').rut({
+    //         formatOn: 'keypress blur',
+    //         validateOn: 'keypress blur'
+    //     }).on('rutInvalido', function() {
+    //         $('#empre_rut').addClass("state-error malo").removeClass("state-success").attr('aria-invalid', 'true');
+    //     })
+    //     .on('rutValido', function() {
+    //         $('#empre_rut').addClass("state-success").removeClass("state-error malo").attr('aria-invalid', 'false');
+    //     });
 
     // bloqueo de letras para un imput con la clase val_mun
     $('.val_num').keypress(function(e) {
@@ -61,57 +61,25 @@ $(document).ready(function() {
                 contentType: false,
                 processData: false,
                 cache: false
-            }).done(function(json) {
+            }).done(function(response) {
                 //form[0].reset();
                 //validator.resetForm();
-                toastr.success('Datos guardados');
+                if (response.valid == false) { //significa que el rut ya existe en la bdd
+                    toastr.warning('Cedula de identidad ya registrada');
+                } else {
+                    if (response.result == false) { //error de bdd al guardar un personal "valido"
+                        toastr.error('Error al guardar infomación');
+                    } else {
+                        toastr.success('Datos guardados');
+                    }
+                }
             }).fail(function(json) {
-                toastr.error('Error al guardar');
+                toastr.error('Error al guardar Infomacion');
             });
         } else {
             toastr.warning('Complete todos los campos requeridos');
         }
     });
-    // configuracion del dropdown de busqueda de empresas
-    // busqueda de empresas por ajax
-    //$("#busq_cont").on('keyup', function() {
-    //    var input = $(this).val();
-    //    if ( input.length >= 2 ) {
-    //        var data = {busq_cont: input};
-    //        $.ajax({
-    //            dataType: 'json',
-    //            method: "POST",
-    //            url: Routing.generate('ajax_autocomplete_contacto'),
-    //            data: data,
-    //            timeout: 3000,
-    //        }).done(function(response){
-    //            $('#lista_conta').html(response.contactoLista);
-    //            conta_lista();
-    //        }).fail(function(){
-    //            toastr.error('Error al buscar en la base de datos');
-    //        });
-    //    }
-    //});
-
-    // js ajax quitar empresa de un contacto
-    //$('.del_btn_i').on('click', function(e) {
-    //    var btn  = $(this);
-    //    var id   = btn.data('id');
-    //    var data = { id:id };
-    //    e.preventDefault();
-    //    $.ajax({
-    //        dataType: 'json',
-    //        method: 'POST',
-    //        url: Routing.generate('ajax_borrar_contacto'),
-    //        data: data,
-    //    }).done(function(json){
-    //        if(json)
-    //        {
-    //            btn.parent().remove();
-    //            toastr.success('Dato eliminado');
-    //        }
-    //    });
-    //});
     $("#regiones").on('change', function() {
         var region = $(this);
         var id_region = $(this).val();

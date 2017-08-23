@@ -1,5 +1,3 @@
-var idproducto = null;
-
 $(document).ready(function() {
 
     // bloqueo de letras para un imput con la clase val_mun
@@ -12,9 +10,8 @@ $(document).ready(function() {
     });
 
     // guardar formulario de nuevo contacto
-    $('#guardar_contacto').on('click', function() {
-        //e.preventDefault();
-
+    $('#guardar_contacto').on('click', function(e) {
+        e.preventDefault();
         var form = $('#form_nuevo_cliente');
         form.validate({
             errorClass: "state-error",
@@ -53,8 +50,7 @@ $(document).ready(function() {
                 processData: false,
                 cache: false
             }).done(function(response) {
-                var id_edit = response.id_new;
-                idproducto = id_edit;
+                $('#id_contacto').val(response.id_new);
                 $("#mostrar").show(); //activa el div una vez realiza el guardado
                 toastr.success('Datos guardados');
                 //  url: Routing.generate('admin_contacto');
@@ -125,31 +121,75 @@ $(document).ready(function() {
     });
     // js ajax modal guardar cargo
     $('#btnModalGuardarCargo').on('click', function(e) {
-        var nombre = $('#cargo_nombre').val();
-        var obs = $('#cargo_obs').val();
-        var data = { nombre: nombre, obs: obs };
-        console.log(data);
-        e.preventDefault();
-        $.ajax({
-            dataType: 'json',
-            method: 'POST',
-            url: Routing.generate('ajax_guardar_cargo'),
-            data: data,
-        }).done(function(response) {
-            $('#cargos').html(response.lista_cargos);
-            $('#myModal').modal('hide');
-            toastr.success('Datos Guardados');
+
+        var form = $('#form-new-cargo');
+        form.validate({
+            errorClass: "state-error",
+            validClass: "state-success",
+            errorElement: "em",
+            rules: {
+                cargo_nombre: {
+                    required: true
+                },
+
+            },
+            messages: {
+                cargo_nombre: {
+                    required: "Ingrese un nombre valido"
+                },
+            },
+            errorPlacement: function(element, errorClass, validClass) {
+                $(element).closest('.field').addClass(errorClass).removeClass(validClass);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).closest('.field').addClass(errorClass).removeClass(validClass);
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).closest('.field').removeClass(errorClass).addClass(validClass);
+            }
         });
+        if (form.valid(true)) {
+            var datos = new FormData(form[0]);
+            var validator = form.validate();
+            $.ajax({
+                dataType: 'json',
+                method: form.attr('method'),
+                url: form.attr('action'),
+                data: datos,
+                contentType: false,
+                processData: false,
+                cache: false
+            }).done(function(response) {
+                $('#cargos').html(response.lista_cargos);
+                toastr.success('Datos guardados');
+            }).fail(function(response) {
+                toastr.error('Error al guardar');
+            });
+        } else {
+            toastr.warning('Complete todos los campos requeridos');
+        }
+        // ------------------------------------------
+        // var nombre = $('#cargo_nombre').val();
+        // var obs = $('#cargo_obs').val();
+        // var data = { nombre: nombre, obs: obs };
+        // console.log(data);
+        // e.preventDefault();
+        // $.ajax({
+        //     dataType: 'json',
+        //     method: 'POST',
+        //     url: Routing.generate('ajax_guardar_cargo'),
+        //     data: data,
+        // }).done(function(response) {
+        //     $('#cargos').html(response.lista_cargos);
+        //     $('#myModal').modal('hide');
+        //     toastr.success('Datos Guardados');
+        // });
     });
 });
 
 // funcion unir empresa-cliente
 function cli_empre() {
-    var data_cont = $('#match').data('cont');
-    if (data_cont == null) { //consulta valor de la id, por si es un producto creado en la misma ventana 
-        data_cont = idproducto //id producto es una variable global en el script
-    }
-
+    var data_cont = $('#id_contacto').val();
     $('.ele span').on('click', function() {
         var span = $(this);
         var idempre = span.data('id');

@@ -42,8 +42,8 @@ class CargoController extends Controller
         {
             // captura de datos desde el formulario
             $id                 = ($request->get('id_contacto', false)) ? $request->get('id_contacto'): 0;
-            $nombre             = ucfirst($request->get('nombre'));
-            $obs                = $request->get('obs');
+            $nombre             = ucfirst($request->get('cargo_nombre'));
+            $obs                = $request->get('cargo_obs');
 
             $em = $this->getDoctrine()->getManager();
 
@@ -59,37 +59,48 @@ class CargoController extends Controller
             $em->flush();            
             $result = true;
             $id_new = $cargo->getId();
-        }
-        $response = new JsonResponse();
-        $response->setData(array('result' => $result, 'id_new' => $id_new));        
-        return $response;
-    }
-    public function ajaxCargoGuardarAction(Request $request)
-    {
-        $nombre  = $request->get('nombre');            
-        $obs   = $request->get('obs');
-        $em = $this->getDoctrine()->getManager();
 
-        $cargo = new Cargo();
-        $cargo->setNombre($nombre);
-        $cargo->setObservacion($obs);
-  
-        $em->persist($cargo);
-        $em->flush();            
-        $id_new = $cargo->getId();
-
-        $cargos = $em->getRepository('AdminBundle:Cargo')->findAll();
-
-        $lista_cargos = '';
-        $op = true;
-        foreach ($cargos as $result) {
-            if($lista_cargos==''){
-                $lista_cargos .= '<option value="">Seleccione</option>';
+            $cargos = $em->getRepository('AdminBundle:Cargo')->findAll();
+            
+            $lista_cargos = '';
+            $op = true;
+            foreach ($cargos as $result) {
+                if($lista_cargos==''){
+                    $lista_cargos .= '<option value="">Seleccione</option>';
+                }
+                $lista_cargos .= '<option value="'.$result->getId().'"> '.$result->getNombre().'</option>';
             }
-            $lista_cargos .= '<option value="'.$result->getId().'"> '.$result->getNombre().'</option>';
         }
         $response = new JsonResponse();
-        $response->setData(array('lista_cargos' => $lista_cargos));        
+        $response->setData(array('result' => $result, 'id_new' => $id_new, 'lista_cargos'=>$lista_cargos));        
         return $response;
     }
+    // public function ajaxCargoGuardarAction(Request $request)
+    // {
+    //     $nombre  = $request->get('nombre');            
+    //     $obs   = $request->get('obs');
+    //     $em = $this->getDoctrine()->getManager();
+
+    //     $cargo = new Cargo();
+    //     $cargo->setNombre($nombre);
+    //     $cargo->setObservacion($obs);
+  
+    //     $em->persist($cargo);
+    //     $em->flush();            
+    //     $id_new = $cargo->getId();
+
+    //     $cargos = $em->getRepository('AdminBundle:Cargo')->findAll();
+
+    //     $lista_cargos = '';
+    //     $op = true;
+    //     foreach ($cargos as $result) {
+    //         if($lista_cargos==''){
+    //             $lista_cargos .= '<option value="">Seleccione</option>';
+    //         }
+    //         $lista_cargos .= '<option value="'.$result->getId().'"> '.$result->getNombre().'</option>';
+    //     }
+    //     $response = new JsonResponse();
+    //     $response->setData(array('lista_cargos' => $lista_cargos));        
+    //     return $response;
+    // }
 }

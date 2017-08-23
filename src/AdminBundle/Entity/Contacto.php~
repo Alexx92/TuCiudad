@@ -73,6 +73,13 @@ class Contacto
     /**
      * @var string
      *
+     * @ORM\Column(name="celular", type="string", length=45, nullable=true)
+     */
+    private $celular;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="observacion", type="string", length=300, nullable=true)
      */
     private $observacion;

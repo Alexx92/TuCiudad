@@ -12,19 +12,14 @@
             </div>
         </div>
         <!-- bloque superior fin-->
-       
-
         <!-- contenido -->
         <div class="row">
             <div role="tab-block">
                 <!-- Tabs Navigation -->
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#datos-vendedor-tab" aria-controls="datos-vendedor-tab" role="tab" data-toggle="tab">Datos Producto / Servicio</a></li>
-                    {# {% if data.id is defined %} #}
                     <li id="add-categoria" style={{data.id is not defined ? "display:none;" : " "}}  role="presentation"><a href="#add-categoria-tab" aria-controls="add-categoria-tab" role="tab" data-toggle="tab">Opciones Producto</a></li>
-                 {# {% endif %} #}
-                </ul>
-                 
+                </ul>                 
                 <!-- Tab Content Panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade active in" id="datos-vendedor-tab">
@@ -35,9 +30,7 @@
                                         <div class="section-divider mb40">
                                             <span>Datos del Producto/Servicio</span>
                                         </div>
-                                        
-                                        <input type="hidden" name="prod_id" id="prod_id" value="{{ data.id is defined ?  data.id}}" >                         
-                                        
+                                        <input type="hidden" name="prod_id" id="prod_id" value="{{ data.id is defined ?  data.id}}" >                                        
                                         <div class="row">
                                             <div class="form-group col-sm-12 col-lg-3">
                                                 <label class="field">
@@ -51,10 +44,10 @@
                                                     <input type="text" name="prod_codigo" id="prod_codigo" class="gui-input" value="{{data.prod_codigo is defined ? data.prod_codigo}}" required>
                                                 </label>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3">
+                                            <div class="form-group col-sm-12 col-lg-3">
                                                 <label class="field">
                                                     Precio
-                                                    <input type="number" name="prod_valor" min="1" id="prod_valor" class="gui-input" value="{{data.prod_valor is defined ? data.prod_valor}}" required>
+                                                    <input type="number" name="prod_valor" min="1" id="prod_valor" class="gui-input val_num" value="{{data.prod_valor is defined ? data.prod_valor}}" required>
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-12 col-lg-3">
@@ -62,9 +55,10 @@
                                                     Descripcion
                                                     <input type="text" name="prod_descp" id="prod_descp" class="gui-input" value="{{data.prod_descp is defined ? data.prod_descp}}">
                                                 </label>
-                                            </div>                                                                             
-                                            <div class="form-group col-sm-12">
-                                                <div class="form-group col-sm-4">
+                                            </div>                                           
+                                        </div>
+                                        <div class="row">
+                                                <div class="form-group col-sm-12 col-lg-4">
                                                     <input type="hidden" name="check" id="check" value="{{ data.tipo is defined ?  data.tipo}}" >                         
                                                     <blockquote>
                                                         <p>Escoja una opcion para identificar el ingreso</p>
@@ -76,16 +70,15 @@
                                                         </label>
                                                     </blockquote>
                                                 </div>
-                                                <div class="form-group col-sm-2">
+                                                <div class="form-group  col-sm-12 col-lg-2">
                                                     <label class="field">
-                                                        Tiempo de producción 
-                                                        <div class="input-group">                                               
-                                                            <input style="text-align: right;" type="number" min="0" name="time" id="time" class="gui-input" value="{{data.time is defined ? data.time}}">
+                                                        Tiempo de producción
+                                                        <div class="input-group">
+                                                            <input style="text-align: right;" type="number" min="0" name="time" id="time" class="gui-input val_num" value="{{data.time is defined ? data.time}}">
                                                             <div class="input-group-addon">Horas</div>
                                                         </div>
                                                     </label>
                                                 </div>
-                                            </div>
                                         </div>
                                         {% if data.id is not defined  %}
                                             <div id="primera_categoria" class="row">
@@ -148,8 +141,8 @@
                                     </form>
                                     {# modal para la creacion de categoria, a deje aca por temas de formulario #}
                                     {% if data.id is not defined  %}
-                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                         <div class="modal-dialog">
+                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -223,44 +216,23 @@
                                         <div class="form-group col-sm-6">
                                             <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar Categorias</h5>
                                             <div class="dropdown">
-                                                <input type="text" id="busq_cat" name="buscar" class="form-control dropdown-toggle" data-toggle="dropdown">
+                                                <input type="text" id="busq_cat" name="buscar" class="form-control dropdown-toggle" data-toggle="dropdown" autocomplete="off">
                                                 <ul id="match" aria-labelledby="busq_cat" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
                                             </div>
-                                            <div id="cli-cat" class="cli-cat" >
-                                                {# <!-- se agregan las empresas para hacer el vinculo -->
-                                                {% if liscat is defined %}
-                                                        {% for lcat in liscat %}
-                                                            <div class="valign-wrapper"><i class="material-icons del_btn_i pointer" data-id="{{ lcat.id }}">remove_circle_outline</i>{{ lcat.nombre }}</div>
-                                                        {% endfor %}
-                                                {% endif %} #}
+                                        </div>
+                                        <div class="form-group col-sm-12 ">
+                                            <h5><i class="material-icons">view_list</i>Listado de categorias seleccionadas</h5>
+                                            <div id="cli-cat" class="cli-cat col-sm-offset-1" >                                               
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-sm-12 ">
-                                            <h5><i class="material-icons">view_list</i>Listado de opciones accesibles por categoria seleccionada</h5>
-                                            <div class="form-group col-sm-12 col-md-offset-1" id="opciones_accesibles">
+                                            <h5><i class="material-icons">list</i>Listado de opciones accesibles por categoria seleccionada</h5>
+                                            <div class="form-group col-md-offset-1" id="opciones_accesibles">
                                             </div>
                                         </div>
                                     </div>
-                                    {# <div class="row">
-                                        <div class="form-group col-sm-12">
-                                            <div class="form-group col-md-3">
-                                                <label class="field">
-                                                    Categorias
-                                                </label>
-                                                <label class="field select">
-                                                    <select id="categorias" name="categorias" class="form-control">
-                                                        <option value="" selected>Seleccione</option>
-                                                            {% for listaCategorias in listaCategorias %}
-                                                                <option id="seleccion" name="seleccion" value={{listaCategorias.id}}>{{listaCategorias.Nombre}}</option>
-                                                            {% endfor %}
-                                                    </select>
-                                                    <i class="arrow"></i>
-                                                </label>
-                                            </div>                                           
-                                        </div>
-                                    </div> #}
                                     <div class="row">
                                         <div class="form-group col-sm-12 ">
                                             <!-- Button trigger modal -->
@@ -272,13 +244,15 @@
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h4 class="modal-title" id="myModalLabel3">Creacion de Opcion</h4>
+                                                            <h4 class="modal-title" id="myModalLabel3">Creación de Opción</h4>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="panel">
-                                                                <div class="panel-body bg-light">
+                                                                <div class="panel-body bg-light">                                           
                                                                     <form id="form-new-opcion" name="form-new-opcion" class=""  action="{{ url('admin_opcion_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
-                                                                        <h5 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
+                                                                        <h4 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h4>
+                                                                        <div class="section-divider mb40">
+                                                                        </div>
                                                                         <div class="row">
                                                                             <div class="col-md-12">
                                                                                 <div class="row">
@@ -300,11 +274,11 @@
                                                                                 </div>
                                                                                 <div class="row">
                                                                                     <div class="form-group col-md-12">
-                                                                                        <h4>Seleccione alternativa </h4>
+                                                                                        <h5>Clasificación de la opción para realizar cobros </h5>
                                                                                         <div class="form-group col-md-6">
                                                                                             <label><input type="radio" name="unidad" id="unidad1" value="1"> Medida</label><br>
                                                                                             <label><input type="radio" name="unidad" id="unidad2" value="2"> Peso</label><br>
-                                                                                            <label><input  type="radio" name="unidad" id="unidad3"value="3" checked> Otro</label>
+                                                                                            <label><input  type="radio" name="unidad" id="unidad3"value="3" checked> Unidad</label>
                                                                                         </div>
                                                                                         <div id="opcionSelect" class="form-group col-md-6" style="display:none">                                              
                                                                                             <label class="field">
@@ -359,8 +333,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div><!--Fin Modal-->
-                                            </div>
+                                                </div>
+                                            </div><!--Fin Modal-->
                                         </div>
                                     </div>
                         		</div>

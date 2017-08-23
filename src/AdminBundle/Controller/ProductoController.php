@@ -293,21 +293,30 @@ class ProductoController extends Controller
         $response->setData(array('cli_procat' => $cli_procat->getId()));        
         return $response;
         //exit;
-    }
+    } 
     // ajax para quitar categoria viculadas a clientes
-    public function ajax_borrar_categoriaAction(Request $request) /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+    public function ajax_borrar_categoriaAction(Request $request)
     {
         $id = $request->get('id');
         $em = $this->getDoctrine()->getManager();
         $isvalid = false;
-        if ($delete = $em->getRepository('AdminBundle:ProductoCategoria')->findOneBy(array('id' => $id) && $resto = $em->getReposity('AdminBundle:ProductoCategoria'->findBy(array('fkCategoria')))))
+        if ($delete = $em->getRepository('AdminBundle:ProductoCategoria')->findOneBy(array('id'=> $id)) )
         {
-            $em->remove($delete);
-            $em->flush();
-            $isvalid = true;
+            $dql= " SELECT  op.id
+                    FROM AdminBundle:ProductoCategoria op
+                    where op.fkProducto=:id_producto and op.id!=:id_op";   
+            $results= $em->createQuery($dql)
+                    ->setParameter('id_producto', $delete->getFkProducto()->getId())
+                    ->setParameter('id_op', $id)
+                    ->getResult();
+            if ($results) {
+                $em->remove($delete);
+                $em->flush();
+                $isvalid = true;
+            }            
         }
         $response = new JsonResponse();
-        $response->setData(array('isvalid' => $isvalid));        
+        $response->setData(array('isvalid' => $isvalid));
         return $response;
     }
     //cargar todas las opciones por la categoria del producto
@@ -335,7 +344,6 @@ class ProductoController extends Controller
             }
             $lista_opciones .= '<li value="'.$result['id'].'">'.$result['nombre'].', $ '.$result['valor'].' '.$nombreUnidad.'</li>';
         }
-
         // $query = $em->createQuery(''
         //     . 'SELECT c.id, c.nombre, c.valor '
         //     . 'FROM AdminBundle:OpcionesProducto c '
@@ -370,7 +378,6 @@ class ProductoController extends Controller
     public function cargaCategoriasProductoIdAction(Request $request)
     {
         $id_producto  = $request->get('prod_id');
-
         $em = $this->getDoctrine()->getManager();//declaracion de doctrine
        // $detalle = $em->getRepository('AdminBundle:Producto')->findOneBy(array('id'=>$id_producto));
         $lista_categorias="";        
@@ -381,7 +388,7 @@ class ProductoController extends Controller
                     }
                 $lista_categorias .= '<option value="'.$result->getFkCategoria()->getId().'">'.$result->getFkCategoria()->getNombre(). '</option>';
             }
-        }        
+        }
         $response = new JsonResponse();
         $response->setData(array('lista_categorias'=>$lista_categorias));
         return $response;
@@ -394,16 +401,15 @@ class ProductoController extends Controller
         $em = $this->getDoctrine()->getManager();//declaracion de doctrine
         $detalle = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('id'=>$id_detalle));
 
-        $lista_categorias="";        
-        if ($categorias = $em->getRepository('AdminBundle:ProductoCategoria')->findBy(array('fkProducto'=>$detalle->getFkProducto()->getId()))){  
+        $lista_categorias="";
+        if ($categorias = $em->getRepository('AdminBundle:ProductoCategoria')->findBy(array('fkProducto'=>$detalle->getFkProducto()->getId()))){
             foreach ($categorias as $result) {
                 if($lista_categorias==''){
                        $lista_categorias .= '<option value="">Seleccione</option>';
-                    }                   
+                }
                 $lista_categorias .= '<option value="'.$result->getFkCategoria()->getId().'">'.$result->getFkCategoria()->getNombre(). '</option>';
             }
-        }        
-        
+        }
         $response = new JsonResponse();
         $response->setData(array('lista_categorias'=>$lista_categorias));
         return $response;
