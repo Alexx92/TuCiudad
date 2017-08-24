@@ -12,7 +12,6 @@
 			</div>
 		</div>
 		<!-- bloque superior fin-->
-
 		<!-- contenido -->
 		<div class="row">
 			<div role="tab-block">
@@ -26,7 +25,7 @@
 						<div class="admin-form theme-default theme-info">
 							<div class="panel heading-border panel-default panel-info">
                     			<div class="panel-body bg-light">
-									<form id="form_datos_empresa" action="{{ url('admin_pedido_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
+									<form id="form_datos_empresa" class="" action="{{ url('admin_pedido_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
 										<div class="row">
 											<div class="col-md-12">
 												<div class="form-group col-sm-12 col-lg-3">													
@@ -126,9 +125,8 @@
 												</label>
 											</div>
 										</div>
-
-										<div class="row" id="contacto" style="display: none;">
-											<div class="section-divider mb40" >
+										<div class="row" id="contacto" style="display: none;" >
+											<div class="section-divider mb40">
                     					  		<span>Contacto Asociado a Pedido</span>											
                     						</div>
 											<div class="form-group col-sm-12 col-lg-6">
@@ -145,125 +143,25 @@
 													<i class="arrow"></i>
 												</label>
 											</div>				
-											<div class="form-group col-sm-6">							
+											<div class="form-group col-sm-6">
 												<!-- Button trigger modal -->											
-<!-- style      -->								<button style ="margin-top:18px;" type="button"  class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+												<button id="modalIngresoContacto" style ="margin-top:18px;" type="button"  class="btn btn-primary btn-lg" data-target="#myModalContacto">
 													Ingresar Contacto
-												</button>
-												<!-- Modal -->
-												<div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-													<div class="modal-dialog modal-lg">
-														<div class="modal-content">
-															<div class="modal-header">
-																<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-																	<h5 class="header2"><i class="material-icons">person_add</i> Nuevo Contacto</h5>
-															</div>
-															<div class="modal-body">
-																<div class="panel">
-																	<div class="panel-heading">
-																		<h5 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
-																	<form id="form_nuevo_cliente" class="modalForm" action="" method="post" enctype="multipart/form-data">
-																		<div class="row">
-																			<div class="col-md-6 col-lg-6">
-																				<div class="row">																				
-																					<div class="form-group col-md-6">                                           
-																						<label class="field">
-																							Run
-																							<input type="text" name="contacto_run" id="contacto_run" class="gui-input" value="" required>
-																						</label>
-																					</div>																				
-																				</div>
-																			</div>  
-																		</div>
-																		<div class="row">																	    
-																			<div class="col-md-6 col-lg-6">
-																				<div class="row">																				
-																					<div class="form-group col-md-6">                                           
-																						<label class="field">
-																							Primer Nombre
-																							<input type="text" name="contacto_pri_nomb" id="contacto_pri_nomb" class="gui-input" value="" required>
-																						</label>
-																					</div>
-																					<div class="form-group col-md-6">
-																						<label class="field">
-																							Segundo Nombre
-																							<input type="text" name="contacto_seg_nomb" id="contacto_seg_nomb" class="gui-input" value="" >
-																						</label>
-																					</div>
-																				</div>
-																			</div>                                    
-																			<div class="col-md-6 col-lg-6">
-																				<div class="row">
-																					<div class="form-group col-md-6">
-																						<label class="field">																						Apellido Paterno
-																							<input type="text" name="contacto_ape_pate" id="contacto_ape_pate" class="gui-input" value="" required>
-																						</label>
-																					</div>
-																					<div class="form-group col-md-6">
-																						<label class="field">
-																							Apellido Materno
-																							<input type="text" name="contacto_ape_mate" id="contacto_ape_mate" class="gui-input" value="" required>
-																						</label>
-																					</div>
-																				</div>
-																			</div>
-																			<div class="col-md-6 col-lg-6">
-																				<div class="row">
-																					<div class="form-group col-sm-12 col-lg-6">
-																						<label class="field">
-																							Email
-																							<input type="text" name="contacto_email" id="contacto_email" class="gui-input" value="" >
-																						</label>
-																					</div>
-																					<div class="form-group col-sm-12 col-lg-6">
-																						<label class="field">
-																							Tel&eacute;fono		
-																							<input type="text" name="contacto_fono" id="contacto_fono" class="gui-input val_num" value="" required>
-																						</label>
-																					</div>
-																				</div>
-																			</div>
-																			<div class="form-group col-sm-12 col-lg-6">
-																				<label class="field">
-																					Cargo en la empresa
-																					<input type="text" name="contacto_cargo" id="contacto_cargo" class="gui-input" value="" required>
-																				</label>
-																			</div>
-																			<div class="form-group col-sm-12">
-																				<label class="field">Observaciones</label>
-																				<label class="field prepend-icon">
-																					<textarea class="gui-textarea" id="contacto_obs" name="contacto_obs"></textarea>
-																					<label for="contacto_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
-																				</label>
-																			</div>													   
-																		</div>																
-																	</form>	
-																</div>																
-															</div>																												
-														</div>
-														<div class="modal-footer">
-															<div class="col-sm-12 text-right">
-																<button id="guardar_contacto" type="submit" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
-																<button id="cancelar_contacto" class="btn btn-warning ">Cancelar <i class="fa fa-ban"></i></button>
-															</div>
-														</div>
-													</div>
-												</div>
+												</button>												
 											</div>
 										</div>
-									</div>									
 										<div  id="prod_empresa" style="display: none;" class="row" >
 											<div class="section-divider mb40" >
 												<span>Ingreso de productos  / servicios</span>											
 											</div>
-                                           <div class="form-group col-md-6 " > 
-                                               <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar Producto / Servicio</h5>
+                                            <div class="form-group col-md-6 " > 
+                                                <h5><i class="material-icons" style="vertical-align: bottom;">domain</i> Agregar Producto / Servicio</h5>
 												<label class="field append-icon">
 													<div class="dropdown">
 														{# <input type="hidden" name="prod_id" id="prod_id" value="" >  #}
 														<input type="hidden" name="ped_id" id="ped_id" value="" >
 														<input  type="text" id="bsq_producto" name="buscar" class="form-control dropdown-toggle" data-toggle="dropdown">
-															<ul id="lista_producto" aria-labelledby="bsq_producto" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
+														<ul id="lista_producto" aria-labelledby="bsq_producto" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
 													</div>
 													<label for="bsq_producto" class="field-icon">
 														<i class="fa fa-search"></i>
@@ -273,8 +171,8 @@
                                        	</div>
 										<div class="section-divider mb40">
                     					  	<span>Listado de productos / servicios</span>
-										</div>                                             
-										
+										</div>
+										<!-- tabla -->
                     					<div class="row">
                     						<div class="col-md-12">
 												<!-- bloque busqueda / filtros -->
@@ -299,145 +197,310 @@
 												</div>
 											</div>
 										</div>
-										<!-- Modal -->
-											<div class="modal fade bs-example-modal-lg" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="overflow-y: scroll;">
-												<div class="modal-dialog modal-lg">
-													<div class="modal-content">
-														<div class="modal-header">
-															<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-																<h4 class="header2"><i class="material-icons">mode_edit</i>Actualizacion datos de producto</h4>
-														</div>
-														<div class="modal-body">
-															<div class="panel">
-																<div class="panel-heading">
-																	<h4 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos opcionales</h4>	
-																	<div class="section-divider mb40">
-																		<span></span>
-																	</div> 															
-																<form id="op" class="modalForm2" action="" method="post" enctype="multipart/form-data">
-																	<input type="hidden" name="detalle" id="detalle" value="{{ data.id is defined ? data.id}}" >
-																	<div class="row">
-																		<div class="col-md-6 col-lg-12">
-																			<div class="form-group col-sm-12">
-																				<label class="field">Observaciones</label>
-																				<label class="field prepend-icon">
-																					<textarea class="gui-textarea" id="obs" name="obs"></textarea>
-																					<label for="obs" class="field-icon"><i class="fa fa-comments"></i></label>
+										
+									</form>
+									<!-- Modal Creacion de Contacto -->
+									<div class="modal fade bs-example-modal-lg" id="myModalContacto" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="overflow-y: scroll;">
+										<div class="modal-dialog modal-lg">
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+													<h5 class="header2"><i class="material-icons">person_add</i> Nuevo Contacto</h5>
+												</div>
+												<div class="modal-body">
+													<div class="panel">
+														<div class="panel-body bg-light">
+															<h5 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
+															<div class="row">
+																<form id="form_nuevo_cliente" class="admin-form" action="{{ url('admin_contacto_guardar') }}" method="post" enctype="multipart/form-data">
+																	<input type="hidden" name="id_contacto" id="id_contacto" value="{{ data.id is defined ? data.id}}" >                                    
+																	<div class="col-md-12 ">
+																		<div class="row">
+																			<div class="form-group col-md-3">                                           
+																				<label class="field">
+																					Run
+																					<input type="text" name="contacto_run" id="contacto_run" class="gui-input">
+																				</label>
+																			</div>                                           
+																		</div>
+																	</div>
+																	<div class="col-md-6 col-lg-6">
+																		<div class="row">
+																			<div class="form-group col-md-6">
+																				<label class="field">
+																					Primer Nombre
+																					<input type="text" pattern="[a-z]{1,15}" name="contacto_pri_nomb" id="contacto_pri_nomb" class="gui-input">
+																				</label>
+																			</div>
+																			<div class="form-group col-md-6">
+																				<label class="field">
+																					Segundo Nombre
+																					<input type="text" name="contacto_seg_nomb" id="contacto_seg_nomb" class="gui-input">
 																				</label>
 																			</div>
 																		</div>
 																	</div>
-																	<div class="row">
-																		<div class="form-group col-sm-12 col-md-6 col-md-offset-1">
-																			<label class="field">
-																				Opciones producto
-																			</label>
-																			<label class="field select">
-																				<select id="opciones" name="opciones" class="form-control" required>
-																					<option value="0" selected>Seleccione</option>
-																				</select>
-																				<i class="arrow"></i>
-																			</label>																																																			
-																		</div>	
-																		<div class="form-group col-sm-12 col-md-4">
-																				<!-- Button trigger modal -->
-<!-- style      -->																<button id="botonMoldal3"  style ="margin-top:50px;" type="button" class="btn btn-primary btn-lg"  data-target="#myModal3">
-																					Agregar Opcion
-																				</button>
-																				<!-- Modal -->
-																				<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="true"  >
-																					<div class="modal-dialog">
-																						<div class="modal-content">
-																							<div class="modal-header">
-																								<h4 class="modal-title" id="myModalLabel3">Creacion de Opcion</h4>
+																	<div class="col-md-6 col-lg-6">
+																		<div class="row">
+																			<div class="form-group col-md-6">
+																				<label class="field">
+																					Apellido Paterno
+																					<input type="text" name="contacto_ape_pate" id="contacto_ape_pate" class="gui-input">
+																				</label>
+																			</div>
+																			<div class="form-group col-md-6">
+																				<label class="field">
+																					Apellido Materno
+																					<input type="text" name="contacto_ape_mate" id="contacto_ape_mate" class="gui-input">
+																				</label>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-md-6 col-lg-6">
+																		<div class="row">
+																			<div class="form-group col-sm-12 col-lg-6">
+																				<label class="field">
+																					Email
+																					<input type="text" name="contacto_email" id="contacto_email" class="gui-input">
+																				</label>
+																			</div>
+																			<div class="form-group col-sm-12 col-lg-6">
+																				<label class="field">			
+																					Tel&eacute;fono
+																					<input type="tel" name="contacto_fono" id="contacto_fono" class="gui-input val_num" >
+																				</label>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="form-group col-sm-12 col-md-3">
+																		<label class="field">
+																			Cargo
+																		</label>
+																		<label class="field select">
+																			<select id="cargos" name="cargos" class="form-control" required>
+																				<option value="">Seleccione</option>
+																				{#% for lista_cargos in lista_cargos %}
+																					<option id="seleccion_contacto" name="seleccion_contacto" value={{lista_cargos.id}}>{{lista_cargos.nombre}}</option>
+																				{% endfor %#}
+																			</select>
+																			<i class="arrow"></i>
+																		</label>
+																	</div>
+																	<div class="form-group col-sm-12 col-md-3">
+																		<!-- Button trigger modal -->
+																		<button style="margin-top: 17px;" id="btnShowModalCargo" type="button" class="btn btn-primary btn-lg"  data-target="#myModalCargo">
+																			Crear Cargo
+																		</button>
+																	</div>
+																	<div class="form-group col-sm-12">
+																		<label class="field">Observaciones</label>
+																		<label class="field prepend-icon">
+																			<textarea class="gui-textarea" id="contacto_obs" name="contacto_obs"></textarea>
+																			<label for="contacto_obs" class="field-icon"><i class="fa fa-comments"></i></label>
+																		</label>
+																	</div>																	
+																	<!-- imagen -->
+																	<div class="input-field col-sm-3">
+																		<label class="field">Adjuntar imagen</label>
+																		<label class="field prepend-icon append-button file">
+																			<span class="button btn-primary">Elija un archivo</span>
+																			<input type="file" class="gui-file" name="contacto_img" id="contacto_img" onChange="document.getElementById('uploader1').value = this.value;">
+																			<input type="text" class="gui-input" id="uploader1" name="uploader1">
+																			<label class="field-icon"><i class="fa fa-upload"></i></label>
+																		</label>
+																	</div>
+																</form>
+																{# Modal form cargo. Form fuera de principal por problemas entre formularios #}
+																<!--Modal-->
+																<div class="modal fade" id="myModalCargo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+																	<div class="modal-dialog">
+																		<div class="modal-content">
+																			<div class="modal-header">
+																				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+																				<h4 class="modal-title" id="myModalLabel">Ingreso de Categoria</h4>
+																			</div>
+																			<div class="modal-body">
+																				<div class="panel">
+																					<div class="panel-body bg-light"> 
+																						<h5><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
+																						<form id="form-new-cargo" name="form-new-cargo" class="" action="{{ url('admin_cargo_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
+																							<div class="row">
+																								<div class="form-group col-lg-6">
+																									<label class="field">
+																										Nombre
+																										<input type="text" name="cargo_nombre" id="cargo_nombre" class="gui-input">
+																									</label>
+																								</div>                                                                    
 																							</div>
-																							<div class="modal-body">
-																								<div class="panel">
-																									<div class="panel-heading">
-																										<h5 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
-																												<div class="row">																	    
-																													<div class="col-md-12">
-																														<div class="row">
-																															<div class="form-group col-md-6">
-																																<label class="field">
-																																	Nombre
-																																	<input type="text" name="opcion_nombre" id="opcion_nombre" class="gui-input" >
-																																</label>
-																															</div>
-																															<div class="form-group col-md-6">
-																																<label class="field">
-																																	Valor
-																																	<div class="input-group">
-																																		<div class="input-group-addon">$</div>
-																																		<input type="number" min="1" name="opcion_valor" id="opcion_valor" class="form-control">
-																																	</div>
-																																</label>
-																															</div>
-																														</div>
-																														<div class="row">																															
-																															<div class="form-group col-md-12">
-																																<h4>Seleccione alternativa </h4> 
-																																<div class="form-group col-md-6">
-																																	<label><input type="radio" name="unidad" id="unidad1" value="1"> Medida</label><br>
-																																	<label><input type="radio" name="unidad" id="unidad2" value="2"> Peso</label><br>
-																																	<label><input  type="radio" name="unidad" id="unidad3"value="3" checked> Otro</label>																															
-																																</div>
-																																<div id="opcionSelect" class="form-group col-md-6" style="display:none">                                              
-																																	<label class="field">
-																																		Unidad
-																																	</label>
-																																	<label class="field select">
-																																		<select id="opcion_unidades" name="opcion_unidades" class="form-control">
-																																			<option value="">Seleccione unidad</option>																																	
-																																		</select>
-																																		<i class="arrow"></i>
-																																	</label>
-																																</div>																																
-																															</div>
-																														</div>  																																
+																							<div class="row">
+																								<div class="form-group col-sm-12">
+																									<label class="field">Observaciones</label>
+																									<label class="field prepend-icon">
+																									<textarea class="gui-textarea" id="cat_obs" name="cat_obs"></textarea>
+																									<label for="cat_obs" class="field-icon"><i class="fa fa-comments"></i></label>
+																									</label>
+																								</div>
+																							</div>
+																						</form>
+																					</div>
+																				</div>
+																				<div class="modal-footer">
+																					<button id="btnModalGuardarCargo" type="button" class="btn btn-primary">Guardar</button>
+																					<button id="btnModalCerrarCargo"type="button" class="btn btn-default" >Cerrar</button>
+																				</div> 
+																			</div>                                                                                                                                                                                  
+																		</div>
+																	</div>
+																</div><!--Fin Modal-->
+															</div>
+														</div><!--Panel de ingreso cliente-->
+													</div>
+													<div class="modal-footer">
+														<button id="btnGuardarContacto" type="button" class="btn btn-primary">Guardar</button>
+														<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div><!--FinModal-->
+									<!-- Modal Opciones Producto-->
+									<div class="modal fade bs-example-modal-lg" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel2" aria-hidden="true" style="overflow-y: scroll;">
+										<div class="modal-dialog modal-lg">
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+														<h4 class="header2"><i class="material-icons">mode_edit</i>Actualizacion datos de producto</h4>
+												</div>
+												<div class="modal-body">
+													<div class="panel">
+														<div class="panel-heading">
+															<h4 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos opcionales</h4>	
+															<div class="section-divider mb40">
+																<span></span>
+															</div> 															
+															<form id="op" class="modalForm2" action="" method="post" enctype="multipart/form-data">
+																<input type="hidden" name="detalle" id="detalle" value="{{ data.id is defined ? data.id}}" >
+																<div class="row">
+																	<div class="col-md-6 col-lg-12">
+																		<div class="form-group col-sm-12">
+																			<label class="field">Observaciones</label>
+																			<label class="field prepend-icon">
+																				<textarea class="gui-textarea" id="obs" name="obs"></textarea>
+																				<label for="obs" class="field-icon"><i class="fa fa-comments"></i></label>
+																			</label>
+																		</div>
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="form-group col-sm-12 col-md-6 col-md-offset-1">
+																		<label class="field">
+																			Opciones producto
+																		</label>
+																		<label class="field select">
+																			<select id="opciones" name="opciones" class="form-control" required>
+																				<option value="0" selected>Seleccione</option>
+																			</select>
+																			<i class="arrow"></i>
+																		</label>																																																			
+																	</div>	
+																	<div class="form-group col-sm-12 col-md-4">
+																		<!-- Button trigger modal -->
+																		<button id="botonMoldal3"  style ="margin-top:50px;" type="button" class="btn btn-primary btn-lg"  data-target="#myModal3">
+																			Agregar Opcion
+																		</button>
+																		<!-- Modal Creacion de Opcion-->
+																		<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="true"  >
+																			<div class="modal-dialog">
+																				<div class="modal-content">
+																					<div class="modal-header">
+																						<h4 class="modal-title" id="myModalLabel3">Creacion de Opcion</h4>
+																					</div>
+																					<div class="modal-body">
+																						<div class="panel">
+																							<div class="panel-heading">
+																								<h5 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
+																								<div class="row">																	    
+																									<div class="col-md-12">
+																										<div class="row">
+																											<div class="form-group col-md-6">
+																												<label class="field">
+																													Nombre
+																													<input type="text" name="opcion_nombre" id="opcion_nombre" class="gui-input" >
+																												</label>
+																											</div>
+																											<div class="form-group col-md-6">
+																												<label class="field">
+																													Valor
+																													<div class="input-group">
+																														<div class="input-group-addon">$</div>
+																														<input type="number" min="1" name="opcion_valor" id="opcion_valor" class="form-control">
 																													</div>
-																													<div class="form-group col-md-6 col-md-offset-1">                                              
-																														<label class="field">
-																															Categoria Opcion
-																														</label>
-																														<label class="field select">
-																															<select id="opcion_categorias" name="opcion_categorias" class="form-control">
-																																<option value="" >Seleccione</option>																																	
-																															</select>
-																															<i class="arrow"></i>
-																														</label>
-																													</div>
-																													<div class="form-group col-sm-12">
-																														<label class="field">Observaciones</label>
-																														<label class="field prepend-icon">
-																															<textarea class="gui-textarea" id="opcion_obs" name="opcion_obs"></textarea>
-																															<label for="opcion_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
-																														</label>
-																													</div>	
-																														<!-- imagen ingreso-->
-																													<!-- <div class="col-md-12">
-																														<div class="input-field col-md-6">
-																															<label class="field prepend-icon append-button file">
-																																<span class="button btn-primary">Elija un archivo</span>
-																																<input type="file" class="gui-file" name="cat_imagen" id="cat_imagen" onChange="document.getElementById('upload_prod_i').value = this.value;">
-																																<input type="text" class="gui-input" id="upload_prod_i" name="upload_prod_i">
-																																<label class="field-icon"><i class="fa fa-upload"></i>
-																																</label>
-																															</label>
-																														</div>
-																													</div>																																					    -->
-																												</div>																
-																										
-																								</div>																									
+																												</label>
+																											</div>
+																										</div>
+																										<div class="row">																															
+																											<div class="form-group col-md-12">
+																												<h4>Seleccione alternativa </h4> 
+																												<div class="form-group col-md-6">
+																													<label><input type="radio" name="unidad" id="unidad1" value="1"> Medida</label><br>
+																													<label><input type="radio" name="unidad" id="unidad2" value="2"> Peso</label><br>
+																													<label><input  type="radio" name="unidad" id="unidad3"value="3" checked> Otro</label>																															
+																												</div>
+																												<div id="opcionSelect" class="form-group col-md-6" style="display:none">                                              
+																													<label class="field">
+																														Unidad
+																													</label>
+																													<label class="field select">
+																														<select id="opcion_unidades" name="opcion_unidades" class="form-control">
+																															<option value="">Seleccione unidad</option>																																	
+																														</select>
+																														<i class="arrow"></i>
+																													</label>
+																												</div>																																
+																											</div>
+																										</div>  																																
+																									</div>
+																									<div class="form-group col-md-6 col-md-offset-1">                                              
+																										<label class="field">
+																											Categoria Opcion
+																										</label>
+																										<label class="field select">
+																											<select id="opcion_categorias" name="opcion_categorias" class="form-control">
+																												<option value="" >Seleccione</option>																																	
+																											</select>
+																											<i class="arrow"></i>
+																										</label>
+																									</div>
+																									<div class="form-group col-sm-12">
+																										<label class="field">Observaciones</label>
+																											<label class="field prepend-icon">
+																												<textarea class="gui-textarea" id="opcion_obs" name="opcion_obs"></textarea>
+																												<label for="opcion_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
+																											</label>
+																										</div>	
+																										<!-- imagen ingreso-->
+																										<div class="col-md-12">
+																											<div class="input-field col-md-6">
+																												<label class="field prepend-icon append-button file">
+																													<span class="button btn-primary">Elija un archivo</span>
+																													<input type="file" class="gui-file" name="cat_imagen" id="cat_imagen" onChange="document.getElementById('upload_prod_i').value = this.value;">
+																													<input type="text" class="gui-input" id="upload_prod_i" name="upload_prod_i">
+																													<label class="field-icon"><i class="fa fa-upload"></i></label>
+																												</label>
+																											</div>
+																										</div>																																					    -->
+																									</div>																									
+																								</div>																										
 																							</div>
 																							<div class="modal-footer">
 																								<button id="botonGuardarModal3" type="button" class="btn btn-primary">Guardar Opcion</button>
 																								<button id="botonCancelarModal3" type="button" class="btn btn-default" >Close</button>
 																							</div>
 																						</div>
-																					</div>
-																				</div><!--Fin Modal-->
+																					</div><!--ojo coneste si se desordena -->
+																				</div>
 																			</div>
+																		</div><!--Fin Modal-->
 																	</div>		
 																	<div id="viewOpciones" class="row" style="display:none">
 																		<div class="col-md-12">	
@@ -484,15 +547,13 @@
 																					Cantidad:
 																					<input type="number" min="1" name="cantidad"  class="gui-input" id="" onchange="myFunction(this.value, this.id)" >
 																				</label>
-																			</div>
-																			
+																			</div>																			
 																			<div class="col-md-2">																				
 																				<label class="field">
 																					Modificado:
 																					<input type="number" min="1" name="valor_m"  class="gui-input" onchange="myFunctionValCotizacion(this.value, this.id)">
 																				</label>
-																			</div>
-																																						
+																			</div>																																						
 																			<div class="col-md-2">
 																				<label class="field">
 																					Opciones:
@@ -507,8 +568,8 @@
 																			</div>
 																		</div>
 																	</div>
-																</form>
-															</div>
+																</div>
+															</form>
 														</div>
 													</div>
 													<div class="modal-footer">
@@ -518,8 +579,9 @@
 														</div>
 													</div>
 												</div>
-											</div>
-									</form>
+											</div> 
+										</div>
+									</div>
                         		</div>
                         		<div class="panel-footer text-right">
                         			<button id="guardar_empresa" class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>

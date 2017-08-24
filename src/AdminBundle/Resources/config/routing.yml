@@ -268,8 +268,14 @@ ajax_actualizar_valorCotizacion_detalle:
     options:
         expose: true
 #ruta ajax carga el listado de opciones dependiendo del producto y su categoria
+ajax_cargar_opciones_valores:
+    path:     /ajax/busqueda/pedido/cargarOpcionesValores/
+    defaults: { _controller: AdminBundle:Pedido:cargarOpcionesValores}
+    options:
+        expose: true
+#ruta ajax carga el listado de opciones dependiendo del producto y su categoria
 ajax_cargar_listado_opciones:
-    path:     /ajax/busqueda/pedido/cargarOpciones/
+    path:     /ajax/busqueda/pedido/cargarListadoOpciones/
     defaults: { _controller: AdminBundle:Pedido:cargarListadoOpciones}
     options:
         expose: true
@@ -397,10 +403,10 @@ admin_cargo_guardar:
     defaults: { _controller: AdminBundle:Cargo:cargoGuardar}
     options:
         expose: true
-# #ruta ajax Guardar Cargo
-# ajax_guardar_cargo:
-#     path:     /ajax/cargo/guardarModal/
-#     defaults: { _controller: AdminBundle:Cargo:ajaxCargoGuardar}
-#     options:
-#         expose: true
+#ruta ajax cargar Cargos
+ajax_cargar_cargos:
+    path:     /ajax/cargo/cargarlistado/
+    defaults: { _controller: AdminBundle:Cargo:cargarListadoAll}
+    options:
+        expose: true
 

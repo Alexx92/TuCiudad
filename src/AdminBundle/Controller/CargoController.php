@@ -33,7 +33,7 @@ class CargoController extends Controller
             'submenu'         => 'opcionesproducto_nuevo'
         ));
     }
-    // guarda nueva cargo
+    // guarda nuevo cargo y retorna un listado de todos los existentes
     public function cargoGuardarAction(Request $request)
     {
         $result = false;
@@ -44,63 +44,56 @@ class CargoController extends Controller
             $id                 = ($request->get('id_contacto', false)) ? $request->get('id_contacto'): 0;
             $nombre             = ucfirst($request->get('cargo_nombre'));
             $obs                = $request->get('cargo_obs');
-
+            $valid = false;
             $em = $this->getDoctrine()->getManager();
-
-            if( !$cargo = $em->getRepository('AdminBundle:Cargo')->findOneBy(array( 'id' => $id )) )
-            {
-                $cargo = new cargo();
-            }
-
-            $cargo->setNombre($nombre);       
-            $cargo->setObservacion($obs);   
-
-            $em->persist($cargo);
-            $em->flush();            
-            $result = true;
-            $id_new = $cargo->getId();
-
-            $cargos = $em->getRepository('AdminBundle:Cargo')->findAll();
+            $id_new ='';
+            $lista_cargos = '';//listado final a retornar
             
-            $lista_cargos = '';
-            $op = true;
-            foreach ($cargos as $result) {
-                if($lista_cargos==''){
-                    $lista_cargos .= '<option value="">Seleccione</option>';
+            /*If de validacion de cargo por nombre*/
+            if (!$em->getRepository('AdminBundle:Cargo')->findOneBy(array('nombre'=>$nombre))) {
+                $valid = true;
+                if( !$cargo = $em->getRepository('AdminBundle:Cargo')->findOneBy(array( 'id' => $id )) )
+                {
+                    $cargo = new cargo();
                 }
-                $lista_cargos .= '<option value="'.$result->getId().'"> '.$result->getNombre().'</option>';
-            }
+                $cargo->setNombre($nombre);       
+                $cargo->setObservacion($obs);   
+    
+                $em->persist($cargo);
+                $em->flush();            
+                $result = true;
+                $id_new = $cargo->getId();
+                /*Retorna listado de todos los cargos*/    
+                $cargos = $em->getRepository('AdminBundle:Cargo')->findAll();
+                
+                $lista_cargos = '';//listado final a retornar
+                foreach ($cargos as $result) {
+                    if($lista_cargos==''){
+                        $lista_cargos .= '<option value="">Seleccione</option>';
+                    }
+                    $lista_cargos .= '<option value="'.$result->getId().'"> '.$result->getNombre().'</option>';
+                }
+            }//Fin validacion por nombre
+           
         }
         $response = new JsonResponse();
-        $response->setData(array('result' => $result, 'id_new' => $id_new, 'lista_cargos'=>$lista_cargos));        
+        $response->setData(array('result' => $result,'valid'=>$valid,'id_new' => $id_new, 'lista_cargos'=>$lista_cargos));        
         return $response;
     }
-    // public function ajaxCargoGuardarAction(Request $request)
-    // {
-    //     $nombre  = $request->get('nombre');            
-    //     $obs   = $request->get('obs');
-    //     $em = $this->getDoctrine()->getManager();
-
-    //     $cargo = new Cargo();
-    //     $cargo->setNombre($nombre);
-    //     $cargo->setObservacion($obs);
-  
-    //     $em->persist($cargo);
-    //     $em->flush();            
-    //     $id_new = $cargo->getId();
-
-    //     $cargos = $em->getRepository('AdminBundle:Cargo')->findAll();
-
-    //     $lista_cargos = '';
-    //     $op = true;
-    //     foreach ($cargos as $result) {
-    //         if($lista_cargos==''){
-    //             $lista_cargos .= '<option value="">Seleccione</option>';
-    //         }
-    //         $lista_cargos .= '<option value="'.$result->getId().'"> '.$result->getNombre().'</option>';
-    //     }
-    //     $response = new JsonResponse();
-    //     $response->setData(array('lista_cargos' => $lista_cargos));        
-    //     return $response;
-    // }
+    // Retorna listado de todos los cargos 
+    public function cargarListadoAllAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $cargos = $em->getRepository('AdminBundle:Cargo')->findAll();        
+        $lista_cargos = '';
+        foreach ($cargos as $result) {
+            if($lista_cargos==''){
+                $lista_cargos .= '<option value="">Seleccione</option>';
+            }
+            $lista_cargos .= '<option value="'.$result->getId().'"> '.$result->getNombre().'</option>';
+        }    
+        $response = new JsonResponse();
+        $response->setData(array( 'listaCargos'=>$lista_cargos));        
+        return $response;
+    }
 }

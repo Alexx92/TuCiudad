@@ -38,7 +38,8 @@ $(document).ready(function() {
     $("#bsq_producto").on('keyup', function() {
         var input = $(this).val();
         if (input.length > 1) {
-            var data = { bsq_producto: input };
+            var id_pedido = $('#ped_id').val();
+            var data = { bsq_producto: input, id_pedido: id_pedido };
             $.ajax({
                 dataType: 'json',
                 method: "POST",
@@ -64,40 +65,137 @@ $(document).ready(function() {
         if (input != "") {
             $("#prod_empresa").show(); //activa div de ingreso de producto
         } else {
-            $('#lista_producto').html("Ingrese mas caracteres para la busqueda");
+            $("#prod_empresa").hide(); //desactiva div de ingreso de producto
         }
     });
-    //guardar contacto ingresado en modal
-    $('#guardar_contacto').on('click', function() {
-        var contacto_pri_nomb = $('#contacto_pri_nomb').val();
-        var contacto_seg_nomb = $('#contacto_seg_nomb').val();
-        var contacto_ape_pate = $('#contacto_ape_pate').val();
-        var contacto_ape_mate = $('#contacto_ape_mate').val();
-        var contacto_email = $('#contacto_email').val();
-        var contacto_fono = $('#contacto_fono').val();
-        var contacto_cargo = $('#contacto_cargo').val();
-        var contacto_obs = $('#contacto_obs').val();
-        var contacto_img = $('#contacto_img').val();
-        var uploader1 = $('#uploader1').val();
-        var empresa_id = $('#empre_id').val();
-        var data = { contacto_pri_nomb: contacto_pri_nomb, contacto_seg_nomb: contacto_seg_nomb, contacto_ape_pate: contacto_ape_pate, contacto_email: contacto_email, contacto_fono: contacto_fono, contacto_cargo: contacto_cargo, contacto_obs: contacto_obs, contacto_img: contacto_img, uploader1: uploader1, empresa_id: empresa_id };
+    // js ajax abrir modal crear Contacto
+    $('#modalIngresoContacto').on('click', function() {
         $.ajax({
             dataType: 'json',
-            method: "POST",
-            url: Routing.generate('ajax_admin_contacto_guardar2'),
-            data: data,
+            method: 'POST',
+            url: Routing.generate('ajax_cargar_cargos'),
         }).done(function(response) {
-            data = { id_cont: response.id_new, id_empre: empresa_id };
+            $('#cargos').html(response.listaCargos)
+        });
+        $('#myModalContacto').modal('show');
+    });
+    // js ajax abrir modal crear cargo
+    $('#btnShowModalCargo').on('click', function() {
+        $('#myModalCargo').modal('show');
+    });
+    $('#btnModalCerrarCargo').on('click', function() {
+        $('#myModalCargo').modal('hide');
+    });
+    //guardar contacto ingresado en modal
+    $('#btnGuardarContacto').on('click', function(e) {
+        e.preventDefault();
+        var form = $('#form_nuevo_cliente');
+        form.validate({
+            errorClass: "state-error",
+            validClass: "state-success",
+            errorElement: "em",
+            rules: {
+                contacto_pri_nomb: {
+                    required: true
+                },
+
+            },
+            messages: {
+                contacto_pri_nomb: {
+                    required: "Ingrese un nombre valido"
+                },
+            },
+            errorPlacement: function(element, errorClass, validClass) {
+                $(element).closest('.field').addClass(errorClass).removeClass(validClass);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).closest('.field').addClass(errorClass).removeClass(validClass);
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).closest('.field').removeClass(errorClass).addClass(validClass);
+            }
+        });
+        if (form.valid(true)) {
+            var datos = new FormData(form[0]);
+            var validator = form.validate();
             $.ajax({
                 dataType: 'json',
-                method: "POST",
-                url: Routing.generate('ajax_guardar_empresa'),
-                data: data,
+                method: form.attr('method'),
+                url: form.attr('action'),
+                data: datos,
+                contentType: false,
+                processData: false,
+                cache: false
             }).done(function(response) {
-                toastr.success('Datos guardados');
+                // $('#id_contacto').val(response.id_new);
+                // $("#mostrar").show(); //activa el div una vez realiza el guardado
+                // toastr.success('Datos guardados');
+                //  url: Routing.generate('admin_contacto');
                 cargarContactos();
+
+            }).fail(function(response) {
+                toastr.error('Error al guardar');
             });
+        } else {
+            toastr.warning('Complete todos los campos requeridos');
+        }
+    });
+    // js ajax modal guardar cargo
+    $('#btnModalGuardarCargo').on('click', function(e) {
+        var form = $('#form-new-cargo');
+        form.validate({
+            errorClass: "state-error",
+            validClass: "state-success",
+            errorElement: "em",
+            rules: {
+                cargo_nombre: {
+                    required: true
+                },
+            },
+            messages: {
+                cargo_nombre: {
+                    required: "Ingrese un nombre valido"
+                },
+            },
+            errorPlacement: function(element, errorClass, validClass) {
+                $(element).closest('.field').addClass(errorClass).removeClass(validClass);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).closest('.field').addClass(errorClass).removeClass(validClass);
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).closest('.field').removeClass(errorClass).addClass(validClass);
+            }
         });
+        if (form.valid(true)) {
+            var datos = new FormData(form[0]);
+            var validator = form.validate();
+            $.ajax({
+                dataType: 'json',
+                method: form.attr('method'),
+                url: form.attr('action'),
+                data: datos,
+                contentType: false,
+                processData: false,
+                cache: false
+            }).done(function(response) {
+                if (response.valid == true) {
+                    if (response.result == true) {
+                        $('#cargos').html(response.lista_cargos);
+                        $('#myModalcargo').modal('hide');
+                        toastr.success('Datos guardados');
+                    } else {
+                        toastr.error('Error de datos');
+                    }
+                } else {
+                    toastr.warning('Ya existe un cargo con ese nombre');
+                }
+            }).fail(function(response) {
+                toastr.error('Error al guardar');
+            });
+        } else {
+            toastr.warning('Complete todos los campos requeridos');
+        }
     });
     //Seleccion de opciones asignada al producto
     $('#opciones').on('change', function() {
@@ -127,7 +225,8 @@ $(document).ready(function() {
                 $('#valor').val(response.total_pedido);
                 var total = "total" + id_detalle;
                 document.getElementById(total).innerHTML = " " + response.total_pedido;
-                $('#opciones').val($('#opciones > option:first').val());
+                $('#opciones').val($('#opciones > option:first').val()); //????????
+                cargarOpcionesPosibles();
                 toastr.success('Valor Agregado');
             }).fail(function(response) {
                 toastr.warning('No ha seleccionado ninguna opcion');
@@ -201,17 +300,7 @@ $(document).ready(function() {
             }).done(function(response) {
                 toastr.success('Datos Guardados');
                 $('#myModal3').modal('hide');
-                var id_detalle = $('#detalle').val();
-                var data = { id_detalle: id_detalle };
-                $.ajax({
-                    dataType: 'json',
-                    method: 'POST',
-                    url: Routing.generate('ajax_cargar_listado_opciones'),
-                    data: data,
-                }).done(function(response) {
-                    $('#opciones').html(response.lista_opciones);
-                    toastr.success('Datos Guardados');
-                });
+                cargarOpcionesPosibles();
             });
         } else {
             toastr.warning('Complete los campos');
@@ -273,8 +362,9 @@ function functionDelete(id_opcion) {
         toastr.success('Opcion eliminada ');
     });
 }
-//funcion que activa la ventana modal para agregar detalles al producto a cotizar
-function modal(id_detalle) {
+//funcion que carga las opciones que puede tomar un producto
+function cargarOpcionesPosibles() {
+    var id_detalle = $('#detalle').val();
     var data = { id_detalle: id_detalle };
     $.ajax({
         dataType: 'json',
@@ -283,6 +373,21 @@ function modal(id_detalle) {
         data: data,
     }).done(function(response) {
         $('#opciones').html(response.lista_opciones);
+        //  toastr.success('Datos Guardados');
+    });
+}
+//funcion que activa la ventana modal para agregar detalles al producto a cotizar
+function modal(id_detalle) {
+    var data = { id_detalle: id_detalle };
+    $.ajax({
+        dataType: 'json',
+        method: 'POST',
+        url: Routing.generate('ajax_cargar_opciones_valores'),
+        data: data,
+    }).done(function(response) {
+        //$('#opciones').html(response.lista_opciones);
+        $("#detalle").val(id_detalle);
+        cargarOpcionesPosibles(); //carga opciones alcanzables por el producto
         $('#click_opcion').html(response.lista_opciones_guardadas);
         $("#detalle").val(id_detalle);
         $('#myModal2').modal('show');
@@ -402,8 +507,10 @@ function select_prod() {
         }).done(function(response) {
             var respuesta = response.producto;
             var id_pedido = response.id_pedido;
-            bsq_producto
+
             $("input#ped_id").val(response.id_pedido);
+            $("#bsq_producto").val(); //deja en planco el input de ingreso
+            $("#lista_producto").html("");
             $("input#bsq_producto").val("");
             $("#dT_pedido tbody").append(respuesta);
         });
