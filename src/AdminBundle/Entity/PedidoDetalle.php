@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PedidoDetalle
  *
- * @ORM\Table(name="pedido_detalle", indexes={@ORM\Index(name="fk_pedido", columns={"fk_pedido"}), @ORM\Index(name="fk_producto", columns={"fk_producto"})})
+ * @ORM\Table(name="pedido_detalle", indexes={@ORM\Index(name="fk_pedido", columns={"fk_pedido"}), @ORM\Index(name="fk_producto", columns={"fk_producto"}), @ORM\Index(name="fk_pedido_detalle_etapa_pedido_detalle1_idx", columns={"etapa_pedido_detalle_id"})})
  * @ORM\Entity
  */
 class PedidoDetalle
@@ -55,6 +55,16 @@ class PedidoDetalle
      * @ORM\Column(name="observacion", type="text", length=65535, nullable=true)
      */
     private $observacion;
+
+    /**
+     * @var \EtapaPedidoDetalle
+     *
+     * @ORM\ManyToOne(targetEntity="EtapaPedidoDetalle")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="etapa_pedido_detalle_id", referencedColumnName="id")
+     * })
+     */
+    private $etapaPedidoDetalle;
 
     /**
      * @var \Pedidos
@@ -201,6 +211,29 @@ class PedidoDetalle
     public function getObservacion()
     {
         return $this->observacion;
+    }
+
+    /**
+     * Set etapaPedidoDetalle
+     *
+     * @param \AdminBundle\Entity\EtapaPedidoDetalle $etapaPedidoDetalle
+     * @return PedidoDetalle
+     */
+    public function setEtapaPedidoDetalle(\AdminBundle\Entity\EtapaPedidoDetalle $etapaPedidoDetalle = null)
+    {
+        $this->etapaPedidoDetalle = $etapaPedidoDetalle;
+
+        return $this;
+    }
+
+    /**
+     * Get etapaPedidoDetalle
+     *
+     * @return \AdminBundle\Entity\EtapaPedidoDetalle 
+     */
+    public function getEtapaPedidoDetalle()
+    {
+        return $this->etapaPedidoDetalle;
     }
 
     /**

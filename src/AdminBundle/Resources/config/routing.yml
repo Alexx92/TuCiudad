@@ -275,7 +275,7 @@ ajax_cargar_opciones_valores:
         expose: true
 #ruta ajax carga el listado de opciones dependiendo del producto y su categoria
 ajax_cargar_listado_opciones:
-    path:     /ajax/busqueda/pedido/cargarListadoOpciones/
+    path:     /ajax/busqueda/pedido/cargarListadoOp/
     defaults: { _controller: AdminBundle:Pedido:cargarListadoOpciones}
     options:
         expose: true
@@ -322,6 +322,12 @@ ajax_guardar_detalle_pedido:
     defaults: { _controller: AdminBundle:Pedido:guardaPedidoDetalle}
     options:
         expose: true
+#ruta ajax eliminar productoDetalle
+ajax_eliminar_detalle_pedido:
+    path:     /ajax/busqueda/pedido/eliminarProductoDetalle/
+    defaults: { _controller: AdminBundle:Pedido:eliminaDetallePedido}
+    options:
+        expose: true
 #----------------------------Opciones Producto------------------------------------
 admin_producto:
     path:     /producto/
@@ -356,7 +362,7 @@ ajax_cargar_categorias_producto_id:
         expose: true
 #ruta ajax carga las categorias de producto por id_detalle
 ajax_cargar_categorias_producto_idDetalle:
-    path:     /ajax/busqueda/producto/cargaTodasCategoriasProducto/
+    path:     /ajax/busqueda/producto/cargaTodasCategoriasProductoIdDetalle/
     defaults: { _controller: AdminBundle:Producto:cargaCategoriasProductoIdDetalle}
     options:
         expose: true

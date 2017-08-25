@@ -221,11 +221,11 @@ $(document).ready(function() {
                 url: Routing.generate('ajax_guardar_opcion_detalleProducto'),
                 data: data,
             }).done(function(response) {
-                $('#click_opcion').append('<div class="valign-wrapper"  id ="' + id_opcion + '" ><i onClick="functionDelete(' + id_opcion + ' )" class="material-icons del_btn_i pointer">remove_circle_outline</i>' + selected + ' Unidades: <input type="number" id="' + response.id_op_det + '" style="width:70px;text-align:center;margin-left:10px;" min="1" value="1" class="gui-input input-sm" onchange="actualizaCantidadOpcion(this.value,this.id)"></div>');
+                $('#click_opcion').append('<div class="valign-wrapper"  id ="' + id_opcion + '" ><i onClick="functionDelete(' + id_opcion + ' )" class="material-icons del_btn_i pointer">remove_circle_outline</i>' + selected + ' Unidades: <input type="number" id="' + response.id_op_det + '" style="width:70px;text-align:center;margin-left:10px;" min="1" value="1" class="gui-input input-sm val_num" onchange="actualizaCantidadOpcion(this.value,this.id)"></div>');
                 $('#valor').val(response.total_pedido);
                 var total = "total" + id_detalle;
                 document.getElementById(total).innerHTML = " " + response.total_pedido;
-                $('#opciones').val($('#opciones > option:first').val()); //????????
+                // $('#opciones').val($('#opciones > option:first').val()); //????????
                 cargarOpcionesPosibles();
                 toastr.success('Valor Agregado');
             }).fail(function(response) {
@@ -268,43 +268,108 @@ $(document).ready(function() {
     $('#botonMoldal3').on('click', function() {
         var id_detalle = $('#detalle').val();
         var data = { id_detalle: id_detalle };
+        console.log(data);
+
         $.ajax({
             dataType: 'json',
             method: 'POST',
             url: Routing.generate('ajax_cargar_categorias_producto_idDetalle'),
             data: data,
         }).done(function(response) {
+            console.log(response.lista_categorias);
             $('#opcion_categorias').html(response.lista_categorias);
+            $('#myModal3').modal('show');
         });
-        $('#myModal3').modal('show');
     });
     //cerrar ventana modal de creacion opcion-producto
     $('#botonCancelarModal3').on('click', function() {
         $('#myModal3').modal('hide');
     });
     //Guardar datos crear opcion producto
-    $('#botonGuardarModal3').on('click', function() {
-        var nombre = $('#opcion_nombre').val();
-        var valor = $('#opcion_valor').val();
-        var id_select = $('#opcion_unidades').val();
-        var id_categoria = $('#opcion_categorias').val();
-        // var observaciones = document.getElementById("opcion_obs").value;
-        var observaciones = $('#opcion_obs').val();
-        if (nombre != "" && valor != "" && id_categoria != "") {
-            var data = { nombre: nombre, valor: valor, id_select: id_select, id_categoria: id_categoria, observaciones: observaciones };
+    $('#botonGuardarModal3').on('click', function(e) {
+        e.preventDefault();
+        var form = $('#form-new-opcion');
+        form.validate({
+            errorClass: "state-error",
+            validClass: "state-success",
+            errorElement: "em",
+            rules: {
+                opcion_nombre: {
+                    required: true
+                },
+                opcion_valor: {
+                    required: true
+                },
+                opcion_categorias: {
+                    required: true
+                }
+            },
+            messages: {
+                opcion_nombre: {
+                    required: 'Ingrese un nombre valido'
+                },
+                opcion_valor: {
+                    required: 'Ingrese un valor numerico valido'
+                },
+                opcion_categorias: {
+                    required: 'Seleccione'
+                }
+            },
+            errorPlacement: function(element, errorClass, validClass) {
+                $(element).closest('.field').addClass(errorClass).removeClass(validClass);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).closest('.field').addClass(errorClass).removeClass(validClass);
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).closest('.field').removeClass(errorClass).addClass(validClass);
+            }
+        });
+
+        if (form.valid(true)) {
+            var datos = new FormData($("#form-new-opcion")[0]);
+            console.log(datos);
+            var validator = form.validate();
             $.ajax({
+                url: form.attr('action'),
+                data: datos,
                 dataType: 'json',
-                method: 'POST',
-                url: Routing.generate('ajax_guarda_new_opcion_producto'),
-                data: data,
+                method: form.attr('method'),
+                contentType: false,
+                processData: false,
+                cache: false
             }).done(function(response) {
-                toastr.success('Datos Guardados');
-                $('#myModal3').modal('hide');
                 cargarOpcionesPosibles();
+                $('#myModal3').modal('hide'); //cierra la modal
+                $("#form-new-opcion")[0].reset(); // reset el frm del modal
+                toastr.success('Datos guardados');
+            }).fail(function(response) {
+                toastr.error('Error al guardar');
             });
         } else {
-            toastr.warning('Complete los campos');
+            toastr.warning('Complete todos los campos requeridos');
         }
+        // var nombre = $('#opcion_nombre').val();
+        // var valor = $('#opcion_valor').val();
+        // var id_select = $('#opcion_unidades').val();
+        // var id_categoria = $('#opcion_categorias').val();
+        // // var observaciones = document.getElementById("opcion_obs").value;
+        // var observaciones = $('#opcion_obs').val();
+        // if (nombre != "" && valor != "" && id_categoria != "") {
+        //     var data = { nombre: nombre, valor: valor, id_select: id_select, id_categoria: id_categoria, observaciones: observaciones };
+        //     $.ajax({
+        //         dataType: 'json',
+        //         method: 'POST',
+        //         url: Routing.generate('ajax_guarda_new_opcion_producto'),
+        //         data: data,
+        //     }).done(function(response) {
+        //         toastr.success('Datos Guardados');
+        //         $('#myModal3').modal('hide');
+        //         cargarOpcionesPosibles();
+        //     });
+        // } else {
+        //     toastr.warning('Complete los campos');
+        // }
     });
     //Guardar datos crear opcion producto
     $('#botonGuardarModal2').on('click', function() {
@@ -359,6 +424,7 @@ function functionDelete(id_opcion) {
         document.getElementById(total).innerHTML = " " + response.total_pedido;
         $('#valor').val(response.total_pedido);
         $("#" + id_opcion).remove();
+        cargarOpcionesPosibles();
         toastr.success('Opcion eliminada ');
     });
 }
@@ -373,7 +439,6 @@ function cargarOpcionesPosibles() {
         data: data,
     }).done(function(response) {
         $('#opciones').html(response.lista_opciones);
-        //  toastr.success('Datos Guardados');
     });
 }
 //funcion que activa la ventana modal para agregar detalles al producto a cotizar
@@ -432,11 +497,11 @@ function myFunction(val, id) {
         url: Routing.generate('ajax_actualizar_cantidad_detalle'),
         data: data,
     }).done(function(response) {
-        toastr.success('Datos guardados');
         var total = "total" + id_detalle;
         document.getElementById(total).innerHTML = " " + response.result;
         $("#valor").val(response.result); //le pasa el valor total de la fila en el valor de la ventana modal
         document.getElementById("nc" + id_detalle).value = cantidad;
+        toastr.success('Datos guardados');
     });
 }
 //funcion que actualiza la cantidad de la opcion seleccionada 
@@ -490,6 +555,31 @@ function cargarContactos() {
         toastr.error('Error al buscar en la base de datos');
     })
 }
+//Eliminar detalle producto del pedido
+function eliminarProductoDetalle(id_detalle_pedido) {
+    var id_detalle = id_detalle_pedido;
+    var validar = confirm("¿Eliminar producto de pedido?");
+    if (validar) {
+        var data = { id_detalle: id_detalle };
+        $.ajax({
+            dataType: 'json',
+            method: "POST",
+            url: Routing.generate('ajax_eliminar_detalle_pedido'),
+            data: data
+        }).done(function(response) {
+
+
+
+            $("#tr" + id_detalle_pedido).remove();
+            toastr.success('Eliminacion exitosa');
+        }).fail(function() {
+            toastr.error('Error al Eliminar');
+        })
+
+    } else {
+        toastr.error('Error al eliminar');
+    }
+}
 //Selecciona un producto y lo muestra en el campo de texto 
 function select_prod() {
     $('.ele span').on('click', function() {
@@ -498,6 +588,7 @@ function select_prod() {
         var id_empresa = $('#empre_id').val();
         var id_contacto = $('#lista_contactos_cot').val();
         var id_pedido = $('#ped_id').val();
+        // var id_detalle = $('#id_detalle').val();
         var data = { id_producto: id_producto, id_empresa: id_empresa, id_pedido: id_pedido, id_contacto: id_contacto };
         $.ajax({
             dataType: 'json',
@@ -506,7 +597,7 @@ function select_prod() {
             data: data
         }).done(function(response) {
             var respuesta = response.producto;
-            var id_pedido = response.id_pedido;
+            // var id_pedido = response.id_pedido;
 
             $("input#ped_id").val(response.id_pedido);
             $("#bsq_producto").val(); //deja en planco el input de ingreso

@@ -184,11 +184,11 @@
 															<tr>
 															 	<th>#</th>
 															 	<th>Producto</th>
-																<th>Descripcion</th> 
-																<th class="text-right">Valor Unitario Base</th>
+																<th>Valor Unitario Base</th>
 															 	<th class="text-right">Cantidad</th>
 															 	<th class="text-right">Valor Cotizacion</th> 
 															 	<th class="text-right">Total por Producto</th>
+															 	<th class="text-right">Estado</th>
 															</tr>
 														</thead>
 														<tbody>															
@@ -373,12 +373,13 @@
 												</div>
 												<div class="modal-body">
 													<div class="panel">
-														<div class="panel-heading">
+														<div class="panel-body bg-light">
 															<h4 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos opcionales</h4>	
 															<div class="section-divider mb40">
 																<span></span>
-															</div> 															
-															<form id="op" class="modalForm2" action="" method="post" enctype="multipart/form-data">
+															</div>
+															{# form de ingreso de opcion #}
+															{# <form id="op" class="modalForm2" action="" method="post" enctype="multipart/form-data"> #}
 																<input type="hidden" name="detalle" id="detalle" value="{{ data.id is defined ? data.id}}" >
 																<div class="row">
 																	<div class="col-md-6 col-lg-12">
@@ -405,8 +406,8 @@
 																	</div>	
 																	<div class="form-group col-sm-12 col-md-4">
 																		<!-- Button trigger modal -->
-																		<button id="botonMoldal3"  style ="margin-top:50px;" type="button" class="btn btn-primary btn-lg"  data-target="#myModal3">
-																			Agregar Opcion
+																		<button id="botonMoldal3"  style ="margin-top:17px;" type="button" class="btn btn-primary btn-lg"  data-target="#myModal3">
+																			Agregar Nueva Opcion
 																		</button>
 																		<!-- Modal Creacion de Opcion-->
 																		<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="true"  >
@@ -417,80 +418,82 @@
 																					</div>
 																					<div class="modal-body">
 																						<div class="panel">
-																							<div class="panel-heading">
-																								<h5 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
-																								<div class="row">																	    
-																									<div class="col-md-12">
-																										<div class="row">
-																											<div class="form-group col-md-6">
-																												<label class="field">
-																													Nombre
-																													<input type="text" name="opcion_nombre" id="opcion_nombre" class="gui-input" >
-																												</label>
+																							<div class="panel-body bg-light">
+																								<form id="form-new-opcion" name="form-new-opcion" class=""  action="{{ url('admin_opcion_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
+																									<h5 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
+																									<div class="row">
+																										<div class="col-md-12">
+																											<div class="row">
+																												<div class="form-group col-md-6">
+																													<label class="field">
+																														Nombre
+																														<input type="text" name="opcion_nombre" id="opcion_nombre" class="gui-input" >
+																													</label>
+																												</div>
+																												<div class="form-group col-md-6">
+																													<label class="field">
+																														Valor
+																														<div class="input-group">
+																															<div class="input-group-addon">$</div>
+																															<input type="number" min="1" name="opcion_valor" id="opcion_valor" class="gui-input">{# clase form-control#}
+																														</div>
+																													</label>
+																												</div>
 																											</div>
-																											<div class="form-group col-md-6">
-																												<label class="field">
-																													Valor
-																													<div class="input-group">
-																														<div class="input-group-addon">$</div>
-																														<input type="number" min="1" name="opcion_valor" id="opcion_valor" class="form-control">
+																											<div class="row">
+																												<div class="form-group col-md-12">
+																													<h4>Seleccione alternativa </h4> 
+																													<div class="form-group col-md-6">
+																														<label><input type="radio" name="unidad" id="unidad1" value="1"> Medida</label><br>
+																														<label><input type="radio" name="unidad" id="unidad2" value="2"> Peso</label><br>
+																														<label><input  type="radio" name="unidad" id="unidad3"value="3" checked> Otro</label>																															
 																													</div>
+																													<div id="opcionSelect" class="form-group col-md-6" style="display:none">                                              
+																														<label class="field">
+																															Unidad
+																														</label>
+																														<label class="field select">
+																															<select id="opcion_unidades" name="opcion_unidades" class="form-control">
+																																<option value="">Seleccione unidad</option>																																	
+																															</select>
+																															<i class="arrow"></i>
+																														</label>
+																													</div>																																
+																												</div>
+																											</div>  																																
+																										</div>
+																										<div class="form-group col-md-6 col-md-offset-1">                                              
+																											<label class="field">
+																												Categoria Opcion
+																											</label>
+																											<label class="field select">
+																												<select id="opcion_categorias" name="opcion_categorias" class="form-control">
+																													<option value="" >Seleccione</option>																																	
+																												</select>
+																												<i class="arrow"></i>
+																											</label>
+																										</div>
+																										<div class="form-group col-sm-12">
+																											<label class="field">Observaciones</label>
+																												<label class="field prepend-icon">
+																													<textarea class="gui-textarea" id="opcion_obs" name="opcion_obs"></textarea>
+																													<label for="opcion_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
 																												</label>
+																											</div>	
+																											<!-- imagen ingreso-->
+																											<div class="col-md-12">
+																												<div class="input-field col-md-6">
+																													<label class="field prepend-icon append-button file">
+																														<span class="button btn-primary">Elija un archivo</span>
+																														<input type="file" class="gui-file" name="cat_imagen" id="cat_imagen" onChange="document.getElementById('upload_prod_i').value = this.value;">
+																														<input type="text" class="gui-input" id="upload_prod_i" name="upload_prod_i">
+																														<label class="field-icon"><i class="fa fa-upload"></i></label>
+																													</label>
+																												</div>
 																											</div>
 																										</div>
-																										<div class="row">																															
-																											<div class="form-group col-md-12">
-																												<h4>Seleccione alternativa </h4> 
-																												<div class="form-group col-md-6">
-																													<label><input type="radio" name="unidad" id="unidad1" value="1"> Medida</label><br>
-																													<label><input type="radio" name="unidad" id="unidad2" value="2"> Peso</label><br>
-																													<label><input  type="radio" name="unidad" id="unidad3"value="3" checked> Otro</label>																															
-																												</div>
-																												<div id="opcionSelect" class="form-group col-md-6" style="display:none">                                              
-																													<label class="field">
-																														Unidad
-																													</label>
-																													<label class="field select">
-																														<select id="opcion_unidades" name="opcion_unidades" class="form-control">
-																															<option value="">Seleccione unidad</option>																																	
-																														</select>
-																														<i class="arrow"></i>
-																													</label>
-																												</div>																																
-																											</div>
-																										</div>  																																
 																									</div>
-																									<div class="form-group col-md-6 col-md-offset-1">                                              
-																										<label class="field">
-																											Categoria Opcion
-																										</label>
-																										<label class="field select">
-																											<select id="opcion_categorias" name="opcion_categorias" class="form-control">
-																												<option value="" >Seleccione</option>																																	
-																											</select>
-																											<i class="arrow"></i>
-																										</label>
-																									</div>
-																									<div class="form-group col-sm-12">
-																										<label class="field">Observaciones</label>
-																											<label class="field prepend-icon">
-																												<textarea class="gui-textarea" id="opcion_obs" name="opcion_obs"></textarea>
-																												<label for="opcion_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
-																											</label>
-																										</div>	
-																										<!-- imagen ingreso-->
-																										<div class="col-md-12">
-																											<div class="input-field col-md-6">
-																												<label class="field prepend-icon append-button file">
-																													<span class="button btn-primary">Elija un archivo</span>
-																													<input type="file" class="gui-file" name="cat_imagen" id="cat_imagen" onChange="document.getElementById('upload_prod_i').value = this.value;">
-																													<input type="text" class="gui-input" id="upload_prod_i" name="upload_prod_i">
-																													<label class="field-icon"><i class="fa fa-upload"></i></label>
-																												</label>
-																											</div>
-																										</div>																																					    -->
-																									</div>																									
-																								</div>																										
+																								</form>
 																							</div>
 																							<div class="modal-footer">
 																								<button id="botonGuardarModal3" type="button" class="btn btn-primary">Guardar Opcion</button>
@@ -504,7 +507,7 @@
 																	</div>		
 																	<div id="viewOpciones" class="row" style="display:none">
 																		<div class="col-md-12">	
-																			<div class="col-md-6 col-md-offset-1">																			
+																			<div class="col-md-6 col-md-offset-1">
 																				<div id="divLargo" class="form-group col-md-3" style="display:none">
 																					<label class="field">
 																						Largo
@@ -548,7 +551,7 @@
 																					<input type="number" min="1" name="cantidad"  class="gui-input" id="" onchange="myFunction(this.value, this.id)" >
 																				</label>
 																			</div>																			
-																			<div class="col-md-2">																				
+																			<div class="col-md-2">
 																				<label class="field">
 																					Modificado:
 																					<input type="number" min="1" name="valor_m"  class="gui-input" onchange="myFunctionValCotizacion(this.value, this.id)">
@@ -569,7 +572,7 @@
 																		</div>
 																	</div>
 																</div>
-															</form>
+															{# </form> #}
 														</div>
 													</div>
 													<div class="modal-footer">

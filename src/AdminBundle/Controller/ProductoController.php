@@ -343,35 +343,14 @@ class ProductoController extends Controller
                 }
             }
             $lista_opciones .= '<li value="'.$result['id'].'">'.$result['nombre'].', $ '.$result['valor'].' '.$nombreUnidad.'</li>';
-        }
-        // $query = $em->createQuery(''
-        //     . 'SELECT c.id, c.nombre, c.valor '
-        //     . 'FROM AdminBundle:OpcionesProducto c '
-        //     . 'ORDER BY c.id ASC'
-        // );
-        // $results = $query->getResult();
-        // $lista_all_opciones='';
-        // foreach ($results as $result) {
-        //     $nombreUnidad ="";
-        //     if ($lista_all_opciones == '') {
-        //         $lista_all_opciones.='<option value="">Seleccione</option>';
-        //     }
-        //     if (isset($result['unidadMedidaDimension']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaDimension')->findOneBy(array('id'=>$result['unidadMedidaDimension']))) {
-        //        $nombreUnidad= ' x ['.$opcion->getSigla().']';
-        //     } else {
-        //         if (isset($result['unidadMedidaPeso']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaPeso')->findOneBy(array('id'=>$result['unidadMedidaPeso']))) {
-        //              $nombreUnidad= 'x ['.$opcion->getSigla().']';
-        //         }
-        //     }
-        //     $lista_all_opciones .= '<option value="'.$result['id'].'">'.$result['nombre'].', $ '.$result['valor'].' '.$nombreUnidad.'</option>';
-        // }
+        }       
         $allCategoriasProducto = $em->getRepository('AdminBundle:ProductoCategoria')->findBy(array('fkProducto'=>$prod_id));
         $listaAllCategoriasProducto='';
         foreach ($allCategoriasProducto as $value) {
             $listaAllCategoriasProducto.='<div class="valign-wrapper"  id ="'.$value->getId().'"><i onClick="functionDelete('.$value->getId().' )"class="material-icons del_btn_i pointer">remove_circle_outline</i>'.$value->getFkCategoria()->getNombre().'</div>';            
         }
         $response = new JsonResponse();
-        $response->setData(array('lista_opciones'=>$lista_opciones,/*'lista_all_opciones'=>$lista_all_opciones,*/'listaAllCategoriasProducto'=>$listaAllCategoriasProducto));
+        $response->setData(array('lista_opciones'=>$lista_opciones,'listaAllCategoriasProducto'=>$listaAllCategoriasProducto));
         return $response;
     }
     //carga todas las categorias por id_producto

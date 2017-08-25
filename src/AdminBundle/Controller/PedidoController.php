@@ -269,14 +269,12 @@ class PedidoController extends Controller
         $results = $query->getResult();
         $productoLista = '';
         foreach ($results as $result) {
-            if (!$em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('fkPedido'=>$id_pedido,'fkProducto'=>$result['id']))) {
-                $bold_prinombre = preg_replace('/('.$data.')/i', '<strong>$1</strong>', $result['nombre']);
-                $bold_segnombre = preg_replace('/('.$data.')/i', '<strong>$1</strong>', $result['codigoProd']);
-                $productoLista .= '<li class="ele test" role="presentation"><span role="menuitem" data-id="'.$result['id'].'"><strong>Codigo:  </strong>'.$bold_segnombre.' , <strong>Nombre:   </strong> '.$bold_prinombre.'</span></li>';
-            }
+            $bold_prinombre = preg_replace('/('.$data.')/i', '<strong>$1</strong>', $result['nombre']);
+            $bold_segnombre = preg_replace('/('.$data.')/i', '<strong>$1</strong>', $result['codigoProd']);
+            $productoLista .= '<li class="ele test" role="presentation"><span role="menuitem" data-id="'.$result['id'].'"><strong>Codigo:  </strong>'.$bold_segnombre.' , <strong>Nombre:   </strong> '.$bold_prinombre.'</span></li>';
         }
         $response = new JsonResponse();
-        $response->setData(array('productoLista' => $productoLista));        
+        $response->setData(array('productoLista' => $productoLista));
         return $response;
     }
     /*Encargado de cargar listado de opciones por producto-categoria*/
@@ -294,44 +292,21 @@ class PedidoController extends Controller
         $lista_opciones = '';
         foreach ($results as $result) {
             if (!$em->getRepository('AdminBundle:DetallepedidoOpcionesproducto')->findOneBy(array('pedidoDetalle'=>$id_detalle,'opcionesProducto'=>$result['id']))) {
-
-            }
-            if($lista_opciones==''){
-                $lista_opciones .= '<option value="">Seleccione</option>';
-            }
-            $nombreUnidad ="";           
-            if (isset($result['unidadMedidaDimension']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaDimension')->findOneBy(array('id'=>$result['unidadMedidaDimension']))) {
-               $nombreUnidad= ' x ['.$opcion->getSigla().']';
-            } else {
-                if (isset($result['unidadMedidaPeso']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaPeso')->findOneBy(array('id'=>$result['unidadMedidaPeso']))) {
-                     $nombreUnidad= 'x ['.$opcion->getSigla().']';
+                if($lista_opciones==''){
+                    $lista_opciones .= '<option value="">Seleccione</option>';
                 }
-            }            
-            $lista_opciones .= '<option value="'.$result['id'].'">'.$result['nombre'].', $ '.$result['valor'].' '.$nombreUnidad.'</option>';
-        }
-        // /*Segunda consulta para obtener el listado perteneciente al detalle del producto */
-        // $dql2= " SELECT  op.id, op.valor, op.cantidad, op.largo, op.ancho, op.peso, IDENTITY(op.pedidoDetalle, 'id') AS pedidoDetalle, IDENTITY(op.opcionesProducto,'id') AS opcionesProducto,pc.id AS idOpcion, pc.nombre , IDENTITY(pc.unidadMedidaDimension, 'id') AS unidadMedidaDimension, IDENTITY(pc.unidadMedidaPeso,'id') AS unidadMedidaPeso
-        //         FROM AdminBundle:DetallepedidoOpcionesproducto op  INNER JOIN AdminBundle:OpcionesProducto pc WITH op.opcionesProducto = pc.id
-        //         WHERE op.pedidoDetalle=:data";
-
-        //  $results2= $em->createQuery($dql2)
-        //             ->setParameter('data', $id_detalle)
-        //             ->getResult();
-        //      $listaOpcionesGuardadas = '';
-        //         foreach ($results2 as $result) {
-        //              $nombreUnidad ="";
-        //             if (isset($result['unidadMedidaDimension']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaDimension')->findOneBy(array('id'=>$result['unidadMedidaDimension']))) {
-        //                 $nombreUnidad= ' x ['.$opcion->getSigla().']';
-        //                 $listaOpcionesGuardadas .= '<div class="valign-wrapper" id ="'.$result['idOpcion'].'"><i onClick="functionDelete('.$result['idOpcion'].')" class="material-icons del_btn_i pointer">remove_circle_outline</i>   '.$result['nombre'].'  $ '.$result['valor'].' '.$nombreUnidad.', Total medida: '.$result['largo']*$result['ancho'].' ['.$opcion->getSigla().'] = $ '.$result['valor']*($result['largo']*$result['ancho']).'</div>';
-        //             } else {
-        //                 if (isset($result['unidadMedidaPeso']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaPeso')->findOneBy(array('id'=>$result['unidadMedidaPeso']))) {
-        //                     $nombreUnidad= 'x ['.$opcion->getSigla().']';
-        //                 }else{
-        //                     $listaOpcionesGuardadas .= '<div class="valign-wrapper"  id ="'.$result['idOpcion'].'"><i onClick="functionDelete('.$result['idOpcion'].')" class="material-icons del_btn_i pointer">remove_circle_outline</i>   '.$result['nombre'].'  $ '.$result['valor'].',  Unidades : <input type="number" id="'.$result['id'].'" style="width:70px;text-align:center;margin-left:10px;" min="1" value="'.$result['cantidad'].'" class="gui-input input-sm" onchange="actualizaCantidadOpcion(this.value,this.id)"></div>';
-        //                 }
-        //             }
-        //         }
-        // $valorModificado = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('id'=>$id_detalle));
+                $nombreUnidad ="";           
+                if (isset($result['unidadMedidaDimension']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaDimension')->findOneBy(array('id'=>$result['unidadMedidaDimension']))) {
+                   $nombreUnidad= ' x ['.$opcion->getSigla().']';
+                } else {
+                    if (isset($result['unidadMedidaPeso']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaPeso')->findOneBy(array('id'=>$result['unidadMedidaPeso']))) {
+                         $nombreUnidad= 'x ['.$opcion->getSigla().']';
+                    }
+                }            
+                $lista_opciones .= '<option value="'.$result['id'].'">'.$result['nombre'].', $ '.$result['valor'].' '.$nombreUnidad.'</option>';
+            }
+           
+        }      
         $response = new JsonResponse();
         $response->setData(array('lista_opciones' => $lista_opciones,/*'lista_opciones_guardadas' => $listaOpcionesGuardadas,'valorModificado'=>$valorModificado->getValorModificado(),'cantidad'=>$valorModificado->getCantidad()*/));
         return $response;
@@ -340,29 +315,7 @@ class PedidoController extends Controller
     public function cargarOpcionesValoresAction(Request $request)
     {
         $id_detalle = $request->get('id_detalle');
-        $em = $this->getDoctrine()->getManager();
-       // $detalleProducto = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('id'=>$id_detalle));
-        // $dql= " SELECT  op.id, op.nombre, op.valor,IDENTITY(op.unidadMedidaDimension, 'id') AS unidadMedidaDimension, IDENTITY(op.unidadMedidaPeso,'id') AS unidadMedidaPeso
-        //         FROM AdminBundle:ProductoCategoria pc  INNER JOIN AdminBundle:OpcionesProducto op WITH pc.fkCategoria = op.categorias
-        //         where pc.fkProducto=:id_producto";   
-        // $results= $em->createQuery($dql)
-        //             ->setParameter('id_producto', $detalleProducto->getFkProducto()->getId())
-        //             ->getResult(); 
-        // $lista_opciones = '';
-        // foreach ($results as $result) {
-        //     if($lista_opciones==''){
-        //         $lista_opciones .= '<option value="">Seleccione</option>';
-        //     }
-        //     $nombreUnidad ="";           
-        //     if (isset($result['unidadMedidaDimension']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaDimension')->findOneBy(array('id'=>$result['unidadMedidaDimension']))) {
-        //        $nombreUnidad= ' x ['.$opcion->getSigla().']';
-        //     } else {
-        //         if (isset($result['unidadMedidaPeso']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaPeso')->findOneBy(array('id'=>$result['unidadMedidaPeso']))) {
-        //              $nombreUnidad= 'x ['.$opcion->getSigla().']';
-        //         }
-        //     }            
-        //     $lista_opciones .= '<option value="'.$result['id'].'">'.$result['nombre'].', $ '.$result['valor'].' '.$nombreUnidad.'</option>';
-        // }
+        $em = $this->getDoctrine()->getManager();      
         /*Segunda consulta para obtener el listado perteneciente al detalle del producto */
         $dql2= " SELECT  op.id, op.valor, op.cantidad, op.largo, op.ancho, op.peso, IDENTITY(op.pedidoDetalle, 'id') AS pedidoDetalle, IDENTITY(op.opcionesProducto,'id') AS opcionesProducto,pc.id AS idOpcion, pc.nombre , IDENTITY(pc.unidadMedidaDimension, 'id') AS unidadMedidaDimension, IDENTITY(pc.unidadMedidaPeso,'id') AS unidadMedidaPeso
                 FROM AdminBundle:DetallepedidoOpcionesproducto op  INNER JOIN AdminBundle:OpcionesProducto pc WITH op.opcionesProducto = pc.id
@@ -419,7 +372,7 @@ class PedidoController extends Controller
                     $em->flush();
                     $id_pedido = $new_pedido->getId();
                 }
-            /*Fin */
+            /*Fin*/
             /*Inicio creacion de detalle de pedido*/
                 /*Extrae el mismo objeto pedido que se creo*/
                 $pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array( 'id' => $id_pedido));
@@ -431,6 +384,7 @@ class PedidoController extends Controller
                 $pedido_detalle->setFkPedido($pedido);
                 $pedido_detalle->setValorProducto($producto->getValorUnitario());
                 $pedido_detalle->setCantidad(1);
+                $pedido_detalle->setEtapaPedidoDetalle($em->getRepository('AdminBundle:EtapaPedidoDetalle')->findOneBy(array('id'=>1)));
                 $pedido_detalle->setTotal($producto->getValorUnitario());
                 $pedido_detalle->setValorModificado($producto->getValorUnitario());
                 $em->persist($pedido_detalle);
@@ -438,8 +392,8 @@ class PedidoController extends Controller
             /*Fin*/
             /*Inicio actualizacion de total de el pedido*/
                 $new_pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array( 'id' => $id_pedido ));
-                $valorTotal =  $new_pedido->getTotal();//obtiene el valor total antes de cambiarlo
-                $valorNuevo =  $pedido_detalle->getTotal();//obtiene el valor nuevo a sumar
+                $valorTotal = $new_pedido->getTotal();//obtiene el valor total antes de cambiarlo
+                $valorNuevo = $pedido_detalle->getTotal();//obtiene el valor nuevo a sumar
                 $new_pedido->setTotal($valorTotal + $valorNuevo);//actualiza el valor total del pedido sumandole el valor del detalle nuevo
                 $em->persist($new_pedido);
                 $em->flush();
@@ -454,19 +408,19 @@ class PedidoController extends Controller
             ->from('AdminBundle:Producto', 'c')
             ->where('c.id = '.$id_prod)
             ->getQuery();
-        
+                $id_detalle = $pedido_detalle->getId();
             if ($resultQuery = $q->getResult()) {
                 foreach ($resultQuery as $value) {
-                    $id_detalle = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('fkProducto'=> $value->getId(), 'fkPedido'=> $new_pedido->getId()))->getId();
-                    $producto .= '<tr>';
+                    //$id_detalle = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('fkProducto'=> $value->getId(), 'fkPedido'=> $new_pedido->getId()))->getId();
+                    $producto .= '<tr id=tr'.$id_detalle.'>';
                     $producto .= '<td class="td-width-40">'.$value->getCodigoProd().'</td>';
-                    $producto .= '<td title="NOmbre">'.$value->getNombre().'</td>';
-                    $producto .= '<td title="Descripcion">'.$value->getDescripcion().'</td>';
-                    $producto .= '<td class="text-right td-width-30"title="Valor Unitario Base">'.$value->getValorUnitario().'</td>';
+                    $producto .= '<td title="Nombre">'.$value->getNombre().'</td>';
+                    $producto .= '<td title="Valor Base">'.$value->getValorUnitario().'</td>';
                     $producto .= '<td class="text-right td-width-30" title="Cantidad"><input style="width: 50px;" name="newCantidad" id="nc'.$id_detalle.'" type="number" min="1" class="text-right val_num" value="'.$pedido_detalle->getCantidad().'" onchange="myFunction(this.value, this.id)"></td>';
                     $producto .= '<td class="text-right td-width-50" title="Valor Cotizacion"><input style="width: 100px;" name="totalac" id="vm'.$id_detalle.'" type="number" min="1" class="text-right val_num" value="'.$pedido_detalle->getTotal().'" onchange="myFunctionValCotizacion(this.value, this.id)"></td>';
                     $producto .= '<td class="text-right td-width-100" title="Total por producto" id="total'.$id_detalle.'">'.$pedido_detalle->getTotal().'</td>';
-                    $producto .= '<td class="text-right td-width-50" ><a id="'.$id_detalle.'" onclick="modal(this.id)"><i class="material-icons">mode_edit</i></a></td>';
+                    $producto .= '<td class="text-right td-width-100" title="Estado" id="total'.$id_detalle.'">'.$pedido_detalle->getEtapaPedidoDetalle()->getNombre().'</td>';
+                    $producto .= '<td class="text-right td-width-50" ><a id="'.$id_detalle.'" onclick="modal(this.id)"><i class="material-icons">mode_edit</i></a><a id="'.$id_detalle.'" onclick="eliminarProductoDetalle(this.id)"><i class="material-icons">delete_forever</i></a></td>';
                     $producto .= '</tr>';
                 }
                 $result = true;
@@ -513,29 +467,24 @@ class PedidoController extends Controller
     {
         $cantidad       = $request->get('cantidad');//cantidad nueva
         $id_detalle_opc = $request->get('id_detalle_opc');//detalle-pedido
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();
         $detalle_opciones = $em->getRepository('AdminBundle:DetallepedidoOpcionesproducto')->findOneBy(array('id'=>$id_detalle_opc));//obj Opciones-detalle-pedido
         $detalle = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('id'=>$detalle_opciones->getPedidoDetalle()));//detalle-pedido
         $pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array('id'=>$detalle->getFkPedido()));//pedido
-
         /*Inicio calculo valor a sumar en detalle_pedido y pedidos*/
-            $valOPAntiguo = $detalle_opciones->getCantidad()*$detalle_opciones->getValor();//1*500=500||||2*500=1000
-            $valOPNuevo   = $cantidad*$detalle_opciones->getValor();//2*500=1000||||4*500=2000
-            $valorASumar  = $valOPNuevo-$valOPAntiguo;//1000-500=500|||2000-1000=1000
+            $valOPAntiguo = $detalle_opciones->getCantidad()*$detalle_opciones->getValor();//obtengo el valor antiguo de la opcion**********
+            $valOPNuevo   = $cantidad*$detalle_opciones->getValor();//valor de la opcion por la cantidad  nueva de la opcion
+            $valorASumar  = $valOPNuevo-$valOPAntiguo;//saco la diferencia entre las opciones para saber cuanto es lo que tengo que sumar
         /*Fin*/
-
-        $valor = $detalle->getTotal()+($valorASumar/**$detalle->getCantidad()*/);//=5000+(500*1)=5500||||5500+(1000*2)
-
-        $detalle->setTotal($valor);
-        // $pedido->setTotal($valor);
+        $valor = $detalle->getTotal()+($valorASumar*$detalle->getCantidad());//se calcula el valor a sumar y se actualiza el total del detallePedido
         $pedido->setTotal($pedido->getTotal()+($valor-$detalle->getTotal()));
-        
+        $detalle->setTotal($valor);       
         $detalle_opciones->setCantidad($cantidad);
-
         $em->persist($detalle);
         $em->persist($pedido);
         $em->persist($detalle_opciones);
         $em->flush();
+
         $response = new JsonResponse();
         $response->setData(array('result' => $detalle->getTotal()));
         return $response;
@@ -641,6 +590,27 @@ class PedidoController extends Controller
         return $response;
     }
     /*Funcion que guarda la opcion del producto (producto_detalle)*/
+    public function eliminaDetallePedidoAction(Request $request)
+    {
+        $id_detalle = $request->get('id_detalle');
+        $em = $this->getDoctrine()->getManager();
+        $pedidoDetalle = $em->getReposity('AdminBundle:PedidoDetalle')->findOneBy(array('id'=>$id_detalle));//objeto productoDetalle
+        $detalleP_OpcionesP = $em->getReposity('AdminBundle:DetallepedidoOpcionesproducto')->findBy(array('pedidoDetalle'=>$id_detalle));//todas las opciones por el producto
+        foreach ($detalleP_OpcionesP as $value) {//itera por todas las opciones del producto a eliminar
+            $em->remove($value);
+        }
+        $pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array('id'=>$pedidoDetalle->getFkPedido()));
+        $pedido->setTotal($pedido->getTotal()-$detalle->getTotal());
+
+        $em->remove($pedidoDetalle);
+        $em->persist($pedido);
+        $em->flush();
+
+        $response = new JsonResponse();
+        $response->setData(array('total_pedido'=>$detalle->getTotal()));
+        return $response;
+    }
+    /*Funcion que guarda la opcion del producto (producto_detalle)*/
     public function agregarOpcionDimensionAction(Request $request)
     {
         $res = false;
@@ -711,27 +681,7 @@ class PedidoController extends Controller
         $response->setData(array('lista_opciones'=>$lista_contactos));
         return $response;
     }
-    // public function cargaCategoriasProductoAction(Request $request)
-    // {
-    //     $id_detalle  = $request->get('id_detalle');
-
-    //     $em = $this->getDoctrine()->getManager();//declaracion de doctrine
-    //     $detalle = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('id'=>$id_detalle));
-
-    //     $lista_categorias="";        
-    //     if ($categorias = $em->getRepository('AdminBundle:ProductoCategoria')->findBy(array('fkProducto'=>$detalle->getFkProducto()->getId()))){  
-    //         foreach ($categorias as $result) {
-    //             if($lista_categorias==''){
-    //                    $lista_categorias .= '<option value="">Seleccione</option>';
-    //                 }                   
-    //             $lista_categorias .= '<option value="'.$result->getFkCategoria()->getId().'">'.$result->getFkCategoria()->getNombre(). '</option>';
-    //         }
-    //     }        
-        
-    //     $response = new JsonResponse();
-    //     $response->setData(array('lista_categorias'=>$lista_categorias));
-    //     return $response;
-    // }
+    //guarda las opciones de la ventana modal de pedido detalle, solamente queda guardar la observacion el resto es ajax
     public function guardaPedidoDetalleAction(Request $request)
     {
         $result = false;
@@ -752,34 +702,4 @@ class PedidoController extends Controller
         // $response->setData(array());
         // return $response;
     }
-
-    // ajax guardar relaciones pedido-producto
-    // public function guardarProductoAction(Request $request)
-    // {
-    //     $id = (false);
-    //     $id_producto = $request->get('id_producto');
-    //     $id_empre = $request->get('id_empre');
-
-    //     if( $request->getMethod() == 'POST' )
-    //     {
-    //         $em = $this->getDoctrine()->getManager();
-
-    //         $Fkcategoria = $em->getRepository('AdminBundle:Empresa')->findOneBy(array('id' => $id_empre));
-    //         $fkproducto  = $em->getRepository('AdminBundle:Producto')->findOneBy(array('id' => $id_producto));
-
-    //         if( !$cli_procat = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array( 'fkProducto' => $id_producto, 'fkPedidos' => $idcat  )) )
-    //         {
-    //             $cli_procat = new ProductoCategoria();
-    //             $cli_procat->setFkCategoria($Fkcategoria);
-    //             $cli_procat->setFkProducto($fkproducto);
-    //             $em->persist($cli_procat);
-    //             $em->flush();
-    //         }
-    //     }
-    //     $response = new JsonResponse();
-    //     $response->setData(array('cli_procat' => $cli_procat));
-        
-    //     return $response;
-    //     exit;
-    // }
 }
