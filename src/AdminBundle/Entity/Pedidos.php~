@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Pedidos
  *
- * @ORM\Table(name="pedidos", indexes={@ORM\Index(name="fk_etapa", columns={"fk_etapa"}), @ORM\Index(name="fk_pedidos_contac_empre1_idx", columns={"contac_empre_id"}), @ORM\Index(name="fk_pedidos_personal1_idx", columns={"personal_id"})})
+ * @ORM\Table(name="pedidos", indexes={@ORM\Index(name="fk_etapa", columns={"fk_etapa"}), @ORM\Index(name="fk_pedidos_contac_empre1_idx", columns={"contac_empre_id"}), @ORM\Index(name="fk_pedidos_personal1_idx", columns={"personal_id"}), @ORM\Index(name="fk_pedidos_estapas_proceso1_idx", columns={"estapas_proceso_id"})})
  * @ORM\Entity
  */
 class Pedidos
@@ -79,6 +79,16 @@ class Pedidos
      * })
      */
     private $contacEmpre;
+
+    /**
+     * @var \EstapasProceso
+     *
+     * @ORM\ManyToOne(targetEntity="EstapasProceso")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="estapas_proceso_id", referencedColumnName="id")
+     * })
+     */
+    private $estapasProceso;
 
     /**
      * @var \Personal

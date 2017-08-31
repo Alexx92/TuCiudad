@@ -31,13 +31,6 @@ class Producto
     /**
      * @var string
      *
-     * @ORM\Column(name="descripcion", type="string", length=200, nullable=true)
-     */
-    private $descripcion;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="codigo_prod", type="string", length=30, nullable=true)
      */
     private $codigoProd;
@@ -124,29 +117,6 @@ class Producto
     public function getNombre()
     {
         return $this->nombre;
-    }
-
-    /**
-     * Set descripcion
-     *
-     * @param string $descripcion
-     * @return Producto
-     */
-    public function setDescripcion($descripcion)
-    {
-        $this->descripcion = $descripcion;
-
-        return $this;
-    }
-
-    /**
-     * Get descripcion
-     *
-     * @return string 
-     */
-    public function getDescripcion()
-    {
-        return $this->descripcion;
     }
 
     /**

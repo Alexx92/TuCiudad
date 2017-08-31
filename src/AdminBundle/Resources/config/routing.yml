@@ -217,6 +217,7 @@ admin_pedido_eliminar:
     defaults: { _controller: AdminBundle:Pedido:pedidoEliminar }
     options:
         expose: true
+
 #ruta ajax buscar empresas
 ajax_busq_empre_cot:
     path:     /ajax/busqueda/empresa/data/
@@ -328,6 +329,7 @@ ajax_eliminar_detalle_pedido:
     defaults: { _controller: AdminBundle:Pedido:eliminaDetallePedido}
     options:
         expose: true
+
 #----------------------------Opciones Producto------------------------------------
 admin_producto:
     path:     /producto/
@@ -352,6 +354,11 @@ admin_producto_editar:
 admin_producto_eliminar:
     path:     /producto/eliminar/
     defaults: { _controller: AdminBundle:Producto:productoEliminar }
+    options:
+        expose: true
+admin_guardar_producto_cotizar:
+    path:     /producto/guardarCotizar/
+    defaults: { _controller: AdminBundle:Producto:productoGuardarACotizar }
     options:
         expose: true
 #ruta ajax carga las categorias de producto por id_producto
@@ -390,6 +397,12 @@ ajax_cargar_opciones:
     defaults: { _controller: AdminBundle:Producto:cargarTodasOpciones }
     options:
         expose: true
+# ruta ajax cargar producto id
+ajax_cargar_producto_id:
+    path:     /ajax/producto/cargarProductoId/
+    defaults: { _controller: AdminBundle:Producto:cargarProductoPorId }
+    options:
+        expose: true
 #-------------------OpcionesProducto---------------------------------------
 #ruta ajax Guardar OpcionProducto nueva
 admin_opcion_guardar:
@@ -416,3 +429,43 @@ ajax_cargar_cargos:
     options:
         expose: true
 
+#----------------------------------AppIonic------------------------------------------
+#ruta json buscar Contacto 
+json_buscar_contacto:
+    path:     /appionic/contacto/buscar.json/{searchTerm}
+    defaults: { _controller: AdminBundle:AppIonic:contactoBuscarJson , searchTerm:'a' }
+    options:
+        expose: true
+#ruta json buscar Empresa 
+json_buscar_empresa:
+    path:     /appionic/empresa/buscar.json/{searchTerm}
+    defaults: { _controller: AdminBundle:AppIonic:empresaBuscarJson}
+    options:
+        expose: true
+#ruta json buscar Producto 
+json_buscar_producto:
+    path:     /appionic/producto/buscar.json/{searchTerm}
+    defaults: { _controller: AdminBundle:AppIonic:productoBuscarJson}
+    options:
+        expose: true
+##################
+##################   Guardar
+################## 
+#ruta json guardar Empresa 
+json_guardar_empresa:
+    path:     /appionic/empresa/guardar.json/
+    defaults: { _controller: AdminBundle:AppIonic:empresaGuardarJson}
+    options:
+        expose: true
+#ruta json guardar Contacto 
+json_guardar_contacto:
+    path:     /appionic/contacto/guardar.json/
+    defaults: { _controller: AdminBundle:AppIonic:contactoGuardarJson}
+    options:
+        expose: true
+#ruta json guardar Pedido 
+json_guardar_pedido:
+    path:     /appionic/pedido/guardar.json/
+    defaults: { _controller: AdminBundle:AppIonic:pedidoGuardarJson}
+    options:
+        expose: true

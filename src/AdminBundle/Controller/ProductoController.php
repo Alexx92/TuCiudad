@@ -23,7 +23,6 @@ class ProductoController extends Controller
             'menu_o_con'   => 'producto'
         ));
     }
-
     public function productoNuevoAction()
     {
         $titulo  = 'Nuevo Producto / Servicio';
@@ -42,7 +41,6 @@ class ProductoController extends Controller
             'submenu'         => 'producto_nuevo'
         ));
     }
-
     // carga la taba de producto en el index
     public function productoCargartablaAction(Request $request)
     {
@@ -72,8 +70,45 @@ class ProductoController extends Controller
             'lista_producto' => $lista_producto
         ));
     }
+    // guarda nuevo producto a cotizar con categoria A COTIZAR
+    public function productoGuardarACotizarAction(Request $request)
+    {
+        $result = false;
+        $isEdit = true;
+        if( $request->getMethod() == 'POST' )
+        {
+            // captura de datos desde el formulario
+            $id               = ($request->get('id_prod_cot', false)) ? $request->get('id_prod_cot'): 0;
+            $prod_nombre      = ucfirst($request->get('prod_nombre'));
+            $observacion      = ucfirst($request->get('prod_obs'));
+            $em = $this->getDoctrine()->getManager();
+            if( !$producto = $em->getRepository('AdminBundle:Producto')->findOneBy(array( 'id' => $id )) )
+            {
+                $producto = new Producto();
+                $producto->setEstado(1);
+                $producto->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));
+                $isEdit = false;
+            }
+            $producto->setNombre($prod_nombre);
+            $producto->setObservacion($observacion);
+            // $producto->setTipo($valorCheck);           
+            $em->persist($producto);
+            $em->flush();       
+            
+            $categoria_producto = new ProductoCategoria();
+            $categoria_producto->setFkCategoria($em->getRepository('AdminBundle:Categorias')->findOneBy(array('id'=>1)));
+            $categoria_producto->setFkProducto($producto);
+            $em->persist($categoria_producto);
+            $em->flush();
+            $result = true;
+            $id_newb = $producto->getId();
+        }
 
-    // guarda nuevo producto
+        $response = new JsonResponse();
+        $response->setData(array('isEdit'=>$isEdit,'result' => $result, 'id_newb' => $id_newb,'id'=>$id));
+        
+        return $response;
+    }
     public function productoGuardarAction(Request $request)
     {
         $result = false;
@@ -85,7 +120,7 @@ class ProductoController extends Controller
             $id               = ($request->get('prod_id', false)) ? $request->get('prod_id'): 0;
             $prod_nombre      = ucfirst($request->get('prod_nombre'));
             $prod_codigo      = $request->get('prod_codigo');
-            $prod_descp       = ucfirst($request->get('prod_descp'));
+            // $prod_descp       = ucfirst($request->get('prod_descp'));
             $prod_valor       = $request->get('prod_valor');
             /*valor de id de select categoria*/
              $valselect        = $request->get('selectCat');
@@ -105,7 +140,7 @@ class ProductoController extends Controller
 
             $producto->setNombre($prod_nombre);
             $producto->setCodigoProd($prod_codigo);
-            $producto->setDescripcion($prod_descp);
+            // $producto->setDescripcion($prod_descp);
             $producto->setValorUnitario($prod_valor);                
             $producto->setObservacion($observacion);
             $producto->setTipo($valorCheck);
@@ -141,7 +176,6 @@ class ProductoController extends Controller
         
         return $response;
     }
-
     // cargar formulario para editar
     public function productoEditarAction(Request $request)
     {
@@ -154,7 +188,7 @@ class ProductoController extends Controller
         $data['id']            = $producto->getId();
         $data['prod_nombre']   = $producto->getNombre();
         $data['prod_codigo']   = $producto->getCodigoProd();
-        $data['prod_descp']    = $producto->getDescripcion();
+        // $data['prod_descp']    = $producto->getDescripcion();
         $data['prod_valor']    = $producto->getValorUnitario();
         $data['tipo']          = $producto->getTipo();        
         $data['observacion']   = $producto->getObservacion();
@@ -184,8 +218,7 @@ class ProductoController extends Controller
             'submenu'         => 'producto_nuevo',
             'menu_o_con'      => 'producto'
         ));
-    }
-    
+    }    
     // elimanr un producto
     public function productoEliminarAction(Request $request)
     {
@@ -264,7 +297,6 @@ class ProductoController extends Controller
         
         return $response;
     }
-
     // ajax guardar relaciones producto-categoria
     public function ajax_guardar_categoriaAction(Request $request)
     {
@@ -293,7 +325,7 @@ class ProductoController extends Controller
         $response->setData(array('cli_procat' => $cli_procat->getId()));        
         return $response;
         //exit;
-    } 
+    }
     // ajax para quitar categoria viculadas a clientes
     public function ajax_borrar_categoriaAction(Request $request)
     {
@@ -373,7 +405,7 @@ class ProductoController extends Controller
         return $response;
     }
         //carga todas las categorias por id_detallePedido
-       public function cargaCategoriasProductoIdDetalleAction(Request $request)
+    public function cargaCategoriasProductoIdDetalleAction(Request $request)
     {
         $id_detalle  = $request->get('id_detalle');
 
@@ -391,6 +423,18 @@ class ProductoController extends Controller
         }
         $response = new JsonResponse();
         $response->setData(array('lista_categorias'=>$lista_categorias));
+        return $response;
+    }
+        //carga todas las categorias por id_detallePedido
+    public function cargarProductoPorIdAction(Request $request)
+    {
+        $id_prod  = $request->get('id_prod');
+
+        $em = $this->getDoctrine()->getManager();//declaracion de doctrine
+        $producto = $em->getRepository('AdminBundle:Producto')->findOneBy(array('id'=>$id_prod));
+      
+        $response = new JsonResponse();
+        $response->setData(array('nombre'=>$producto->getNombre(),'observacion'=>$producto->getObservacion()));
         return $response;
     }
 }

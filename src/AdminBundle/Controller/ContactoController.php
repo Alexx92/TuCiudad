@@ -38,8 +38,7 @@ class ContactoController extends Controller
             'menu_o_con'      => 'contacto',
             'submenu'         => 'contacto_nuevo'
         ));
-    }    
-
+    }
     // carga la taba de contactos en el index
     public function contactoCargartablaAction(Request $request)
     {
@@ -258,28 +257,27 @@ class ContactoController extends Controller
         $id = (false);
         $id_cont = $request->get('id_cont');
         $id_empre = $request->get('id_empre');
-
+        $valid = false;
         if( $request->getMethod() == 'POST' )
         {
             $em = $this->getDoctrine()->getManager();
 
-            $Fkcontacto = $em->getRepository('AdminBundle:Contacto')->findOneBy(array('id' => $id_cont));            
+            $Fkcontacto = $em->getRepository('AdminBundle:Contacto')->findOneBy(array('id' => $id_cont));
             $Fkempresa  = $em->getRepository('AdminBundle:Empresa')->findOneBy(array('id' => $id_empre));
 
-            if( !$cli_empre = $em->getRepository('AdminBundle:ContacEmpre')->findOneBy(array( 'id' => $id )) )
+            if( !$cli_empre = $em->getRepository('AdminBundle:ContacEmpre')->findOneBy(array( 'fkContacto' => $id_cont,'fkEmpresa'=>$id_empre )) )
             {
                 $cli_empre = new ContacEmpre();
                 $cli_empre->setFkContacto($Fkcontacto);
                 $cli_empre->setFkEmpresa($Fkempresa);
                 $em->persist($cli_empre);
                 $em->flush();
+                $valid = true;
             }
-
         }
-
+     
         $response = new JsonResponse();
-        $response->setData(array('cli_empre' => $cli_empre));
-        
+        $response->setData(array('valid'=>$valid,'cli_empre' => $cli_empre->getId()));
         return $response;
     }
 

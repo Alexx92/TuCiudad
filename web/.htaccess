@@ -5,6 +5,17 @@
 # to each configured DirectoryIndex file (e.g. index.php, index.html, index.pl).
 DirectoryIndex app.php
 
+# app
+<IfModule mod_headers.c>
+HEADER set Access-Control-Allow-Origin *
+HEADER set Access-Control-Allow-Headers X-Requested-With,content-type,X-Forwarded-Proto
+HEADER set Access-Control-Allow-Methods GET,POST,PUT,OPTIONS
+</IfModule>
+# app
+
+
+
+
 # By default, Apache does not evaluate symbolic links if you did not enable this
 # feature in your server configuration. Uncomment the following line if you
 # install assets as symlinks or if you experience problems related to symlinks

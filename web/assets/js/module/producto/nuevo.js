@@ -92,26 +92,6 @@ $(document).ready(function() {
             $('#match').html("Ingrese mas caracteres para la busqueda");
         }
     });
-    // // js ajax quitar categoria  de un producto
-    // $('.del_btn_i').on('click', function(e) {
-    //     var btn = $(this);
-    //     var id = btn.data('id');
-    //     var data = { id: id };
-    //     e.preventDefault();
-    //     console.log(data);
-    //     $.ajax({
-    //         dataType: 'json',
-    //         method: 'POST',
-    //         url: Routing.generate('ajax_borrar_categoria'),
-    //         data: data,
-    //     }).done(function(json) {
-    //         if (json) {
-    //             btn.parent().remove();
-    //             cargarOpciones();
-    //             toastr.success('Dato eliminado');
-    //         }
-    //     });
-    // });
 
     $("input[name=radio]").on('click', function() {
         $("#check").val($(this).val());

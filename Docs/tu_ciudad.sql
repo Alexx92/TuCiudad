@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-08-2017 a las 00:01:20
+-- Tiempo de generación: 31-08-2017 a las 17:22:35
 -- Versión del servidor: 10.1.24-MariaDB
 -- Versión de PHP: 7.1.6
 
@@ -65,7 +65,8 @@ INSERT INTO `cargo` (`id`, `nombre`, `observacion`) VALUES
 (1, 'Dueño', 'Unico dueño de la empresa'),
 (2, 'Vendedor/Comprador', 'Encargado de Ventas y Compras'),
 (3, 'Secretaria(o)', 'Secretaria encargada de compras'),
-(4, 'Vendedor', NULL);
+(4, 'Vendedor', NULL),
+(5, 'XDXD', NULL);
 
 -- --------------------------------------------------------
 
@@ -75,7 +76,7 @@ INSERT INTO `cargo` (`id`, `nombre`, `observacion`) VALUES
 
 CREATE TABLE `categorias` (
   `id` int(10) NOT NULL,
-  `nombre` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `nombre` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `imagen` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `observacion` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `fecha_ingreso` datetime DEFAULT NULL,
@@ -87,7 +88,7 @@ CREATE TABLE `categorias` (
 --
 
 INSERT INTO `categorias` (`id`, `nombre`, `imagen`, `observacion`, `fecha_ingreso`, `estado`) VALUES
-(1, 'Cat 1', NULL, NULL, '2017-08-16 09:54:42', 1),
+(1, 'A COTIZAR', NULL, 'Producto inexistente. Realizar cotización interna', '2017-08-16 09:54:42', 1),
 (2, 'Cat 2', NULL, NULL, '2017-08-16 09:54:54', 1),
 (3, 'Cat 3', NULL, NULL, '2017-08-16 09:55:04', 1),
 (4, 'Cat 4', NULL, NULL, '2017-08-16 09:55:20', 1),
@@ -140,21 +141,6 @@ CREATE TABLE `contac_empre` (
   `fk_contacto` int(10) DEFAULT NULL,
   `fk_empresa` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Volcado de datos para la tabla `contac_empre`
---
-
-INSERT INTO `contac_empre` (`id`, `fk_contacto`, `fk_empresa`) VALUES
-(1, 1, 1),
-(2, 2, 2),
-(3, 3, 3),
-(4, 4, 4),
-(6, 3, 1),
-(7, 3, 1),
-(8, 5, 1),
-(9, 5, 3),
-(10, 8, 5);
 
 -- --------------------------------------------------------
 
@@ -666,43 +652,6 @@ CREATE TABLE `detallepedido_opcionesproducto` (
   `peso` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Volcado de datos para la tabla `detallepedido_opcionesproducto`
---
-
-INSERT INTO `detallepedido_opcionesproducto` (`id`, `pedido_detalle_id`, `opciones_producto_id`, `cantidad`, `valor`, `largo`, `ancho`, `peso`) VALUES
-(18, 20, 3, '2', '300', NULL, NULL, NULL),
-(19, 20, 1, '1', '100', '1', '4', NULL),
-(20, 28, 3, '1', '300', NULL, NULL, NULL),
-(21, 29, 3, '1', '300', NULL, NULL, NULL),
-(22, 30, 3, '1', '300', NULL, NULL, NULL),
-(23, 31, 3, '1', '300', NULL, NULL, NULL),
-(24, 31, 4, '1', '400', NULL, NULL, NULL),
-(25, 32, 3, '1', '300', NULL, NULL, NULL),
-(26, 32, 4, '1', '400', NULL, NULL, NULL),
-(27, 33, 3, '1', '300', NULL, NULL, NULL),
-(28, 34, 3, '1', '300', NULL, NULL, NULL),
-(29, 35, 3, '1', '300', NULL, NULL, NULL),
-(30, 36, 3, '1', '300', NULL, NULL, NULL),
-(35, 39, 4, '1', '400', NULL, NULL, NULL),
-(40, 53, 4, '2', '400', NULL, NULL, NULL),
-(41, 54, 8, '3', '200', NULL, NULL, NULL),
-(42, 55, 4, '1', '400', NULL, NULL, NULL),
-(43, 55, 3, '2', '300', NULL, NULL, NULL),
-(44, 56, 3, '2', '300', NULL, NULL, NULL),
-(45, 57, 4, '2', '400', NULL, NULL, NULL),
-(46, 58, 3, '2', '300', NULL, NULL, NULL),
-(47, 59, 4, '2', '400', NULL, NULL, NULL),
-(48, 60, 3, '1', '300', NULL, NULL, NULL),
-(49, 61, 4, '1', '400', NULL, NULL, NULL),
-(50, 62, 3, '1', '300', NULL, NULL, NULL),
-(51, 63, 3, '1', '300', NULL, NULL, NULL),
-(52, 64, 3, '2', '300', NULL, NULL, NULL),
-(53, 64, 4, '1', '400', NULL, NULL, NULL),
-(57, 81, 4, '1', '400', NULL, NULL, NULL),
-(58, 83, 4, '2', '400', NULL, NULL, NULL),
-(59, 89, 6, '3', '1000', NULL, NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -743,8 +692,7 @@ INSERT INTO `empresa` (`id`, `nombre`, `razonsocial`, `rut`, `comuna`, `provinci
 (2, 'Empresa 2', 'Em2-Razon Social', '54.213.510-2', '146', '29', '9', '', 'Av Prueba', '555', '71', '5', 4225252, 262620, 'empresa2@gmail.com', '', 'Segunda empresa creada de prueba', '', '598e34598bbba.jpg', '2017-08-11 18:48:57', 1, 1),
 (3, 'Empresa 3', 'EM3 Razon Social', '151.582.321-5', '165', '31', '9', 'Parque Lauquen', 'De Prueba ', '5135', '', '', 42258653, 89942322, 'empresa3@gmail.com', 'www.empresa3.cl', 'Tercera empresa creada con fines de prueba ', '', NULL, '2017-08-11 18:52:08', 1, 1),
 (4, 'Empresa 4', 'Razon- Empresa 4', '87.951.632-2', '146', '29', '9', 'Galilea', 'Lynch', '845', '', '', 0, 97842325, 'empresa4@gmail.com', '', '', '', NULL, '2017-08-16 09:43:12', 1, 1),
-(5, 'TuCiudad', 'Informatica', '12.345.678-9', '165', '31', '9', 'Parque Lauquen', 'Pasaje', '3', '', '', 2147483647, 2147483647, 'tuciudad@tuciudad.cl', 'www.tuciudad.cl', 'Casa', '', NULL, '2017-08-17 16:28:08', 1, 1),
-(6, 'John John', 'Johnnnnn', '15.648.564-0', '165', '31', '9', 'Parque Lauquen', 'Pasaje', '3', '', '', 2147483647, 45654654, 'francisco@tuciudad.cl', '', '', '', NULL, '2017-08-21 14:44:35', 1, 1);
+(5, 'TuCiudad', 'Informatica', '12.345.678-9', '165', '31', '9', 'Parque Lauquen', 'Pasaje', '3', '', '', 2147483647, 2147483647, 'tuciudad@tuciudad.cl', 'www.tuciudad.cl', 'Casa', '', NULL, '2017-08-17 16:28:08', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -789,6 +737,30 @@ INSERT INTO `estado_personal` (`id`, `nombre`, `descripcion`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `estapas_proceso`
+--
+
+CREATE TABLE `estapas_proceso` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(45) DEFAULT NULL,
+  `descripcion` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `estatus`
+--
+
+CREATE TABLE `estatus` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(45) DEFAULT NULL,
+  `descripcion` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `etapas`
 --
 
@@ -818,8 +790,7 @@ CREATE TABLE `etapas_produccion` (
   `nombre` varchar(200) DEFAULT NULL,
   `siglas` varchar(10) DEFAULT NULL,
   `observaciones` varchar(45) DEFAULT NULL,
-  `prioridad` varchar(45) DEFAULT NULL,
-  `producto_id` int(10) NOT NULL
+  `prioridad` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -839,7 +810,8 @@ CREATE TABLE `etapa_pedido_detalle` (
 --
 
 INSERT INTO `etapa_pedido_detalle` (`id`, `nombre`, `descripcion`) VALUES
-(1, 'PENDIENTE', NULL);
+(1, 'PENDIENTE', NULL),
+(2, 'A COTIZAR', 'Producto a cotizar');
 
 -- --------------------------------------------------------
 
@@ -922,85 +894,9 @@ CREATE TABLE `pedidos` (
   `fecha_modificacion` datetime DEFAULT NULL,
   `fk_etapa` int(10) DEFAULT NULL,
   `contac_empre_id` int(10) NOT NULL,
-  `personal_id` int(10) NOT NULL
+  `personal_id` int(10) NOT NULL,
+  `estapas_proceso_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Volcado de datos para la tabla `pedidos`
---
-
-INSERT INTO `pedidos` (`id`, `codigo_pedido`, `fecha_ingreso`, `descuentos`, `valor_neto`, `total`, `observacion`, `fecha_modificacion`, `fk_etapa`, `contac_empre_id`, `personal_id`) VALUES
-(6, NULL, '2017-08-24 15:40:27', NULL, NULL, '500', NULL, NULL, NULL, 8, 1),
-(7, NULL, '2017-08-24 16:01:07', NULL, NULL, '8000', NULL, NULL, NULL, 8, 1),
-(8, NULL, '2017-08-24 16:14:40', NULL, NULL, '1500', NULL, NULL, NULL, 6, 1),
-(9, NULL, '2017-08-24 16:19:01', NULL, NULL, '500', NULL, NULL, NULL, 1, 1),
-(10, NULL, '2017-08-24 16:21:11', NULL, NULL, '500', NULL, NULL, NULL, 1, 1),
-(11, NULL, '2017-08-24 16:24:19', NULL, NULL, '15500', NULL, NULL, NULL, 6, 1),
-(12, NULL, '2017-08-24 16:30:39', NULL, NULL, '2000', NULL, NULL, NULL, 8, 1),
-(13, NULL, '2017-08-24 16:33:29', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(14, NULL, '2017-08-24 16:34:45', NULL, NULL, '1100', NULL, NULL, NULL, 6, 1),
-(15, NULL, '2017-08-24 16:53:53', NULL, NULL, '3700', NULL, NULL, NULL, 8, 1),
-(16, NULL, '2017-08-24 17:59:25', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(17, NULL, '2017-08-24 18:00:32', NULL, NULL, '5000', NULL, NULL, NULL, 6, 1),
-(18, NULL, '2017-08-24 18:05:15', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(19, NULL, '2017-08-24 18:05:24', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(20, NULL, '2017-08-24 18:11:15', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(21, NULL, '2017-08-24 18:17:24', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(22, NULL, '2017-08-24 18:20:28', NULL, NULL, '500', NULL, NULL, NULL, 1, 1),
-(23, NULL, '2017-08-24 18:55:19', NULL, NULL, '800', NULL, NULL, NULL, 2, 1),
-(24, NULL, '2017-08-24 18:58:30', NULL, NULL, '800', NULL, NULL, NULL, 6, 1),
-(25, NULL, '2017-08-24 22:50:31', NULL, NULL, '800', NULL, NULL, NULL, 6, 1),
-(26, NULL, '2017-08-24 23:07:06', NULL, NULL, '1200', NULL, NULL, NULL, 6, 1),
-(27, NULL, '2017-08-24 23:13:27', NULL, NULL, '3700', NULL, NULL, NULL, 8, 1),
-(28, NULL, '2017-08-24 23:23:08', NULL, NULL, '800', NULL, NULL, NULL, 6, 1),
-(29, NULL, '2017-08-24 23:34:31', NULL, NULL, '800', NULL, NULL, NULL, 6, 1),
-(30, NULL, '2017-08-25 09:36:52', NULL, NULL, '1900', NULL, NULL, NULL, 6, 1),
-(31, NULL, '2017-08-25 09:52:57', NULL, NULL, '1900', NULL, NULL, NULL, 6, 1),
-(32, NULL, '2017-08-25 10:00:41', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(33, NULL, '2017-08-25 11:31:37', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1),
-(34, NULL, '2017-08-25 11:50:43', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(35, NULL, '2017-08-25 12:06:06', NULL, NULL, '900', NULL, NULL, NULL, 6, 1),
-(36, NULL, '2017-08-25 12:13:59', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(37, NULL, '2017-08-25 12:21:14', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(38, NULL, '2017-08-25 12:23:46', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(39, NULL, '2017-08-25 12:29:03', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(40, NULL, '2017-08-25 12:30:59', NULL, NULL, '500', NULL, NULL, NULL, 1, 1),
-(41, NULL, '2017-08-25 12:33:20', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(42, NULL, '2017-08-25 13:24:26', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(43, NULL, '2017-08-25 13:25:41', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(44, NULL, '2017-08-25 13:42:21', NULL, NULL, '500', NULL, NULL, NULL, 1, 1),
-(45, NULL, '2017-08-25 13:43:30', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(46, NULL, '2017-08-25 13:45:50', NULL, NULL, '500', NULL, NULL, NULL, 1, 1),
-(47, NULL, '2017-08-25 13:48:04', NULL, NULL, '500', NULL, NULL, NULL, 1, 1),
-(48, NULL, '2017-08-25 13:50:40', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(49, NULL, '2017-08-25 13:52:34', NULL, NULL, '2100', NULL, NULL, NULL, 6, 1),
-(50, NULL, '2017-08-25 14:57:22', NULL, NULL, '1200', NULL, NULL, NULL, 6, 1),
-(51, NULL, '2017-08-25 15:01:18', NULL, NULL, '2300', NULL, NULL, NULL, 1, 1),
-(52, NULL, '2017-08-25 15:05:42', NULL, NULL, '4400', NULL, NULL, NULL, 6, 1),
-(53, NULL, '2017-08-25 15:10:11', NULL, NULL, '800', NULL, NULL, NULL, 6, 1),
-(54, NULL, '2017-08-25 15:13:56', NULL, NULL, '2400', NULL, NULL, NULL, 6, 1),
-(55, NULL, '2017-08-25 15:21:26', NULL, NULL, '800', NULL, NULL, NULL, 6, 1),
-(56, NULL, '2017-08-25 15:24:38', NULL, NULL, '900', NULL, NULL, NULL, 1, 1),
-(57, NULL, '2017-08-25 15:25:38', NULL, NULL, '800', NULL, NULL, NULL, 6, 1),
-(58, NULL, '2017-08-25 15:28:37', NULL, NULL, '800', NULL, NULL, NULL, 6, 1),
-(59, NULL, '2017-08-25 15:29:48', NULL, NULL, '5000', NULL, NULL, NULL, 6, 1),
-(60, NULL, '2017-08-25 16:05:35', NULL, NULL, '500', NULL, NULL, NULL, 1, 1),
-(61, NULL, '2017-08-25 16:07:34', NULL, NULL, '1500', NULL, NULL, NULL, 6, 1),
-(62, NULL, '2017-08-25 16:08:53', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(63, NULL, '2017-08-25 16:09:50', NULL, NULL, '500', NULL, NULL, NULL, 1, 1),
-(64, NULL, '2017-08-25 16:10:39', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(65, NULL, '2017-08-25 16:24:21', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(66, NULL, '2017-08-25 16:45:41', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(67, NULL, '2017-08-25 16:48:58', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(68, NULL, '2017-08-25 16:54:18', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(69, NULL, '2017-08-25 16:55:21', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(70, NULL, '2017-08-25 17:38:38', NULL, NULL, '500', NULL, NULL, NULL, 4, 1),
-(71, NULL, '2017-08-25 17:42:59', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(72, NULL, '2017-08-25 18:09:47', NULL, NULL, NULL, NULL, NULL, NULL, 6, 1),
-(73, NULL, '2017-08-25 18:09:56', NULL, NULL, '500', NULL, NULL, NULL, 6, 1),
-(74, NULL, '2017-08-25 18:12:38', NULL, NULL, '1200', NULL, NULL, NULL, 6, 1),
-(75, NULL, '2017-08-25 18:24:16', NULL, NULL, '4600', NULL, NULL, NULL, 6, 1),
-(76, NULL, '2017-08-25 18:56:20', NULL, NULL, '6000', NULL, NULL, NULL, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -1017,98 +913,9 @@ CREATE TABLE `pedido_detalle` (
   `cantidad` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `total` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `observacion` text COLLATE utf8_unicode_ci,
-  `etapa_pedido_detalle_id` int(11) NOT NULL
+  `etapa_pedido_detalle_id` int(11) DEFAULT NULL,
+  `personal_id` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Volcado de datos para la tabla `pedido_detalle`
---
-
-INSERT INTO `pedido_detalle` (`id`, `fk_pedido`, `fk_producto`, `valor_producto`, `valor_modificado`, `cantidad`, `total`, `observacion`, `etapa_pedido_detalle_id`) VALUES
-(6, 6, 1, '500', '500', '1', '500', NULL, 0),
-(7, 7, 1, '500', '500', '1', '500', NULL, 0),
-(8, 7, 4, '2000', '2000', '1', '2000', NULL, 0),
-(9, 7, 1, '500', '500', '1', '500', NULL, 0),
-(10, 7, 6, '5000', '5000', '1', '5000', NULL, 0),
-(11, 8, 1, '500', '500', '1', '500', NULL, 0),
-(12, 8, 2, '1000', '1000', '1', '1000', NULL, 0),
-(13, 9, 1, '500', '500', '1', '500', NULL, 0),
-(14, 10, 1, '500', '500', '1', '500', NULL, 0),
-(15, 11, 1, '500', '500', '1', '500', NULL, 0),
-(16, 11, 10, '15000', '15000', '1', '15000', NULL, 0),
-(17, 12, 1, '500', '1000', '2', '2000', NULL, 0),
-(18, 13, 1, '500', '500', '1', '500', NULL, 0),
-(19, 14, 1, '500', '1000', '2', '1400', NULL, 0),
-(20, 15, 1, '500', '3000', '1', '4000', NULL, 0),
-(21, 16, 1, '500', '500', '1', '500', NULL, 0),
-(22, 17, 1, '500', '2500', '2', '5000', NULL, 0),
-(23, 18, 1, '500', '500', '1', '500', NULL, 0),
-(24, 19, 1, '500', '500', '1', '500', NULL, 0),
-(25, 20, 1, '500', '500', '1', '500', NULL, 0),
-(26, 21, 1, '500', '500', '1', '500', NULL, 0),
-(27, 22, 1, '500', '500', '1', '500', NULL, 0),
-(28, 23, 1, '500', '500', '1', '800', NULL, 0),
-(29, 24, 1, '500', '500', '1', '800', NULL, 0),
-(30, 25, 1, '500', '500', '1', '800', NULL, 0),
-(31, 26, 1, '500', '500', '1', '1200', NULL, 0),
-(32, 27, 1, '500', '1000', '2', '3700', NULL, 0),
-(33, 28, 1, '500', '500', '1', '800', NULL, 0),
-(34, 29, 1, '500', '500', '1', '800', NULL, 0),
-(35, 30, 1, '500', '500', '2', '1900', NULL, 0),
-(36, 31, 1, '500', '500', '2', '3100', NULL, 0),
-(37, 32, 1, '500', '500', '1', '500', NULL, 0),
-(38, 34, 1, '500', '500', '1', '500', NULL, 1),
-(39, 35, 1, '500', '500', '1', '900', NULL, 1),
-(40, 36, 1, '500', '500', '1', '500', NULL, 1),
-(41, 37, 1, '500', '500', '1', '500', NULL, 1),
-(42, 38, 1, '500', '500', '1', '500', NULL, 1),
-(43, 39, 1, '500', '500', '1', '500', NULL, 1),
-(44, 40, 1, '500', '500', '1', '500', NULL, 1),
-(45, 41, 1, '500', '500', '1', '500', NULL, 1),
-(46, 42, 1, '500', '500', '1', '500', NULL, 1),
-(47, 43, 1, '500', '500', '1', '500', NULL, 1),
-(48, 44, 1, '500', '500', '1', '500', NULL, 1),
-(49, 45, 1, '500', '500', '1', '500', '', 1),
-(50, 46, 1, '500', '500', '1', '500', NULL, 1),
-(51, 47, 1, '500', '500', '1', '500', NULL, 1),
-(52, 48, 1, '500', '500', '1', '500', NULL, 1),
-(53, 49, 1, '500', '500', '1', '1300', NULL, 1),
-(54, 49, 2, '1000', '1000', '1', '1600', '', 1),
-(55, 50, 1, '500', '500', '1', '1500', '', 1),
-(56, 51, 1, '500', '1000', '2', '2900', NULL, 1),
-(57, 52, 1, '500', '500', '1', '1300', NULL, 1),
-(58, 53, 1, '500', '500', '1', '1100', NULL, 1),
-(59, 54, 1, '500', '2000', '1', '2800', NULL, 1),
-(60, 55, 1, '500', '500', '1', '800', NULL, 1),
-(61, 56, 1, '500', '500', '1', '900', NULL, 1),
-(62, 57, 1, '500', '500', '1', '800', NULL, 1),
-(63, 58, 1, '500', '500', '1', '800', NULL, 1),
-(64, 59, 1, '500', '1000', '2', '4000', NULL, 1),
-(65, 59, 2, '1000', '1000', '1', '1000', '', 1),
-(66, 60, 1, '500', '500', '1', '500', NULL, 1),
-(67, 61, 1, '500', '500', '1', '500', NULL, 1),
-(68, 61, 2, '1000', '1000', '1', '1000', NULL, 1),
-(69, 62, 1, '500', '500', '1', '500', NULL, 1),
-(70, 63, 1, '500', '500', '1', '500', NULL, 1),
-(71, 64, 1, '500', '500', '1', '500', NULL, 1),
-(72, 65, 1, '500', '500', '1', '500', NULL, 1),
-(73, 66, 1, '500', '500', '1', '500', NULL, 1),
-(74, 67, 1, '500', '500', '1', '500', NULL, 1),
-(75, 68, 1, '500', '500', '1', '500', NULL, 1),
-(76, 69, 1, '500', '500', '1', '500', NULL, 1),
-(77, 70, 1, '500', '500', '1', '500', NULL, 1),
-(78, 71, 1, '500', '500', '1', '500', NULL, 1),
-(79, 72, 1, '500', '500', '1', '500', NULL, 1),
-(80, 73, 1, '500', '500', '1', '500', NULL, 1),
-(81, 74, 1, '500', '500', '1', '700', NULL, 1),
-(82, 74, 1, '500', '500', '1', '500', NULL, 1),
-(83, 75, 1, '500', '500', '2', '2600', NULL, 1),
-(84, 75, 1, '500', '500', '1', '500', NULL, 1),
-(85, 75, 1, '500', '500', '1', '500', NULL, 1),
-(86, 75, 2, '1000', '1000', '1', '1000', NULL, 1),
-(87, 76, 1, '500', '500', '1', '500', NULL, 1),
-(88, 76, 1, '500', '500', '1', '500', NULL, 1),
-(89, 76, 3, '1500', '2000', '1', '5000', '', 1);
 
 -- --------------------------------------------------------
 
@@ -1144,15 +951,16 @@ CREATE TABLE `personal` (
   `estado` int(2) DEFAULT NULL,
   `empresa_id` int(10) DEFAULT NULL,
   `estado_personal_id` int(11) DEFAULT NULL,
-  `area_id` int(11) NOT NULL
+  `area_id` int(11) NOT NULL,
+  `estatus_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `personal`
 --
 
-INSERT INTO `personal` (`id`, `primer_nombre`, `segundo_nombre`, `apellido_paterno`, `apellido_materno`, `username`, `dni`, `sexo`, `fecha_nacimiento`, `comuna`, `provincia`, `region`, `dir_villa_pbla`, `dir_calle`, `dir_numero_casa`, `dir_numero_departamento`, `dir_numero_piso`, `telefono`, `celular`, `correo`, `skype`, `observacion`, `imagen`, `fecha_ingreso`, `estado`, `empresa_id`, `estado_personal_id`, `area_id`) VALUES
-(1, 'Hernán', 'Alexis', 'Castro', 'Rodriguez', 'admin', '182608831', '1', '1992-09-30', '165', '31', '9', 'Villa Galilea', 'Los Vicentinos', '260', '', '', '', '945921969', 'alexx92.04@gmail.com', '', 'Empleado peligroso XD, Muy Agresivo', NULL, '2017-07-26 09:54:57', 1, NULL, 2, 3);
+INSERT INTO `personal` (`id`, `primer_nombre`, `segundo_nombre`, `apellido_paterno`, `apellido_materno`, `username`, `dni`, `sexo`, `fecha_nacimiento`, `comuna`, `provincia`, `region`, `dir_villa_pbla`, `dir_calle`, `dir_numero_casa`, `dir_numero_departamento`, `dir_numero_piso`, `telefono`, `celular`, `correo`, `skype`, `observacion`, `imagen`, `fecha_ingreso`, `estado`, `empresa_id`, `estado_personal_id`, `area_id`, `estatus_id`) VALUES
+(1, 'Hernán', 'Alexis', 'Castro', 'Rodriguez', 'admin', '182608831', '1', '1992-09-30', '165', '31', '9', 'Villa Galilea', 'Los Vicentinos', '260', '', '', '', '945921969', 'alexx92.04@gmail.com', '', 'Empleado peligroso XD, Muy Agresivo', NULL, '2017-07-26 09:54:57', 1, NULL, 2, 3, NULL);
 
 -- --------------------------------------------------------
 
@@ -1163,7 +971,6 @@ INSERT INTO `personal` (`id`, `primer_nombre`, `segundo_nombre`, `apellido_pater
 CREATE TABLE `producto` (
   `id` int(10) NOT NULL,
   `nombre` char(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `descripcion` char(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `codigo_prod` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
   `fecha_ingreso` datetime DEFAULT NULL,
   `valor_unitario` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -1178,17 +985,17 @@ CREATE TABLE `producto` (
 -- Volcado de datos para la tabla `producto`
 --
 
-INSERT INTO `producto` (`id`, `nombre`, `descripcion`, `codigo_prod`, `fecha_ingreso`, `valor_unitario`, `imagen`, `observacion`, `estado`, `tipo`, `tiempo_apx_produccion`) VALUES
-(1, 'Producto 1', '', 'PR001', '2017-08-16 12:36:51', '500', NULL, '', 1, 2, 2),
-(2, 'Producto 2', '', 'PR002', '2017-08-16 12:49:24', '1000', NULL, '', 1, 1, 1),
-(3, 'Producto 3', '', 'PR003', '2017-08-16 12:53:32', '1500', NULL, '', 1, 2, 50),
-(4, 'Producto 4', '', 'PR004', '2017-08-16 12:55:12', '2000', NULL, '', 1, 2, 120),
-(5, 'Producto 5', '', 'PR005', '2017-08-16 13:01:34', '2000', NULL, '', 1, 1, 0),
-(6, 'Producto 6', '', 'PR006', '2017-08-16 13:32:46', '5000', NULL, '', 1, 1, 0),
-(7, 'Producto 7', '', 'PR007', '2017-08-16 13:35:02', '10000', NULL, '', 1, 1, 0),
-(8, 'Producto 8', '', 'PR008', '2017-08-16 13:41:31', '50000', NULL, '', 1, 1, 0),
-(9, 'Producto 9', '', 'PR009', '2017-08-16 13:53:18', '200', NULL, '', 1, 1, 0),
-(10, 'Producto 10', '', 'PR010', '2017-08-21 09:43:06', '15000', NULL, '', 1, 1, 0);
+INSERT INTO `producto` (`id`, `nombre`, `codigo_prod`, `fecha_ingreso`, `valor_unitario`, `imagen`, `observacion`, `estado`, `tipo`, `tiempo_apx_produccion`) VALUES
+(1, 'Producto 1', 'PR001', '2017-08-16 12:36:51', '500', NULL, '', 1, 2, 2),
+(2, 'Producto 2', 'PR002', '2017-08-16 12:49:24', '1000', NULL, '', 1, 1, 1),
+(3, 'Producto 3', 'PR003', '2017-08-16 12:53:32', '1500', NULL, '', 1, 2, 50),
+(4, 'Producto 4', 'PR004', '2017-08-16 12:55:12', '2000', NULL, '', 1, 2, 120),
+(5, 'Producto 5', 'PR005', '2017-08-16 13:01:34', '2000', NULL, '', 1, 1, 0),
+(6, 'Producto 6', 'PR006', '2017-08-16 13:32:46', '5000', NULL, '', 1, 1, 0),
+(7, 'Producto 7', 'PR007', '2017-08-16 13:35:02', '10000', NULL, '', 1, 1, 0),
+(8, 'Producto 8', 'PR008', '2017-08-16 13:41:31', '50000', NULL, '', 1, 1, 0),
+(9, 'Producto 9', 'PR009', '2017-08-16 13:53:18', '200', NULL, '', 1, 1, 0),
+(10, 'Producto 10', 'PR010', '2017-08-21 09:43:06', '15000', NULL, '', 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -1207,16 +1014,15 @@ CREATE TABLE `producto_categoria` (
 --
 
 INSERT INTO `producto_categoria` (`id`, `fk_producto`, `fk_categoria`) VALUES
-(6, 2, 1),
+(6, 2, 5),
 (7, 3, 5),
 (8, 4, 5),
 (9, 5, 3),
 (10, 6, 3),
 (11, 7, 2),
-(12, 8, 1),
+(12, 8, 6),
 (13, 10, 4),
-(15, 1, 1),
-(16, 1, 4);
+(15, 1, 6);
 
 -- --------------------------------------------------------
 
@@ -1286,7 +1092,8 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `confirmation_token`, `password_requested_at`, `roles`) VALUES
-(1, 'admin', 'admin', 'alexx92.04@gmail.com', 'alexx92.04@gmail.com', 1, NULL, '$2y$13$6HN4g5gts33NZGJ.FpRN4.kyC/sMf5EisMaBauQL77WyrvUOfoqlu', '2017-08-25 11:26:08', NULL, NULL, 'a:1:{i:0;s:10:\"ROLE_ADMIN\";}');
+(1, 'admin', 'admin', 'alexx92.04@gmail.com', 'alexx92.04@gmail.com', 1, NULL, '$2y$13$6HN4g5gts33NZGJ.FpRN4.kyC/sMf5EisMaBauQL77WyrvUOfoqlu', '2017-08-31 09:32:29', NULL, NULL, 'a:1:{i:0;s:10:\"ROLE_ADMIN\";}'),
+(2, 'appionic', 'appionic', 'appionic@gmail.com', 'appionic@gmail.com', 1, NULL, '$2y$13$6a6z3P/k2YaOWN6fBlh3aOs7EHLrf1cHR66S0a9HlwD/YCK7wOVtq', '2017-08-29 12:49:10', NULL, NULL, 'a:1:{i:0;s:10:\"ROLE_ADMIN\";}');
 
 --
 -- Índices para tablas volcadas
@@ -1380,6 +1187,18 @@ ALTER TABLE `estado_personal`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `estapas_proceso`
+--
+ALTER TABLE `estapas_proceso`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `estatus`
+--
+ALTER TABLE `estatus`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `etapas`
 --
 ALTER TABLE `etapas`
@@ -1389,8 +1208,7 @@ ALTER TABLE `etapas`
 -- Indices de la tabla `etapas_produccion`
 --
 ALTER TABLE `etapas_produccion`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_etapas_produccion_producto1_idx` (`producto_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `etapa_pedido_detalle`
@@ -1430,7 +1248,8 @@ ALTER TABLE `pedidos`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_etapa` (`fk_etapa`),
   ADD KEY `fk_pedidos_contac_empre1_idx` (`contac_empre_id`),
-  ADD KEY `fk_pedidos_personal1_idx` (`personal_id`);
+  ADD KEY `fk_pedidos_personal1_idx` (`personal_id`),
+  ADD KEY `fk_pedidos_estapas_proceso1_idx` (`estapas_proceso_id`);
 
 --
 -- Indices de la tabla `pedido_detalle`
@@ -1439,7 +1258,8 @@ ALTER TABLE `pedido_detalle`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_pedido` (`fk_pedido`),
   ADD KEY `fk_producto` (`fk_producto`),
-  ADD KEY `fk_pedido_detalle_etapa_pedido_detalle1_idx` (`etapa_pedido_detalle_id`);
+  ADD KEY `fk_pedido_detalle_etapa_pedido_detalle1_idx` (`etapa_pedido_detalle_id`),
+  ADD KEY `fk_pedido_detalle_personal1_idx` (`personal_id`);
 
 --
 -- Indices de la tabla `personal`
@@ -1448,7 +1268,8 @@ ALTER TABLE `personal`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_personal_empresa1_idx` (`empresa_id`),
   ADD KEY `fk_personal_estado_personal1_idx` (`estado_personal_id`),
-  ADD KEY `fk_personal_area1_idx` (`area_id`);
+  ADD KEY `fk_personal_area1_idx` (`area_id`),
+  ADD KEY `fk_personal_estatus1_idx` (`estatus_id`);
 
 --
 -- Indices de la tabla `producto`
@@ -1498,7 +1319,7 @@ ALTER TABLE `area`
 -- AUTO_INCREMENT de la tabla `cargo`
 --
 ALTER TABLE `cargo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `categorias`
 --
@@ -1508,12 +1329,12 @@ ALTER TABLE `categorias`
 -- AUTO_INCREMENT de la tabla `contacto`
 --
 ALTER TABLE `contacto`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT de la tabla `contac_empre`
 --
 ALTER TABLE `contac_empre`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 --
 -- AUTO_INCREMENT de la tabla `def_comuna`
 --
@@ -1533,17 +1354,27 @@ ALTER TABLE `departamento`
 -- AUTO_INCREMENT de la tabla `detallepedido_opcionesproducto`
 --
 ALTER TABLE `detallepedido_opcionesproducto`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `empresa`
 --
 ALTER TABLE `empresa`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT de la tabla `estado_personal`
 --
 ALTER TABLE `estado_personal`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT de la tabla `estapas_proceso`
+--
+ALTER TABLE `estapas_proceso`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `estatus`
+--
+ALTER TABLE `estatus`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `etapas`
 --
@@ -1573,12 +1404,12 @@ ALTER TABLE `opciones_producto`
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `pedido_detalle`
 --
 ALTER TABLE `pedido_detalle`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `personal`
 --
@@ -1593,7 +1424,7 @@ ALTER TABLE `producto`
 -- AUTO_INCREMENT de la tabla `producto_categoria`
 --
 ALTER TABLE `producto_categoria`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT de la tabla `unidad_medida_dimension`
 --
@@ -1608,7 +1439,7 @@ ALTER TABLE `unidad_medida_peso`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- Restricciones para tablas volcadas
 --
@@ -1658,12 +1489,6 @@ ALTER TABLE `empresa`
   ADD CONSTRAINT `fk_empresa_estado_empresa1` FOREIGN KEY (`estado_empresa_id`) REFERENCES `estado_empresa` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Filtros para la tabla `etapas_produccion`
---
-ALTER TABLE `etapas_produccion`
-  ADD CONSTRAINT `fk_etapas_produccion_producto1` FOREIGN KEY (`producto_id`) REFERENCES `producto` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
 -- Filtros para la tabla `e_p_producto`
 --
 ALTER TABLE `e_p_producto`
@@ -1690,6 +1515,7 @@ ALTER TABLE `opciones_producto`
 --
 ALTER TABLE `pedidos`
   ADD CONSTRAINT `fk_pedidos_contac_empre1` FOREIGN KEY (`contac_empre_id`) REFERENCES `contac_empre` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_pedidos_estapas_proceso1` FOREIGN KEY (`estapas_proceso_id`) REFERENCES `estapas_proceso` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_pedidos_personal1` FOREIGN KEY (`personal_id`) REFERENCES `personal` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `pedidos_ibfk_3` FOREIGN KEY (`fk_etapa`) REFERENCES `etapas` (`id`);
 
@@ -1698,6 +1524,7 @@ ALTER TABLE `pedidos`
 --
 ALTER TABLE `pedido_detalle`
   ADD CONSTRAINT `fk_pedido_detalle_etapa_pedido_detalle1` FOREIGN KEY (`etapa_pedido_detalle_id`) REFERENCES `etapa_pedido_detalle` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_pedido_detalle_personal1` FOREIGN KEY (`personal_id`) REFERENCES `personal` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `pedido_detalle_ibfk_1` FOREIGN KEY (`fk_pedido`) REFERENCES `pedidos` (`id`),
   ADD CONSTRAINT `pedido_detalle_ibfk_2` FOREIGN KEY (`fk_producto`) REFERENCES `producto` (`id`);
 
@@ -1707,7 +1534,8 @@ ALTER TABLE `pedido_detalle`
 ALTER TABLE `personal`
   ADD CONSTRAINT `fk_personal_area1` FOREIGN KEY (`area_id`) REFERENCES `area` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_personal_empresa1` FOREIGN KEY (`empresa_id`) REFERENCES `empresa` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_personal_estado_personal1` FOREIGN KEY (`estado_personal_id`) REFERENCES `estado_personal` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_personal_estado_personal1` FOREIGN KEY (`estado_personal_id`) REFERENCES `estado_personal` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_personal_estatus1` FOREIGN KEY (`estatus_id`) REFERENCES `estatus` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `producto_categoria`

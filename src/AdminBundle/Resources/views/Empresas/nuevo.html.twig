@@ -30,10 +30,8 @@
 									<form id="form_nuevo_empresa" class="" action="{{ url('admin_empresa_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
 										<div class="section-divider mb40">
                     					  	<span>Datos Empresa</span>
-                    					</div>
-										
-										<input type="hidden" name="empre_id" id="empre_id" value="{{ data.id is defined ? data.id}}" >							
-										
+                    					</div>										
+										<input type="hidden" name="empre_id" id="empre_id" value="{{ data.id is defined ? data.id}}" >										
 										<div class="row">
 											<div class="form-group col-sm-12">
 												<div class="form-group  col-lg-4">
@@ -60,59 +58,59 @@
 										<div class="section-divider mb40">
                     					  	<span>Datos de Localizacion</span>
                     					</div>
-											<div class="row">{# divs dependientes si la empresa no esta cargada#}
-												<input type="hidden" name="id_region" id="id_region" value="{{ data.region is defined ? data.region}}">
-												<div class="form-group col-sm-12 col-md-3">
-													<label class="field ">
-														Region
-													</label>
-													<label class=" field select">
-														<select id="regiones" name="regiones" class="form-control" required>
-														{% if data.region is defined  %}
-															<option value="{{data.region is defined? data.region}}"> {{ data.region is defined? nombreRegion }}</option>
-														{% endif %}
-															<option value="">Seleccione Region</option>
-															{% for lista_regiones in lista_regiones %}
-																<option id="seleccion" name="seleccion" value={{lista_regiones.regIdPk}}>{{lista_regiones.regRomano ~" "~ lista_regiones.regNombre}}</option>
+										<div class="row">{# divs dependientes si la empresa no esta cargada#}
+											<input type="hidden" name="id_region" id="id_region" value="{{ data.region is defined ? data.region}}">
+											<div class="form-group col-sm-12 col-md-3">
+												<label class="field ">
+													Region
+												</label>
+												<label class=" field select">
+													<select id="regiones" name="regiones" class="form-control" required>
+													{% if data.region is defined  %}
+														<option value="{{data.region is defined? data.region}}"> {{ data.region is defined? nombreRegion }}</option>
+													{% endif %}
+														<option value="">Seleccione Region</option>
+														{% for lista_regiones in lista_regiones %}
+															<option id="seleccion" name="seleccion" value={{lista_regiones.regIdPk}}>{{lista_regiones.regRomano ~" "~ lista_regiones.regNombre}}</option>
+														{% endfor %}
+													</select>
+												</label>
+											</div>
+											<input type="hidden" name="id_provincia" id="id_provincia" value="{{ data.provincia is defined ? data.provincia}}">
+											<div id="provincia" class="form-group col-sm-12 col-md-3" style="display: none">
+												<label class="field">
+													Provincia
+												</label>
+												<label class=" field select">
+													<select id="provincias" name="provincias" class="form-control" required>
+														{% if data.provincia is defined  %}
+															<option value="{{data.provincia is defined? data.provincia}}"> {{ data.provincia is defined? nombreProvincia }}</option> 
+														{% endif %}   
+														<option value="">Seleccione Provincia</option> 
+															{% for lista_provincias in lista_provincias %}
+																<option id="seleccion" name="seleccion" value={{lista_provincias.proIdPk}}>{{lista_provincias.proNombre}}</option>
 															{% endfor %}
-														</select>
-													</label>
-												</div>
-												<input type="hidden" name="id_provincia" id="id_provincia" value="{{ data.provincia is defined ? data.provincia}}">
-												<div id="provincia" class="form-group col-sm-12 col-md-3" style="display: none">
-													<label class="field">
-														Provincia
-													</label>
-													<label class=" field select">
-														<select id="provincias" name="provincias" class="form-control" required>
-															{% if data.provincia is defined  %}
-																<option value="{{data.provincia is defined? data.provincia}}"> {{ data.provincia is defined? nombreProvincia }}</option> 
-															{% endif %}   
-															<option value="">Seleccione Provincia</option> 
-																{% for lista_provincias in lista_provincias %}
-																	<option id="seleccion" name="seleccion" value={{lista_provincias.proIdPk}}>{{lista_provincias.proNombre}}</option>
-																{% endfor %}
-														</select>	
-													</label>
-												</div>
-												<input type="hidden" name="id_comuna" id="id_comuna" value="{{ data.comuna is defined ? data.comuna}}" >							
-												<div  id="comuna" class="form-group col-sm-12 col-md-3" style="display: none">
-													<label class="field">
-														Comuna
-													</label>
-													<label class=" field select">
-														<select id="comunas" name="comunas" class="form-control" required>
-															{% if data.comuna is defined  %}
-																<option value="{{data.comuna is defined? data.comuna}}"> {{ data.comuna is defined? nombreComuna }}</option> 
-															{% endif %}
-																<option value="">Seleccione Comuna</option>
-																{% for lista_comunas in lista_comunas %}
-																	<option id="seleccion" name="seleccion" value={{lista_comunas.comIdPk}}>{{lista_comunas.comNombre}}</option>
-																{% endfor %}
-														</select>												
-													</label>
-												</div>									
+													</select>	
+												</label>
+											</div>
+											<input type="hidden" name="id_comuna" id="id_comuna" value="{{ data.comuna is defined ? data.comuna}}" >							
+											<div  id="comuna" class="form-group col-sm-12 col-md-3" style="display: none">
+												<label class="field">
+													Comuna
+												</label>
+												<label class=" field select">
+													<select id="comunas" name="comunas" class="form-control" required>
+														{% if data.comuna is defined  %}
+															<option value="{{data.comuna is defined? data.comuna}}"> {{ data.comuna is defined? nombreComuna }}</option> 
+														{% endif %}
+															<option value="">Seleccione Comuna</option>
+															{% for lista_comunas in lista_comunas %}
+																<option id="seleccion" name="seleccion" value={{lista_comunas.comIdPk}}>{{lista_comunas.comNombre}}</option>
+															{% endfor %}
+													</select>												
+												</label>
 											</div>									
+										</div>									
 										<div class="row">
 											<div class="form-group col-sm-12 col-md-3">
 												<label class="field">
@@ -229,19 +227,15 @@
                         			    	<input type="text" id="busq_cont" name="buscar2" class="form-control dropdown-toggle" data-toggle="dropdown" aria-expanded="true">                            
                         			    	<ul id="lista_conta" aria-labelledby="busq_cont" class="dropdown-menu" role="menu" data-cont="{{ data.id is defined ? data.id}}"></ul>
                         			    </div>
-                        			    <div class="admin-form">
-							    			<div class="panel">
-							    			    <div class="panel-body">
-                            						<!-- se agregan las empresas para hacer el vinculo -->
-							    			        <div id="contactos_div" class="cli-emp">
-                            						    {% if lista_contempre is defined %}
-                            						        {% for lista_contempre in lista_contempre %}
-                            				            		<div class="valign-wrapper"><i class="material-icons del_btn_i pointer" data-id="{{ lista_contempre.id_contacto }}">remove_circle_outline</i>{{ lista_contempre.pri_nombre_fkcont }} {{ lista_contempre.seg_nombre_fkcont }} {{ lista_contempre.apellido_pate_fkcont }} {{ lista_contempre.apellido_mate_fkcont }}</div>
-                            						        {% endfor %}
-                            						    {% endif %}
-                            						</div>
-							    			    </div>
-							    			</div>
+										<div class="panel-body">
+											<!-- se agregan las empresas para hacer el vinculo -->
+											<div id="contactos_div" class="cli-emp">
+												{% if lista_contempre is defined %}
+													{% for lista_contempre in lista_contempre %}
+														<div class="valign-wrapper" id ="{{lista_contempre.id_contacto}}"><i onClick=functionDelete({{lista_contempre.id_contacto}}) class="material-icons del_btn_i pointer">remove_circle_outline</i>{{ lista_contempre.pri_nombre_fkcont }} {{ lista_contempre.seg_nombre_fkcont }} {{ lista_contempre.apellido_pate_fkcont }} {{ lista_contempre.apellido_mate_fkcont }}</div>
+													{% endfor %}
+												{% endif %}
+											</div>
 										</div>
                         			</div>
                         		</div>

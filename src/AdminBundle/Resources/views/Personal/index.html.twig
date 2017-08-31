@@ -1,5 +1,8 @@
 {% extends 'admin.html.twig' %}
-
+{% block stylesheets %}
+{# <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  #}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css"> 
+{% endblock %} 
 {% block body %}
 	<div class="container">
 		<div class="row">
@@ -22,14 +25,14 @@
 				<!-- bloque tabla -->
 				<div class="row">
 					<div class="table-responsive">
-						<table id="table_personal" class="table table-condensed table-hover" data-tbody="{{ url('cargar_personal_tabla') }}" data-delete="{{ url('admin_personal_eliminar') }}">
+						<table id="table_personal" class="table table-hover table-striped" data-tbody="{{ url('cargar_personal_tabla') }}" data-delete="{{ url('admin_personal_eliminar') }}">
 							<thead>
 								<tr>
-								  <th>Nombre</th>
-								  <th>Apellido</th>
-								  <th>Email</th>
-								  <th>Telefono</th>
-								  <th>Acciones</th>
+								  	<th>Nombre</th>
+								  	<th>Apellido</th>
+								  	<th>Email</th>
+								  	<th>Telefono</th>
+                               		<th style="width:30px">Acciones</th>
 								</tr>
 							</thead>
 							<tbody>							
@@ -44,5 +47,7 @@
 {% endblock %}
 
 {% block javascripts %}
+<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
 <script src="{{ absolute_url(asset('assets/js/module/personal/tabla_index.js')) }}"></script>
 {% endblock %}

@@ -85,15 +85,15 @@ class CargoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $cargos = $em->getRepository('AdminBundle:Cargo')->findAll();        
-        $lista_cargos = '';
-        foreach ($cargos as $result) {
-            if($lista_cargos==''){
-                $lista_cargos .= '<option value="">Seleccione</option>';
-            }
-            $lista_cargos .= '<option value="'.$result->getId().'"> '.$result->getNombre().'</option>';
-        }    
-        $response = new JsonResponse();
-        $response->setData(array( 'listaCargos'=>$lista_cargos));        
+        // $lista_cargos = '';
+        // foreach ($cargos as $result) {
+        //     if($lista_cargos==''){
+        //         $lista_cargos .= '<option value="">Seleccione</option>';
+        //     }
+        //     $lista_cargos .= '<option value="'.$result->getId().'"> '.$result->getNombre().'</option>';
+        // }
+        $response = new JsonResponse($cargos);
+        // $response->setData(array( 'listaCargos'=>$lista_cargos));        
         return $response;
     }
 }

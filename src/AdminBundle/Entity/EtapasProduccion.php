@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EtapasProduccion
  *
- * @ORM\Table(name="etapas_produccion", indexes={@ORM\Index(name="fk_etapas_produccion_producto1_idx", columns={"producto_id"})})
+ * @ORM\Table(name="etapas_produccion")
  * @ORM\Entity
  */
 class EtapasProduccion
@@ -48,16 +48,6 @@ class EtapasProduccion
      * @ORM\Column(name="prioridad", type="string", length=45, nullable=true)
      */
     private $prioridad;
-
-    /**
-     * @var \Producto
-     *
-     * @ORM\ManyToOne(targetEntity="Producto")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="producto_id", referencedColumnName="id")
-     * })
-     */
-    private $producto;
 
 
 
@@ -161,28 +151,5 @@ class EtapasProduccion
     public function getPrioridad()
     {
         return $this->prioridad;
-    }
-
-    /**
-     * Set producto
-     *
-     * @param \AdminBundle\Entity\Producto $producto
-     * @return EtapasProduccion
-     */
-    public function setProducto(\AdminBundle\Entity\Producto $producto = null)
-    {
-        $this->producto = $producto;
-
-        return $this;
-    }
-
-    /**
-     * Get producto
-     *
-     * @return \AdminBundle\Entity\Producto 
-     */
-    public function getProducto()
-    {
-        return $this->producto;
     }
 }

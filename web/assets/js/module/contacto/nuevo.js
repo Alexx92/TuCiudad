@@ -61,10 +61,7 @@ $(document).ready(function() {
             toastr.warning('Complete todos los campos requeridos');
         }
     });
-
     // configuracion del dropdown de busqueda de empresas
-
-    // busqueda de empresas por ajax
     $(".dropdown-toggle").on('click', function() {
         $(this).dropdown("toggle");
     });
@@ -94,25 +91,6 @@ $(document).ready(function() {
             $('#match').html("Ingrese mas caracteres para la busqueda");
         }
     });
-
-    // js ajax quitar empresa de un contacto
-    $('.del_btn_i').on('click', function(e) {
-        var btn = $(this);
-        var id = btn.data('id');
-        var data = { id: id };
-        e.preventDefault();
-        $.ajax({
-            dataType: 'json',
-            method: 'POST',
-            url: Routing.generate('ajax_borrar_empresa'),
-            data: data,
-        }).done(function(json) {
-            if (json) {
-                btn.parent().remove();
-                toastr.success('Dato eliminado');
-            }
-        });
-    });
     // js ajax abrir modal crear cargo
     $('#btnShowModal').on('click', function(e) {
         $('#cargo_nombre').val("");
@@ -121,7 +99,6 @@ $(document).ready(function() {
     });
     // js ajax modal guardar cargo
     $('#btnModalGuardarCargo').on('click', function(e) {
-
         var form = $('#form-new-cargo');
         form.validate({
             errorClass: "state-error",
@@ -131,7 +108,6 @@ $(document).ready(function() {
                 cargo_nombre: {
                     required: true
                 },
-
             },
             messages: {
                 cargo_nombre: {
@@ -168,22 +144,6 @@ $(document).ready(function() {
         } else {
             toastr.warning('Complete todos los campos requeridos');
         }
-        // ------------------------------------------
-        // var nombre = $('#cargo_nombre').val();
-        // var obs = $('#cargo_obs').val();
-        // var data = { nombre: nombre, obs: obs };
-        // console.log(data);
-        // e.preventDefault();
-        // $.ajax({
-        //     dataType: 'json',
-        //     method: 'POST',
-        //     url: Routing.generate('ajax_guardar_cargo'),
-        //     data: data,
-        // }).done(function(response) {
-        //     $('#cargos').html(response.lista_cargos);
-        //     $('#myModal').modal('hide');
-        //     toastr.success('Datos Guardados');
-        // });
     });
 });
 
@@ -195,16 +155,40 @@ function cli_empre() {
         var idempre = span.data('id');
         var nempre = span.data('name');
         var data = { id_empre: idempre, id_cont: data_cont };
-
         $.ajax({
             type: "POST",
             url: Routing.generate('ajax_guardar_empresa'),
             data: data,
             dataType: 'json',
         }).done(function(response) {
-            $('#cli-emp').append('<div class="valign-wrapper"><i class="material-icons del_btn_i pointer">remove_circle_outline</i>' + nempre + '</div>');
+            if (response.valid == true) {
+                $("#busq_empre").dropdown("toggle");
+                $('#cli-emp').append('<div class="valign-wrapper" id ="' + response.cli_empre + '"><i onClick="functionDelete(' + response.cli_empre + ' )" class="material-icons del_btn_i pointer">remove_circle_outline</i>' + nempre + '</div>');
+                toastr.success('Relacion Creada');
+            } else {
+                toastr.warning('La relacion ya existe');
+            }
+            $('#busq_empre').val('');
+
         }).fail(function(response) {
             toastr.error('Error al cargar el dato');
         });
+    });
+}
+
+function functionDelete(empre_id) {
+    var id = empre_id;
+    var data = { id: id };
+    $.ajax({
+        dataType: 'json',
+        method: 'POST',
+        url: Routing.generate('ajax_borrar_empresa'),
+        data: data,
+    }).done(function(json) {
+        if (json) {
+            $("#" + id).remove();
+            toastr.success('Dato eliminado');
+        }
+
     });
 }

@@ -145,10 +145,9 @@ class EmpresasController extends Controller
             $result = true;
 
         }
-
-        //return $this->redirectToRoute('admin_contacto_nuevo');
-        echo json_encode(array('result' => $result));
-        exit;
+        $response = new JsonResponse();
+        $response->setData(array('result' => $result,'id_new'=>$empresa->getId()));        
+        return $response;        
     }
 
     // cargar formulario para editar
@@ -195,7 +194,6 @@ class EmpresasController extends Controller
             foreach($cont_empre as $value)
             {
                 $datos = new stdClass();
-                
                 $datos->id_contacto            = $value->getId();
                 $datos->pri_nombre_fkcont      = $value->getFkContacto()->getPrimerNombre();
                 $datos->seg_nombre_fkcont      = $value->getFkContacto()->getSegundoNombre();
@@ -316,6 +314,7 @@ class EmpresasController extends Controller
         $id = (false);
         $id_cont = $request->get('id_cont');
         $id_empre = $request->get('id_empre');
+        $valid = false;
 
         if( $request->getMethod() == 'POST' )
         {
@@ -324,19 +323,20 @@ class EmpresasController extends Controller
             $Fkcontacto = $em->getRepository('AdminBundle:Contacto')->findOneBy(array('id' => $id_cont));            
             $Fkempresa  = $em->getRepository('AdminBundle:Empresa')->findOneBy(array('id' => $id_empre));
 
-            if( !$cli_empre = $em->getRepository('AdminBundle:ContacEmpre')->findOneBy(array( 'id' => $id )) )
+            if( !$cli_empre = $em->getRepository('AdminBundle:ContacEmpre')->findOneBy(array( 'fkContacto' => $id_cont,'fkEmpresa'=>$id_empre )) )
             {
                 $cli_empre = new ContacEmpre();
                 $cli_empre->setFkContacto($Fkcontacto);
                 $cli_empre->setFkEmpresa($Fkempresa);
                 $em->persist($cli_empre);
                 $em->flush();
+                $valid = true;
             }
 
         }
 
         $response = new JsonResponse();
-        $response->setData(array('cli_empre' => $cli_empre));
+        $response->setData(array('valid'=>$valid,'cli_empre' => $cli_empre->getId()));
         
         return $response;
     }

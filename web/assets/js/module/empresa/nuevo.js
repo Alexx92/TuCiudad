@@ -21,7 +21,6 @@ $(document).ready(function() {
         te = String.fromCharCode(tecla);
         return patron.test(te);
     });
-
     $('#guardar_empresa').click(function(e) {
         e.preventDefault();
         var form = $('#form_nuevo_empresa');
@@ -60,21 +59,20 @@ $(document).ready(function() {
                 contentType: false,
                 processData: false,
                 cache: false
-            }).done(function(json) {
+            }).done(function(response) {
                 //form[0].reset();
                 //validator.resetForm();
+                $('#empre_id').val(response.id_new);
                 $('#mostrar').show();
                 toastr.success('Datos guardados');
-            }).fail(function(json) {
+            }).fail(function(response) {
                 toastr.error('Error al guardar');
             });
         } else {
             toastr.warning('Complete todos los campos requeridos');
         }
     });
-
     // configuracion del dropdown de busqueda de empresas
-
     // busqueda de empresas por ajax
     $("#busq_cont").on('keyup', function() {
         var input = $(this).val();
@@ -101,42 +99,6 @@ $(document).ready(function() {
 
         }
     });
-
-    // js ajax quitar empresa de un contacto
-    $('.del_btn_i').on('click', function(e) {
-        var btn = $(this);
-        var id = btn.data('id');
-        var data = { id: id };
-        e.preventDefault();
-        $.ajax({
-            dataType: 'json',
-            method: 'POST',
-            url: Routing.generate('ajax_borrar_contacto'),
-            data: data,
-        }).done(function(json) {
-            if (json) {
-                btn.parent().remove();
-                toastr.success('Dato eliminado');
-            }
-        });
-    });
-    // $('.del_btn_i').on('click', function(e) {
-    //     var btn = $(this);
-    //     var id = btn.data('id');
-    //     var data = { id: id };
-    //     e.preventDefault();
-    //     $.ajax({
-    //         dataType: 'json',
-    //         method: 'POST',
-    //         url: Routing.generate('ajax_borrar_contacto'),
-    //         data: data,
-    //     }).done(function(json) {
-    //         if (json) {
-    //             btn.parent().remove();
-    //             toastr.success('Dato eliminado');
-    //         }
-    //     });
-    // });
 
     $("#regiones").on('change', function() {
         var region = $(this);
@@ -168,33 +130,18 @@ $(document).ready(function() {
             $("#comuna").show();
         });
     });
-    // $("#cancelar_empresa").on('click', function() {
-    //     location.href = "index.html.twig";
-    // });
 });
 
 function cargar() {
     var drop1 = $('#id_comuna').val();
-    // var drop2 = $('#id_provincia').val();
-    // var drop3 = $('#id_region').val();
-    // var data = { id_comuna: drop1, id_provincia: drop2 };
     if (drop1 != "") {
         $("#comuna").show();
         $("#provincia").show();
-        //  $.ajax({
-        //      dataType: 'json',
-        //      method: 'POST',
-        //      url: Routing.generate('ajax_cargar_datos_localizacion'),
-        //      data: data,
-        //  }).done(function(response) {
-        //      $("#comunas").html(response.nameComuna);
-        //      $("#provincias").html(response.nameProvincia);
-        //  });
     }
 }
 // funcion unir empresa-cliente
 function conta_lista() {
-    var id_empre = $('#lista_conta').data('cont');
+    var id_empre = $('#empre_id').val();
     $('.ele span').on('click', function() {
         var span = $(this);
         var id_cont = span.data('id');
@@ -207,9 +154,32 @@ function conta_lista() {
             data: data,
             dataType: 'json',
         }).done(function(response) {
-            $("#busq_cont").dropdown("toggle");
-            $('#contactos_div').append('<div class="valign-wrapper"><i class="material-icons del_btn_i pointer">remove_circle_outline</i>' + n_cont + ' ' + a_cont + '</div>');
+            if (response.valid == true) {
+                $("#busq_cont").dropdown("toggle");
+                $('#contactos_div').append('<div class="valign-wrapper" id ="' + response.cli_empre + '" ><i onClick="functionDelete(' + response.cli_empre + ' )" class="material-icons del_btn_i pointer">remove_circle_outline</i>' + n_cont + ' ' + a_cont + '</div>');
+                toastr.success('Relacion Creada');
+            } else {
+                toastr.warning('La relacion ya existe');
+            }
+            $('#busq_cont').val('');
         }).fail(function(response) {});
+
+    });
+}
+
+function functionDelete(empre_id) {
+    var id = empre_id;
+    var data = { id: id };
+    $.ajax({
+        dataType: 'json',
+        method: 'POST',
+        url: Routing.generate('ajax_borrar_contacto'),
+        data: data,
+    }).done(function(json) {
+        if (json) {
+            $("#" + id).remove();
+            toastr.success('Dato eliminado');
+        }
 
     });
 }

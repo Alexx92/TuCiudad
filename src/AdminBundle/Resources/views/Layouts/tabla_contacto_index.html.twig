@@ -5,8 +5,10 @@
 		<td>{{ lcontacto.email }}</td>
 		<td>{{ lcontacto.telefono }}</td>
 		<td>
-			<a class="btn_dele_cont cur_poin text-danger" data-id="{{ lcontacto.id }}" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="red-text small material-icons ">cancel</i></a>
-			<a class="btn_test cur_poin" href="{{ url('admin_contacto_editar',{id:lcontacto.id}) }}" data-toggle="tooltip" data-placement="bottom" title="Editar"><i class="small material-icons ">mode_edit</i></a>
+			<ul class=" list-unstyled list-inline text-right">
+				<li><a class="btn_dele_cont cur_poin text-danger" data-id="{{ lcontacto.id }}" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="red-text small material-icons ">cancel</i></a></li>
+				<li><a class="btn_test cur_poin" href="{{ url('admin_contacto_editar',{id:lcontacto.id}) }}" data-toggle="tooltip" data-placement="bottom" title="Editar"><i class="small material-icons ">mode_edit</i></a></li>
+			</ul>			
 		</td>
 	</tr>
 {% endfor %}

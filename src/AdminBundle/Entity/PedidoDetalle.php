@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PedidoDetalle
  *
- * @ORM\Table(name="pedido_detalle", indexes={@ORM\Index(name="fk_pedido", columns={"fk_pedido"}), @ORM\Index(name="fk_producto", columns={"fk_producto"}), @ORM\Index(name="fk_pedido_detalle_etapa_pedido_detalle1_idx", columns={"etapa_pedido_detalle_id"})})
+ * @ORM\Table(name="pedido_detalle", indexes={@ORM\Index(name="fk_pedido", columns={"fk_pedido"}), @ORM\Index(name="fk_producto", columns={"fk_producto"}), @ORM\Index(name="fk_pedido_detalle_etapa_pedido_detalle1_idx", columns={"etapa_pedido_detalle_id"}), @ORM\Index(name="fk_pedido_detalle_personal1_idx", columns={"personal_id"})})
  * @ORM\Entity
  */
 class PedidoDetalle
@@ -65,6 +65,16 @@ class PedidoDetalle
      * })
      */
     private $etapaPedidoDetalle;
+
+    /**
+     * @var \Personal
+     *
+     * @ORM\ManyToOne(targetEntity="Personal")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="personal_id", referencedColumnName="id")
+     * })
+     */
+    private $personal;
 
     /**
      * @var \Pedidos
@@ -234,6 +244,29 @@ class PedidoDetalle
     public function getEtapaPedidoDetalle()
     {
         return $this->etapaPedidoDetalle;
+    }
+
+    /**
+     * Set personal
+     *
+     * @param \AdminBundle\Entity\Personal $personal
+     * @return PedidoDetalle
+     */
+    public function setPersonal(\AdminBundle\Entity\Personal $personal = null)
+    {
+        $this->personal = $personal;
+
+        return $this;
+    }
+
+    /**
+     * Get personal
+     *
+     * @return \AdminBundle\Entity\Personal 
+     */
+    public function getPersonal()
+    {
+        return $this->personal;
     }
 
     /**

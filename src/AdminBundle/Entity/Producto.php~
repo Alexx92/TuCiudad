@@ -31,13 +31,6 @@ class Producto
     /**
      * @var string
      *
-     * @ORM\Column(name="descripcion", type="string", length=200, nullable=true)
-     */
-    private $descripcion;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="codigo_prod", type="string", length=30, nullable=true)
      */
     private $codigoProd;

@@ -102,25 +102,25 @@ class OpcionesProductoController extends Controller
         
         return $response;
     }
-        // subir imagenes
-        private function subirImagen($imagen)
+    // subir imagenes
+    private function subirImagen($imagen)
+    {
+        $result = null;
+        if($imagen)
         {
-            $result = null;
-            if($imagen)
+            $obj = array(
+                'filesize'      => $imagen->getClientSize(),
+                'filetype'      => $imagen->getClientMimeType(),
+                'fileextension' => $imagen->getClientOriginalExtension(),
+                'filenewname'   => uniqid().".".$imagen->getClientOriginalExtension(),
+                'filenewpath'   => __DIR__.'/../../../web/uploads/opcionesProducto'
+            );
+            if($obj['filetype'] == 'image/png' || $obj['filetype'] == 'image/jpeg')
             {
-                $obj = array(
-                    'filesize'      => $imagen->getClientSize(),
-                    'filetype'      => $imagen->getClientMimeType(),
-                    'fileextension' => $imagen->getClientOriginalExtension(),
-                    'filenewname'   => uniqid().".".$imagen->getClientOriginalExtension(),
-                    'filenewpath'   => __DIR__.'/../../../web/uploads/opcionesProducto'
-                );
-                if($obj['filetype'] == 'image/png' || $obj['filetype'] == 'image/jpeg')
-                {
-                    $imagen->move($obj['filenewpath'], $obj['filenewname']);
-                    $result = $obj['filenewname'];
-                }
+                $imagen->move($obj['filenewpath'], $obj['filenewname']);
+                $result = $obj['filenewname'];
             }
-            return $result;
         }
+        return $result;
+    }
 }
