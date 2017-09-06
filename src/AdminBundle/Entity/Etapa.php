@@ -5,12 +5,12 @@ namespace AdminBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Etapas
+ * Etapa
  *
- * @ORM\Table(name="etapas")
+ * @ORM\Table(name="etapa")
  * @ORM\Entity
  */
-class Etapas
+class Etapa
 {
     /**
      * @var integer
@@ -24,14 +24,21 @@ class Etapas
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=30, nullable=true)
+     * @ORM\Column(name="nombre", type="string", length=30, nullable=false)
      */
     private $nombre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="observacion", type="text", length=65535, nullable=true)
+     * @ORM\Column(name="siglas", type="string", length=45, nullable=false)
+     */
+    private $siglas;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion", type="string", length=200, nullable=true)
      */
     private $observacion;
 
@@ -51,7 +58,7 @@ class Etapas
      * Set nombre
      *
      * @param string $nombre
-     * @return Etapas
+     * @return Etapa
      */
     public function setNombre($nombre)
     {
@@ -71,10 +78,33 @@ class Etapas
     }
 
     /**
+     * Set siglas
+     *
+     * @param string $siglas
+     * @return Etapa
+     */
+    public function setSiglas($siglas)
+    {
+        $this->siglas = $siglas;
+
+        return $this;
+    }
+
+    /**
+     * Get siglas
+     *
+     * @return string 
+     */
+    public function getSiglas()
+    {
+        return $this->siglas;
+    }
+
+    /**
      * Set observacion
      *
      * @param string $observacion
-     * @return Etapas
+     * @return Etapa
      */
     public function setObservacion($observacion)
     {

@@ -31,7 +31,7 @@ class Contacto
     /**
      * @var string
      *
-     * @ORM\Column(name="primer_nombre", type="string", length=30, nullable=true)
+     * @ORM\Column(name="primer_nombre", type="string", length=30, nullable=false)
      */
     private $primerNombre;
 
@@ -64,16 +64,16 @@ class Contacto
     private $correo;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="telefono", type="string", length=20, nullable=true)
+     * @ORM\Column(name="telefono", type="integer", nullable=true)
      */
     private $telefono;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="celular", type="string", length=45, nullable=true)
+     * @ORM\Column(name="celular", type="integer", nullable=true)
      */
     private $celular;
 
@@ -94,14 +94,14 @@ class Contacto
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=true)
+     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=false)
      */
     private $fechaIngreso;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="estado", type="integer", nullable=true)
+     * @ORM\Column(name="estado", type="integer", nullable=false)
      */
     private $estado;
 

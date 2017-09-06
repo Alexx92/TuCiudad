@@ -5,12 +5,12 @@ namespace AdminBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * EtapasProduccion
+ * EtapaProduccion
  *
- * @ORM\Table(name="etapas_produccion")
+ * @ORM\Table(name="etapa_produccion", uniqueConstraints={@ORM\UniqueConstraint(name="nombre_UNIQUE", columns={"nombre"})})
  * @ORM\Entity
  */
-class EtapasProduccion
+class EtapaProduccion
 {
     /**
      * @var integer
@@ -65,7 +65,7 @@ class EtapasProduccion
      * Set nombre
      *
      * @param string $nombre
-     * @return EtapasProduccion
+     * @return EtapaProduccion
      */
     public function setNombre($nombre)
     {
@@ -88,7 +88,7 @@ class EtapasProduccion
      * Set siglas
      *
      * @param string $siglas
-     * @return EtapasProduccion
+     * @return EtapaProduccion
      */
     public function setSiglas($siglas)
     {
@@ -111,7 +111,7 @@ class EtapasProduccion
      * Set observaciones
      *
      * @param string $observaciones
-     * @return EtapasProduccion
+     * @return EtapaProduccion
      */
     public function setObservaciones($observaciones)
     {
@@ -134,7 +134,7 @@ class EtapasProduccion
      * Set prioridad
      *
      * @param string $prioridad
-     * @return EtapasProduccion
+     * @return EtapaProduccion
      */
     public function setPrioridad($prioridad)
     {

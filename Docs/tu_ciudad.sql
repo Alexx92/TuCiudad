@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 31-08-2017 a las 17:22:35
+-- Tiempo de generación: 06-09-2017 a las 23:52:09
 -- Versión del servidor: 10.1.24-MariaDB
 -- Versión de PHP: 7.1.6
 
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `area` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(45) DEFAULT NULL,
+  `nombre` varchar(45) NOT NULL,
   `descripcion` varchar(100) DEFAULT NULL,
   `departamento_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -53,7 +53,7 @@ INSERT INTO `area` (`id`, `nombre`, `descripcion`, `departamento_id`) VALUES
 
 CREATE TABLE `cargo` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(45) DEFAULT NULL,
+  `nombre` varchar(45) NOT NULL,
   `observacion` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -76,11 +76,11 @@ INSERT INTO `cargo` (`id`, `nombre`, `observacion`) VALUES
 
 CREATE TABLE `categorias` (
   `id` int(10) NOT NULL,
-  `nombre` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `nombre` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `imagen` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `observacion` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `fecha_ingreso` datetime DEFAULT NULL,
-  `estado` int(11) DEFAULT NULL
+  `fecha_ingreso` datetime NOT NULL,
+  `estado` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -103,19 +103,19 @@ INSERT INTO `categorias` (`id`, `nombre`, `imagen`, `observacion`, `fecha_ingres
 
 CREATE TABLE `contacto` (
   `id` int(10) NOT NULL,
-  `run` varchar(12) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `primer_nombre` char(30) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `segundo_nombre` char(30) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `apellido_paterno` char(30) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `apellido_materno` char(30) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `correo` varchar(180) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `telefono` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `celular` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `observacion` varchar(300) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `imagen` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `fecha_ingreso` datetime DEFAULT NULL,
-  `estado` int(2) DEFAULT NULL,
-  `cargo_id` int(11) DEFAULT NULL
+  `run` varchar(12) CHARACTER SET utf8 DEFAULT NULL,
+  `primer_nombre` char(30) COLLATE utf8_unicode_ci NOT NULL,
+  `segundo_nombre` char(30) CHARACTER SET utf8 DEFAULT NULL,
+  `apellido_paterno` char(30) CHARACTER SET utf8 DEFAULT NULL,
+  `apellido_materno` char(30) CHARACTER SET utf8 DEFAULT NULL,
+  `correo` varchar(180) CHARACTER SET utf8 DEFAULT NULL,
+  `telefono` int(11) DEFAULT NULL,
+  `celular` int(11) DEFAULT NULL,
+  `observacion` varchar(300) CHARACTER SET utf8 DEFAULT NULL,
+  `imagen` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
+  `fecha_ingreso` datetime NOT NULL,
+  `estado` int(2) NOT NULL,
+  `cargo_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -123,12 +123,12 @@ CREATE TABLE `contacto` (
 --
 
 INSERT INTO `contacto` (`id`, `run`, `primer_nombre`, `segundo_nombre`, `apellido_paterno`, `apellido_materno`, `correo`, `telefono`, `celular`, `observacion`, `imagen`, `fecha_ingreso`, `estado`, `cargo_id`) VALUES
-(1, NULL, 'Mauricio', 'Esteban', 'Romero', 'Ramirez', 'maesro@prueba.cl', '94599233', NULL, 'Contacto de prueba amable y sincero.', NULL, '2017-08-11 19:02:43', 1, 1),
-(2, NULL, 'Alexis', 'Hernan', 'Rodriguez', 'Castro', 'hernancr92@gmail.com', '951565413', NULL, 'Contacto persuasivo', NULL, '2017-08-16 09:26:58', 1, 2),
-(3, NULL, 'Esteban', 'Dido', 'Romero', 'Palma', 'estebandido@gmail.com', '987455232', NULL, 'Difícil de persuadir', NULL, '2017-08-16 09:30:07', 1, 3),
-(4, NULL, 'Aquiles', 'Baesa', 'Parada', 'Gaete', 'aquilesbg@gmail.com', '9251324668', NULL, '', NULL, '2017-08-16 09:36:56', 1, 1),
-(5, NULL, 'Aquiles', 'Brinco', 'Salgado', 'Romero', 'aquilesbrinco@gmail.com', '986542215', NULL, '', NULL, '2017-08-16 09:40:56', 1, 3),
-(8, NULL, 'Francisco', 'Antonio', 'Caro', 'Aguilera', 'francisco@tuciudad.cl', '65460464654', NULL, 'Gringo', '5995eed0a2ba2.jpg', '2017-08-17 16:30:24', 1, 2);
+(1, NULL, 'Mauricio', 'Esteban', 'Romero', 'Ramirez', 'maesro@prueba.cl', 94599233, NULL, 'Contacto de prueba amable y sincero.', NULL, '2017-08-11 19:02:43', 1, 1),
+(2, '', 'Alexis', 'Hernan', 'Rodriguez', 'Castro', 'hernancr92@gmail.com', 951565413, NULL, 'Contacto persuasivo', NULL, '2017-08-16 09:26:58', 1, 2),
+(3, NULL, 'Esteban', 'Dido', 'Romero', 'Palma', 'estebandido@gmail.com', 987455232, NULL, 'Difícil de persuadir', NULL, '2017-08-16 09:30:07', 1, 3),
+(4, NULL, 'Aquiles', 'Baesa', 'Parada', 'Gaete', 'aquilesbg@gmail.com', 2147483647, NULL, '', NULL, '2017-08-16 09:36:56', 1, 1),
+(5, NULL, 'Aquiles', 'Brinco', 'Salgado', 'Romero', 'aquilesbrinco@gmail.com', 986542215, NULL, '', NULL, '2017-08-16 09:40:56', 1, 3),
+(8, NULL, 'Francisco', 'Antonio', 'Caro', 'Aguilera', 'francisco@tuciudad.cl', 2147483647, NULL, 'Gringo', '5995eed0a2ba2.jpg', '2017-08-17 16:30:24', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -138,9 +138,21 @@ INSERT INTO `contacto` (`id`, `run`, `primer_nombre`, `segundo_nombre`, `apellid
 
 CREATE TABLE `contac_empre` (
   `id` int(10) NOT NULL,
-  `fk_contacto` int(10) DEFAULT NULL,
-  `fk_empresa` int(10) DEFAULT NULL
+  `fk_contacto` int(10) NOT NULL,
+  `fk_empresa` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `contac_empre`
+--
+
+INSERT INTO `contac_empre` (`id`, `fk_contacto`, `fk_empresa`) VALUES
+(1, 8, 3),
+(2, 2, 3),
+(3, 2, 1),
+(4, 8, 1),
+(5, 3, 2),
+(6, 4, 2);
 
 -- --------------------------------------------------------
 
@@ -660,26 +672,26 @@ CREATE TABLE `detallepedido_opcionesproducto` (
 
 CREATE TABLE `empresa` (
   `id` int(10) NOT NULL,
-  `nombre` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `razonsocial` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `rut` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `nombre` varchar(200) CHARACTER SET utf8 NOT NULL,
+  `razonsocial` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
+  `rut` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
   `comuna` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `provincia` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `region` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `dir_villa_pbla` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `dir_calle` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `dir_numero` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `dir_numero_departamento` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `dir_numero_piso` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `telefono` int(15) DEFAULT NULL,
-  `celular` int(15) DEFAULT NULL,
+  `dir_villa_pbla` varchar(50) CHARACTER SET utf8 DEFAULT NULL,
+  `dir_calle` varchar(50) CHARACTER SET utf8 DEFAULT NULL,
+  `dir_numero` int(11) DEFAULT NULL,
+  `dir_numero_departamento` int(11) DEFAULT NULL,
+  `dir_numero_piso` int(11) DEFAULT NULL,
+  `telefono` int(11) DEFAULT NULL,
+  `celular` int(11) DEFAULT NULL,
   `correo` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `web` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `observacion` text COLLATE utf8_unicode_ci,
   `coordenadas` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `imagen` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `fecha_ingreso` datetime DEFAULT NULL,
-  `estado` int(2) DEFAULT NULL,
+  `fecha_ingreso` datetime NOT NULL,
+  `estado` int(2) NOT NULL,
   `estado_empresa_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -688,11 +700,9 @@ CREATE TABLE `empresa` (
 --
 
 INSERT INTO `empresa` (`id`, `nombre`, `razonsocial`, `rut`, `comuna`, `provincia`, `region`, `dir_villa_pbla`, `dir_calle`, `dir_numero`, `dir_numero_departamento`, `dir_numero_piso`, `telefono`, `celular`, `correo`, `web`, `observacion`, `coordenadas`, `imagen`, `fecha_ingreso`, `estado`, `estado_empresa_id`) VALUES
-(1, 'Empresa 1', 'Em-Razon Social', '10.251.515-2', '165', '31', '9', '', 'Inventada', '555', '', '', 91523215, 843231655, 'empresa1@gmail.com', '', 'Empresa 1, probando el ingreso general ', '', NULL, '2017-08-11 18:45:05', 1, 1),
-(2, 'Empresa 2', 'Em2-Razon Social', '54.213.510-2', '146', '29', '9', '', 'Av Prueba', '555', '71', '5', 4225252, 262620, 'empresa2@gmail.com', '', 'Segunda empresa creada de prueba', '', '598e34598bbba.jpg', '2017-08-11 18:48:57', 1, 1),
-(3, 'Empresa 3', 'EM3 Razon Social', '151.582.321-5', '165', '31', '9', 'Parque Lauquen', 'De Prueba ', '5135', '', '', 42258653, 89942322, 'empresa3@gmail.com', 'www.empresa3.cl', 'Tercera empresa creada con fines de prueba ', '', NULL, '2017-08-11 18:52:08', 1, 1),
-(4, 'Empresa 4', 'Razon- Empresa 4', '87.951.632-2', '146', '29', '9', 'Galilea', 'Lynch', '845', '', '', 0, 97842325, 'empresa4@gmail.com', '', '', '', NULL, '2017-08-16 09:43:12', 1, 1),
-(5, 'TuCiudad', 'Informatica', '12.345.678-9', '165', '31', '9', 'Parque Lauquen', 'Pasaje', '3', '', '', 2147483647, 2147483647, 'tuciudad@tuciudad.cl', 'www.tuciudad.cl', 'Casa', '', NULL, '2017-08-17 16:28:08', 1, 1);
+(1, 'Empresa 1', 'Razon-Empresa 1', '', '36', '12', '5', '', 'Los robles', 2502, 0, 0, 5621432, 0, 'empresa1@gmail.com', '', '', '', NULL, '2017-09-06 18:17:09', 1, 1),
+(2, 'Empresa 2', 'Razon- Empresa 2', '', '3', '2', '1', '', 'Los Aromos', 879, 0, 0, 4225889, 842305162, 'empresa1@gmail.com', '', '', '', NULL, '2017-09-06 18:18:09', 1, 1),
+(3, 'Empresa 3', 'Razon- empresa 3', '', '1', '1', '1', '', 'Caupolican', 453, 0, 0, 4222158, 845951322, 'empresa3@gmail.com', '', '', '', NULL, '2017-09-06 18:20:09', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -721,7 +731,7 @@ INSERT INTO `estado_empresa` (`id`, `nombre`, `descripcion`) VALUES
 
 CREATE TABLE `estado_personal` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(45) DEFAULT NULL,
+  `nombre` varchar(45) NOT NULL,
   `descripcion` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -737,55 +747,93 @@ INSERT INTO `estado_personal` (`id`, `nombre`, `descripcion`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `estapas_proceso`
---
-
-CREATE TABLE `estapas_proceso` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(45) DEFAULT NULL,
-  `descripcion` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `estatus`
 --
 
 CREATE TABLE `estatus` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(45) DEFAULT NULL,
+  `nombre` varchar(45) NOT NULL,
   `descripcion` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `etapas`
+-- Estructura de tabla para la tabla `etapa`
 --
 
-CREATE TABLE `etapas` (
+CREATE TABLE `etapa` (
   `id` int(10) NOT NULL,
-  `nombre` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `observacion` text COLLATE utf8_unicode_ci
+  `nombre` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `siglas` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `observacion` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Volcado de datos para la tabla `etapas`
+-- Volcado de datos para la tabla `etapa`
 --
 
-INSERT INTO `etapas` (`id`, `nombre`, `observacion`) VALUES
-(1, 'Sin facturar', NULL),
-(2, 'Completado', NULL),
-(3, 'Facturado sin pagar', NULL);
+INSERT INTO `etapa` (`id`, `nombre`, `siglas`, `observacion`) VALUES
+(1, 'EN ESPERA', 'E', NULL),
+(2, 'PENDIENTE', 'P', NULL),
+(3, 'ACTIVA', 'A', NULL),
+(4, 'FINALIZADA', 'F', NULL),
+(5, 'CANCELADA', 'C', NULL),
+(6, 'INCONSISTENTE', 'I', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `etapas_produccion`
+-- Estructura de tabla para la tabla `etapa_pedido_detalle`
 --
 
-CREATE TABLE `etapas_produccion` (
+CREATE TABLE `etapa_pedido_detalle` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(45) NOT NULL,
+  `descripcion` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `etapa_pedido_detalle`
+--
+
+INSERT INTO `etapa_pedido_detalle` (`id`, `nombre`, `descripcion`) VALUES
+(1, 'PENDIENTE', NULL),
+(2, 'A COTIZAR', 'Producto a cotizar'),
+(3, 'EN ESPERA', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `etapa_proceso`
+--
+
+CREATE TABLE `etapa_proceso` (
+  `id` int(11) NOT NULL,
+  `sigla` varchar(45) NOT NULL,
+  `nombre` varchar(45) NOT NULL,
+  `descripcion` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `etapa_proceso`
+--
+
+INSERT INTO `etapa_proceso` (`id`, `sigla`, `nombre`, `descripcion`) VALUES
+(1, 'EAG', 'Espera aprobación gerente', NULL),
+(2, 'EAC', 'Espera aprobación cliente', NULL),
+(3, 'RN', 'Re-negociación', NULL),
+(4, 'C', 'Cancelacion de Pedido', NULL),
+(5, 'AC', 'Aprobación Cliente', NULL),
+(6, 'I', 'Inconsistente', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `etapa_produccion`
+--
+
+CREATE TABLE `etapa_produccion` (
   `id` int(11) NOT NULL,
   `nombre` varchar(200) DEFAULT NULL,
   `siglas` varchar(10) DEFAULT NULL,
@@ -796,33 +844,13 @@ CREATE TABLE `etapas_produccion` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `etapa_pedido_detalle`
---
-
-CREATE TABLE `etapa_pedido_detalle` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(45) DEFAULT NULL,
-  `descripcion` varchar(200) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `etapa_pedido_detalle`
---
-
-INSERT INTO `etapa_pedido_detalle` (`id`, `nombre`, `descripcion`) VALUES
-(1, 'PENDIENTE', NULL),
-(2, 'A COTIZAR', 'Producto a cotizar');
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `e_p_producto`
 --
 
 CREATE TABLE `e_p_producto` (
   `id` int(11) NOT NULL,
-  `etapas_produccion_id` int(11) NOT NULL,
-  `pedido_detalle_id` int(10) NOT NULL
+  `pedido_detalle_id` int(10) NOT NULL,
+  `etapa_produccion_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -855,13 +883,13 @@ CREATE TABLE `historial` (
 
 CREATE TABLE `opciones_producto` (
   `id` int(10) NOT NULL,
-  `nombre` varchar(45) DEFAULT NULL,
-  `valor` varchar(45) DEFAULT NULL,
+  `nombre` varchar(45) NOT NULL,
+  `valor` varchar(45) NOT NULL,
   `descripcion` varchar(200) DEFAULT NULL,
   `imagen` varchar(200) DEFAULT NULL,
   `unidad_medida_peso_id` int(11) DEFAULT NULL,
   `unidad_medida_dimension_id` int(11) DEFAULT NULL,
-  `categorias_id` int(10) DEFAULT NULL
+  `categorias_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -886,17 +914,28 @@ INSERT INTO `opciones_producto` (`id`, `nombre`, `valor`, `descripcion`, `imagen
 CREATE TABLE `pedidos` (
   `id` int(10) NOT NULL,
   `codigo_pedido` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `fecha_ingreso` datetime DEFAULT NULL,
-  `descuentos` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `valor_neto` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `total` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `codigo_cotizacion` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `fecha_ingreso` datetime NOT NULL,
+  `descuentos` int(11) DEFAULT NULL,
+  `iva_actual` int(11) DEFAULT NULL,
+  `valor_neto` int(11) DEFAULT NULL,
+  `total` int(11) DEFAULT NULL,
   `observacion` text COLLATE utf8_unicode_ci,
   `fecha_modificacion` datetime DEFAULT NULL,
-  `fk_etapa` int(10) DEFAULT NULL,
   `contac_empre_id` int(10) NOT NULL,
   `personal_id` int(10) NOT NULL,
-  `estapas_proceso_id` int(11) NOT NULL
+  `etapa_proceso_id` int(11) NOT NULL,
+  `etapa_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `pedidos`
+--
+
+INSERT INTO `pedidos` (`id`, `codigo_pedido`, `codigo_cotizacion`, `fecha_ingreso`, `descuentos`, `iva_actual`, `valor_neto`, `total`, `observacion`, `fecha_modificacion`, `contac_empre_id`, `personal_id`, `etapa_proceso_id`, `etapa_id`) VALUES
+(1, NULL, '0000001', '2017-09-06 18:38:33', NULL, 19, NULL, NULL, NULL, NULL, 3, 1, 6, 6),
+(2, NULL, '0000002', '2017-09-06 18:44:04', NULL, 19, NULL, NULL, NULL, NULL, 3, 1, 6, 6),
+(3, NULL, '0000003', '2017-09-06 18:46:45', NULL, 19, 3500, 3500, '', '2017-09-06 18:47:11', 3, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -906,16 +945,24 @@ CREATE TABLE `pedidos` (
 
 CREATE TABLE `pedido_detalle` (
   `id` int(10) NOT NULL,
-  `fk_pedido` int(10) DEFAULT NULL,
-  `fk_producto` int(10) DEFAULT NULL,
-  `valor_producto` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `valor_modificado` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `cantidad` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `total` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `fk_pedido` int(10) NOT NULL,
+  `fk_producto` int(10) NOT NULL,
+  `valor_producto` int(11) NOT NULL,
+  `valor_modificado` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `total` int(11) NOT NULL,
   `observacion` text COLLATE utf8_unicode_ci,
-  `etapa_pedido_detalle_id` int(11) DEFAULT NULL,
+  `etapa_pedido_detalle_id` int(11) NOT NULL,
   `personal_id` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `pedido_detalle`
+--
+
+INSERT INTO `pedido_detalle` (`id`, `fk_pedido`, `fk_producto`, `valor_producto`, `valor_modificado`, `cantidad`, `total`, `observacion`, `etapa_pedido_detalle_id`, `personal_id`) VALUES
+(1, 3, 1, 500, 2500, 1, 2500, NULL, 3, NULL),
+(2, 3, 2, 1000, 1000, 1, 1000, NULL, 3, NULL);
 
 -- --------------------------------------------------------
 
@@ -925,32 +972,32 @@ CREATE TABLE `pedido_detalle` (
 
 CREATE TABLE `personal` (
   `id` int(10) NOT NULL,
-  `primer_nombre` char(30) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `primer_nombre` char(30) COLLATE utf8_unicode_ci NOT NULL,
   `segundo_nombre` char(30) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `apellido_paterno` char(30) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `apellido_materno` char(30) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `apellido_paterno` char(30) COLLATE utf8_unicode_ci NOT NULL,
+  `apellido_materno` char(30) COLLATE utf8_unicode_ci NOT NULL,
   `username` varchar(180) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `dni` char(30) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `sexo` char(1) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `fecha_nacimiento` date DEFAULT NULL,
-  `comuna` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `provincia` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `region` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `dni` char(30) COLLATE utf8_unicode_ci NOT NULL,
+  `sexo` char(1) COLLATE utf8_unicode_ci NOT NULL,
+  `fecha_nacimiento` date NOT NULL,
+  `comuna` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `provincia` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `region` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `dir_villa_pbla` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `dir_calle` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `dir_numero_casa` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `dir_numero_departamento` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `dir_numero_piso` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `telefono` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `celular` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `dir_numero_casa` int(11) DEFAULT NULL,
+  `dir_numero_departamento` int(11) DEFAULT NULL,
+  `dir_numero_piso` int(11) DEFAULT NULL,
+  `telefono` int(11) DEFAULT NULL,
+  `celular` int(11) DEFAULT NULL,
   `correo` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
   `skype` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
   `observacion` text COLLATE utf8_unicode_ci,
   `imagen` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `fecha_ingreso` datetime DEFAULT NULL,
-  `estado` int(2) DEFAULT NULL,
+  `fecha_ingreso` datetime NOT NULL,
+  `estado` int(2) NOT NULL,
   `empresa_id` int(10) DEFAULT NULL,
-  `estado_personal_id` int(11) DEFAULT NULL,
+  `estado_personal_id` int(11) NOT NULL,
   `area_id` int(11) NOT NULL,
   `estatus_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -960,7 +1007,7 @@ CREATE TABLE `personal` (
 --
 
 INSERT INTO `personal` (`id`, `primer_nombre`, `segundo_nombre`, `apellido_paterno`, `apellido_materno`, `username`, `dni`, `sexo`, `fecha_nacimiento`, `comuna`, `provincia`, `region`, `dir_villa_pbla`, `dir_calle`, `dir_numero_casa`, `dir_numero_departamento`, `dir_numero_piso`, `telefono`, `celular`, `correo`, `skype`, `observacion`, `imagen`, `fecha_ingreso`, `estado`, `empresa_id`, `estado_personal_id`, `area_id`, `estatus_id`) VALUES
-(1, 'Hernán', 'Alexis', 'Castro', 'Rodriguez', 'admin', '182608831', '1', '1992-09-30', '165', '31', '9', 'Villa Galilea', 'Los Vicentinos', '260', '', '', '', '945921969', 'alexx92.04@gmail.com', '', 'Empleado peligroso XD, Muy Agresivo', NULL, '2017-07-26 09:54:57', 1, NULL, 2, 3, NULL);
+(1, 'Hernán', 'Alexis', 'Castro', 'Rodriguez', 'admin', '182608831', '0', '1992-09-30', '1', '1', '1', '', 'Asdas', 24324, 0, 0, 0, 32423, 'alexx92.04@gmail.com', '', '', NULL, '0000-00-00 00:00:00', 1, NULL, 2, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -970,32 +1017,33 @@ INSERT INTO `personal` (`id`, `primer_nombre`, `segundo_nombre`, `apellido_pater
 
 CREATE TABLE `producto` (
   `id` int(10) NOT NULL,
-  `nombre` char(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `nombre` char(200) COLLATE utf8_unicode_ci NOT NULL,
   `codigo_prod` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `fecha_ingreso` datetime DEFAULT NULL,
-  `valor_unitario` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `fecha_ingreso` datetime NOT NULL,
+  `valor_unitario` int(11) DEFAULT NULL,
   `imagen` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `observacion` text COLLATE utf8_unicode_ci,
-  `estado` int(2) DEFAULT NULL,
-  `tipo` int(2) DEFAULT NULL,
-  `tiempo_apx_produccion` int(11) DEFAULT NULL
+  `estado` int(2) NOT NULL,
+  `tipo` int(2) NOT NULL,
+  `tiempo_apx_produccion` int(11) DEFAULT NULL,
+  `valor_minimo_venta` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `producto`
 --
 
-INSERT INTO `producto` (`id`, `nombre`, `codigo_prod`, `fecha_ingreso`, `valor_unitario`, `imagen`, `observacion`, `estado`, `tipo`, `tiempo_apx_produccion`) VALUES
-(1, 'Producto 1', 'PR001', '2017-08-16 12:36:51', '500', NULL, '', 1, 2, 2),
-(2, 'Producto 2', 'PR002', '2017-08-16 12:49:24', '1000', NULL, '', 1, 1, 1),
-(3, 'Producto 3', 'PR003', '2017-08-16 12:53:32', '1500', NULL, '', 1, 2, 50),
-(4, 'Producto 4', 'PR004', '2017-08-16 12:55:12', '2000', NULL, '', 1, 2, 120),
-(5, 'Producto 5', 'PR005', '2017-08-16 13:01:34', '2000', NULL, '', 1, 1, 0),
-(6, 'Producto 6', 'PR006', '2017-08-16 13:32:46', '5000', NULL, '', 1, 1, 0),
-(7, 'Producto 7', 'PR007', '2017-08-16 13:35:02', '10000', NULL, '', 1, 1, 0),
-(8, 'Producto 8', 'PR008', '2017-08-16 13:41:31', '50000', NULL, '', 1, 1, 0),
-(9, 'Producto 9', 'PR009', '2017-08-16 13:53:18', '200', NULL, '', 1, 1, 0),
-(10, 'Producto 10', 'PR010', '2017-08-21 09:43:06', '15000', NULL, '', 1, 1, 0);
+INSERT INTO `producto` (`id`, `nombre`, `codigo_prod`, `fecha_ingreso`, `valor_unitario`, `imagen`, `observacion`, `estado`, `tipo`, `tiempo_apx_produccion`, `valor_minimo_venta`) VALUES
+(1, 'Producto 1', 'PR001', '2017-08-16 12:36:51', 500, NULL, '', 1, 2, 2, 300),
+(2, 'Producto 2', 'PR002', '2017-08-16 12:49:24', 1000, NULL, '', 1, 1, 1, 1000),
+(3, 'Producto 3', 'PR003', '2017-08-16 12:53:32', 1500, NULL, '', 1, 2, 50, 500),
+(4, 'Producto 4', 'PR004', '2017-08-16 12:55:12', 2000, NULL, '', 1, 2, 120, 1000),
+(5, 'Producto 5', 'PR005', '2017-08-16 13:01:34', 2000, NULL, '', 1, 1, 0, 1000),
+(6, 'Producto 6', 'PR006', '2017-08-16 13:32:46', 5000, NULL, '', 1, 1, 0, 2000),
+(7, 'Producto 7', 'PR007', '2017-08-16 13:35:02', 10000, NULL, '', 1, 1, 0, 3500),
+(8, 'Producto 8', 'PR008', '2017-08-16 13:41:31', 50000, NULL, '', 1, 1, 0, 10000),
+(9, 'Producto 9', 'PR009', '2017-08-16 13:53:18', 200, NULL, '', 1, 1, 0, 100),
+(10, 'Producto 10', 'PR010', '2017-08-21 09:43:06', 15000, NULL, '', 1, 1, 0, 7500);
 
 -- --------------------------------------------------------
 
@@ -1005,8 +1053,8 @@ INSERT INTO `producto` (`id`, `nombre`, `codigo_prod`, `fecha_ingreso`, `valor_u
 
 CREATE TABLE `producto_categoria` (
   `id` int(10) NOT NULL,
-  `fk_producto` int(10) DEFAULT NULL,
-  `fk_categoria` int(10) DEFAULT NULL
+  `fk_producto` int(10) NOT NULL,
+  `fk_categoria` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -1092,7 +1140,7 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `confirmation_token`, `password_requested_at`, `roles`) VALUES
-(1, 'admin', 'admin', 'alexx92.04@gmail.com', 'alexx92.04@gmail.com', 1, NULL, '$2y$13$6HN4g5gts33NZGJ.FpRN4.kyC/sMf5EisMaBauQL77WyrvUOfoqlu', '2017-08-31 09:32:29', NULL, NULL, 'a:1:{i:0;s:10:\"ROLE_ADMIN\";}'),
+(1, 'admin', 'admin', 'alexx92.04@gmail.com', 'alexx92.04@gmail.com', 1, NULL, '$2y$13$6HN4g5gts33NZGJ.FpRN4.kyC/sMf5EisMaBauQL77WyrvUOfoqlu', '2017-09-06 17:49:40', NULL, NULL, 'a:1:{i:0;s:10:\"ROLE_ADMIN\";}'),
 (2, 'appionic', 'appionic', 'appionic@gmail.com', 'appionic@gmail.com', 1, NULL, '$2y$13$6a6z3P/k2YaOWN6fBlh3aOs7EHLrf1cHR66S0a9HlwD/YCK7wOVtq', '2017-08-29 12:49:10', NULL, NULL, 'a:1:{i:0;s:10:\"ROLE_ADMIN\";}');
 
 --
@@ -1187,27 +1235,15 @@ ALTER TABLE `estado_personal`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `estapas_proceso`
---
-ALTER TABLE `estapas_proceso`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indices de la tabla `estatus`
 --
 ALTER TABLE `estatus`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `etapas`
+-- Indices de la tabla `etapa`
 --
-ALTER TABLE `etapas`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `etapas_produccion`
---
-ALTER TABLE `etapas_produccion`
+ALTER TABLE `etapa`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1217,12 +1253,25 @@ ALTER TABLE `etapa_pedido_detalle`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `etapa_proceso`
+--
+ALTER TABLE `etapa_proceso`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `etapa_produccion`
+--
+ALTER TABLE `etapa_produccion`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nombre_UNIQUE` (`nombre`);
+
+--
 -- Indices de la tabla `e_p_producto`
 --
 ALTER TABLE `e_p_producto`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_etapas_produccion_producto_etapas_produccion1_idx` (`etapas_produccion_id`),
-  ADD KEY `fk_e_p_producto_pedido_detalle1_idx` (`pedido_detalle_id`);
+  ADD KEY `fk_e_p_producto_pedido_detalle1_idx` (`pedido_detalle_id`),
+  ADD KEY `fk_e_p_producto_etapa_produccion1_idx` (`etapa_produccion_id`);
 
 --
 -- Indices de la tabla `historial`
@@ -1246,10 +1295,10 @@ ALTER TABLE `opciones_producto`
 --
 ALTER TABLE `pedidos`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_etapa` (`fk_etapa`),
   ADD KEY `fk_pedidos_contac_empre1_idx` (`contac_empre_id`),
   ADD KEY `fk_pedidos_personal1_idx` (`personal_id`),
-  ADD KEY `fk_pedidos_estapas_proceso1_idx` (`estapas_proceso_id`);
+  ADD KEY `fk_pedidos_etapa_proceso1_idx` (`etapa_proceso_id`),
+  ADD KEY `fk_pedidos_etapa1_idx` (`etapa_id`);
 
 --
 -- Indices de la tabla `pedido_detalle`
@@ -1329,12 +1378,12 @@ ALTER TABLE `categorias`
 -- AUTO_INCREMENT de la tabla `contacto`
 --
 ALTER TABLE `contacto`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT de la tabla `contac_empre`
 --
 ALTER TABLE `contac_empre`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT de la tabla `def_comuna`
 --
@@ -1359,31 +1408,31 @@ ALTER TABLE `detallepedido_opcionesproducto`
 -- AUTO_INCREMENT de la tabla `empresa`
 --
 ALTER TABLE `empresa`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `estado_personal`
 --
 ALTER TABLE `estado_personal`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
--- AUTO_INCREMENT de la tabla `estapas_proceso`
---
-ALTER TABLE `estapas_proceso`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
 -- AUTO_INCREMENT de la tabla `estatus`
 --
 ALTER TABLE `estatus`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT de la tabla `etapas`
+-- AUTO_INCREMENT de la tabla `etapa`
 --
-ALTER TABLE `etapas`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `etapa`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
--- AUTO_INCREMENT de la tabla `etapas_produccion`
+-- AUTO_INCREMENT de la tabla `etapa_proceso`
 --
-ALTER TABLE `etapas_produccion`
+ALTER TABLE `etapa_proceso`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT de la tabla `etapa_produccion`
+--
+ALTER TABLE `etapa_produccion`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `e_p_producto`
@@ -1404,12 +1453,12 @@ ALTER TABLE `opciones_producto`
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `pedido_detalle`
 --
 ALTER TABLE `pedido_detalle`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `personal`
 --
@@ -1492,8 +1541,8 @@ ALTER TABLE `empresa`
 -- Filtros para la tabla `e_p_producto`
 --
 ALTER TABLE `e_p_producto`
-  ADD CONSTRAINT `fk_e_p_producto_pedido_detalle1` FOREIGN KEY (`pedido_detalle_id`) REFERENCES `pedido_detalle` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_etapas_produccion_producto_etapas_produccion1` FOREIGN KEY (`etapas_produccion_id`) REFERENCES `etapas_produccion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_e_p_producto_etapa_produccion1` FOREIGN KEY (`etapa_produccion_id`) REFERENCES `etapa_produccion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_e_p_producto_pedido_detalle1` FOREIGN KEY (`pedido_detalle_id`) REFERENCES `pedido_detalle` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `historial`
@@ -1515,9 +1564,9 @@ ALTER TABLE `opciones_producto`
 --
 ALTER TABLE `pedidos`
   ADD CONSTRAINT `fk_pedidos_contac_empre1` FOREIGN KEY (`contac_empre_id`) REFERENCES `contac_empre` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_pedidos_estapas_proceso1` FOREIGN KEY (`estapas_proceso_id`) REFERENCES `estapas_proceso` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_pedidos_personal1` FOREIGN KEY (`personal_id`) REFERENCES `personal` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `pedidos_ibfk_3` FOREIGN KEY (`fk_etapa`) REFERENCES `etapas` (`id`);
+  ADD CONSTRAINT `fk_pedidos_etapa1` FOREIGN KEY (`etapa_id`) REFERENCES `etapa` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_pedidos_etapa_proceso1` FOREIGN KEY (`etapa_proceso_id`) REFERENCES `etapa_proceso` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_pedidos_personal1` FOREIGN KEY (`personal_id`) REFERENCES `personal` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `pedido_detalle`

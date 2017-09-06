@@ -122,39 +122,41 @@ class PersonalController extends Controller
                 $personal->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));
                 $personal->setEstadoPersonal($em->getRepository('AdminBundle:EstadoPersonal')->findOneBy(array('id'=>2)));
             }
-            if (!$personal = $em->getRepository('AdminBundle:Personal')->findOneBy(array( 'dni' => $dni ))) {//valida que no alla una persona con el mismo rut
-                $valid = true; //actualizo la variable que valida el ingreso                
-                $personal->setArea($em->getRepository('AdminBundle:Area')->findOneBy(array('id'=>$area)));
-                $personal->setPrimerNombre($primer_nombre);
-                $personal->setSegundoNombre($segundo_nombre);
-                $personal->setApellidoPaterno($apellido_paterno);
-                $personal->setApellidoMaterno($apellido_materno);
-                $personal->setDni($dni);
-                $personal->setSexo($sexo);
-                $personal->setFechaNacimiento($fecha_nacimiento);                
-                $personal->setComuna($comuna);
-                $personal->setProvincia($provincia);
-                $personal->setRegion($region);
-                $personal->setDirVillaPbla($dir_villa_pobl);
-                $personal->setDirCalle($dir_calle);
-                $personal->setDirNumeroCasa($dir_numero_casa);
-                $personal->setDirNumeroDepartamento($dir_numero_depto);
-                $personal->setDirNumeroPiso($dir_numero_piso);                
-                $personal->setTelefono($telefono);
-                $personal->setCelular($celular);
-                $personal->setCorreo($email);
-                $personal->setSkype($skype);                    
-                $personal->setObservacion($observacion);    
-                // guardar imagen
-                if ($imagen)
-                {
-                    $dir_image = $this->subirImagen($imagen);
-                    $personal->setImagen($dir_image);
-                }    
-                $em->persist($personal);
-                $em->flush();
-    
-                $result = true;
+            if ($personal = $em->getRepository('AdminBundle:Personal')->findOneBy(array( 'dni' => $dni ))) {//valida que no alla una persona con el mismo rut
+                if ($personal->getId()==$id) {                
+                    $valid = true; //actualizo la variable que valida el ingreso
+                    $personal->setArea($em->getRepository('AdminBundle:Area')->findOneBy(array('id'=>1)));
+                    $personal->setPrimerNombre($primer_nombre);
+                    $personal->setSegundoNombre($segundo_nombre);
+                    $personal->setApellidoPaterno($apellido_paterno);
+                    $personal->setApellidoMaterno($apellido_materno);
+                    $personal->setDni($dni);
+                    $personal->setSexo($sexo);
+                    $personal->setFechaNacimiento($fecha_nacimiento);
+                    $personal->setComuna($comuna);
+                    $personal->setProvincia($provincia);
+                    $personal->setRegion($region);
+                    $personal->setDirVillaPbla($dir_villa_pobl);
+                    $personal->setDirCalle($dir_calle);
+                    $personal->setDirNumeroCasa($dir_numero_casa);
+                    $personal->setDirNumeroDepartamento($dir_numero_depto);
+                    $personal->setDirNumeroPiso($dir_numero_piso);
+                    $personal->setTelefono($telefono);
+                    $personal->setCelular($celular);
+                    $personal->setCorreo($email);
+                    $personal->setSkype($skype);
+                    $personal->setObservacion($observacion);
+                    // guardar imagen
+                    if ($imagen)
+                    {
+                        $dir_image = $this->subirImagen($imagen);
+                        $personal->setImagen($dir_image);
+                    }    
+                    $em->persist($personal);
+                    $em->flush();
+        
+                    $result = true;
+                }
             }
 
             

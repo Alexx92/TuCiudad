@@ -24,7 +24,7 @@ class Personal
     /**
      * @var string
      *
-     * @ORM\Column(name="primer_nombre", type="string", length=30, nullable=true)
+     * @ORM\Column(name="primer_nombre", type="string", length=30, nullable=false)
      */
     private $primerNombre;
 
@@ -38,14 +38,14 @@ class Personal
     /**
      * @var string
      *
-     * @ORM\Column(name="apellido_paterno", type="string", length=30, nullable=true)
+     * @ORM\Column(name="apellido_paterno", type="string", length=30, nullable=false)
      */
     private $apellidoPaterno;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="apellido_materno", type="string", length=30, nullable=true)
+     * @ORM\Column(name="apellido_materno", type="string", length=30, nullable=false)
      */
     private $apellidoMaterno;
 
@@ -59,42 +59,42 @@ class Personal
     /**
      * @var string
      *
-     * @ORM\Column(name="dni", type="string", length=30, nullable=true)
+     * @ORM\Column(name="dni", type="string", length=30, nullable=false)
      */
     private $dni;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="sexo", type="string", length=1, nullable=true)
+     * @ORM\Column(name="sexo", type="string", length=1, nullable=false)
      */
     private $sexo;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
+     * @ORM\Column(name="fecha_nacimiento", type="date", nullable=false)
      */
     private $fechaNacimiento;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="comuna", type="string", length=30, nullable=true)
+     * @ORM\Column(name="comuna", type="string", length=30, nullable=false)
      */
     private $comuna;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="provincia", type="string", length=30, nullable=true)
+     * @ORM\Column(name="provincia", type="string", length=30, nullable=false)
      */
     private $provincia;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="region", type="string", length=30, nullable=true)
+     * @ORM\Column(name="region", type="string", length=30, nullable=false)
      */
     private $region;
 
@@ -113,37 +113,37 @@ class Personal
     private $dirCalle;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="dir_numero_casa", type="string", length=10, nullable=true)
+     * @ORM\Column(name="dir_numero_casa", type="integer", nullable=true)
      */
     private $dirNumeroCasa;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="dir_numero_departamento", type="string", length=10, nullable=true)
+     * @ORM\Column(name="dir_numero_departamento", type="integer", nullable=true)
      */
     private $dirNumeroDepartamento;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="dir_numero_piso", type="string", length=10, nullable=true)
+     * @ORM\Column(name="dir_numero_piso", type="integer", nullable=true)
      */
     private $dirNumeroPiso;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="telefono", type="string", length=15, nullable=true)
+     * @ORM\Column(name="telefono", type="integer", nullable=true)
      */
     private $telefono;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="celular", type="string", length=15, nullable=true)
+     * @ORM\Column(name="celular", type="integer", nullable=true)
      */
     private $celular;
 
@@ -178,14 +178,14 @@ class Personal
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=true)
+     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=false)
      */
     private $fechaIngreso;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="estado", type="integer", nullable=true)
+     * @ORM\Column(name="estado", type="integer", nullable=false)
      */
     private $estado;
 
@@ -543,7 +543,7 @@ class Personal
     /**
      * Set dirNumeroCasa
      *
-     * @param string $dirNumeroCasa
+     * @param integer $dirNumeroCasa
      * @return Personal
      */
     public function setDirNumeroCasa($dirNumeroCasa)
@@ -556,7 +556,7 @@ class Personal
     /**
      * Get dirNumeroCasa
      *
-     * @return string 
+     * @return integer 
      */
     public function getDirNumeroCasa()
     {
@@ -566,7 +566,7 @@ class Personal
     /**
      * Set dirNumeroDepartamento
      *
-     * @param string $dirNumeroDepartamento
+     * @param integer $dirNumeroDepartamento
      * @return Personal
      */
     public function setDirNumeroDepartamento($dirNumeroDepartamento)
@@ -579,7 +579,7 @@ class Personal
     /**
      * Get dirNumeroDepartamento
      *
-     * @return string 
+     * @return integer 
      */
     public function getDirNumeroDepartamento()
     {
@@ -589,7 +589,7 @@ class Personal
     /**
      * Set dirNumeroPiso
      *
-     * @param string $dirNumeroPiso
+     * @param integer $dirNumeroPiso
      * @return Personal
      */
     public function setDirNumeroPiso($dirNumeroPiso)
@@ -602,7 +602,7 @@ class Personal
     /**
      * Get dirNumeroPiso
      *
-     * @return string 
+     * @return integer 
      */
     public function getDirNumeroPiso()
     {
@@ -612,7 +612,7 @@ class Personal
     /**
      * Set telefono
      *
-     * @param string $telefono
+     * @param integer $telefono
      * @return Personal
      */
     public function setTelefono($telefono)
@@ -625,7 +625,7 @@ class Personal
     /**
      * Get telefono
      *
-     * @return string 
+     * @return integer 
      */
     public function getTelefono()
     {
@@ -635,7 +635,7 @@ class Personal
     /**
      * Set celular
      *
-     * @param string $celular
+     * @param integer $celular
      * @return Personal
      */
     public function setCelular($celular)
@@ -648,7 +648,7 @@ class Personal
     /**
      * Get celular
      *
-     * @return string 
+     * @return integer 
      */
     public function getCelular()
     {

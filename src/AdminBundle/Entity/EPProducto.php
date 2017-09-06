@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EPProducto
  *
- * @ORM\Table(name="e_p_producto", indexes={@ORM\Index(name="fk_etapas_produccion_producto_etapas_produccion1_idx", columns={"etapas_produccion_id"}), @ORM\Index(name="fk_e_p_producto_pedido_detalle1_idx", columns={"pedido_detalle_id"})})
+ * @ORM\Table(name="e_p_producto", indexes={@ORM\Index(name="fk_e_p_producto_pedido_detalle1_idx", columns={"pedido_detalle_id"}), @ORM\Index(name="fk_e_p_producto_etapa_produccion1_idx", columns={"etapa_produccion_id"})})
  * @ORM\Entity
  */
 class EPProducto
@@ -22,6 +22,16 @@ class EPProducto
     private $id;
 
     /**
+     * @var \EtapaProduccion
+     *
+     * @ORM\ManyToOne(targetEntity="EtapaProduccion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="etapa_produccion_id", referencedColumnName="id")
+     * })
+     */
+    private $etapaProduccion;
+
+    /**
      * @var \PedidoDetalle
      *
      * @ORM\ManyToOne(targetEntity="PedidoDetalle")
@@ -30,16 +40,6 @@ class EPProducto
      * })
      */
     private $pedidoDetalle;
-
-    /**
-     * @var \EtapasProduccion
-     *
-     * @ORM\ManyToOne(targetEntity="EtapasProduccion")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="etapas_produccion_id", referencedColumnName="id")
-     * })
-     */
-    private $etapasProduccion;
 
 
 
@@ -51,6 +51,29 @@ class EPProducto
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set etapaProduccion
+     *
+     * @param \AdminBundle\Entity\EtapaProduccion $etapaProduccion
+     * @return EPProducto
+     */
+    public function setEtapaProduccion(\AdminBundle\Entity\EtapaProduccion $etapaProduccion = null)
+    {
+        $this->etapaProduccion = $etapaProduccion;
+
+        return $this;
+    }
+
+    /**
+     * Get etapaProduccion
+     *
+     * @return \AdminBundle\Entity\EtapaProduccion 
+     */
+    public function getEtapaProduccion()
+    {
+        return $this->etapaProduccion;
     }
 
     /**
@@ -74,28 +97,5 @@ class EPProducto
     public function getPedidoDetalle()
     {
         return $this->pedidoDetalle;
-    }
-
-    /**
-     * Set etapasProduccion
-     *
-     * @param \AdminBundle\Entity\EtapasProduccion $etapasProduccion
-     * @return EPProducto
-     */
-    public function setEtapasProduccion(\AdminBundle\Entity\EtapasProduccion $etapasProduccion = null)
-    {
-        $this->etapasProduccion = $etapasProduccion;
-
-        return $this;
-    }
-
-    /**
-     * Get etapasProduccion
-     *
-     * @return \AdminBundle\Entity\EtapasProduccion 
-     */
-    public function getEtapasProduccion()
-    {
-        return $this->etapasProduccion;
     }
 }

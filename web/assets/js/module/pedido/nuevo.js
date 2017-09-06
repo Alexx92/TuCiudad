@@ -1,6 +1,6 @@
 $(document).ready(function() {
     // window.onload = modal(162);
-
+    window.onload = cargar();
     // bloqueo de letras para un imput con la clase val_mun
     $('.val_num').keypress(function(e) {
         var tecla = (document.all) ? e.keyCode : e.which;
@@ -61,12 +61,20 @@ $(document).ready(function() {
     });
     //muestra el input para el ingreso de productos al pedido
     $("#lista_contactos_cot").on('change', function() {
-        var input = $(this).val();
-        if (input != "") {
-            $("#prod_empresa").show(); //activa div de ingreso de producto
+        if ($('#ped_id').val() != "") {
+            var validar = confirm("¿Cambiar el contacto del Pedido?");
+            if (validar) {
+                toastr.warning('Registrar en Hitorial');
+            }
         } else {
-            $("#prod_empresa").hide(); //desactiva div de ingreso de producto
+            var input = $(this).val();
+            if (input != "") {
+                $("#prod_empresa").show(); //activa div de ingreso de producto
+            } else {
+                $("#prod_empresa").hide(); //desactiva div de ingreso de producto
+            }
         }
+
     });
     // js ajax abrir modal crear Contacto
     $('#modalIngresoContacto').on('click', function() {
@@ -221,6 +229,11 @@ $(document).ready(function() {
                 $('#valor').val(response.total_pedido);
                 $('#total' + id_detalle).text("" + response.total_pedido);
                 $('#valor_o').val(response.totalOpciones);
+                $("input#total_ped").val(response.valorTotal);
+                $("input#totalImp").val(response.totalCI);
+                $("input#valorNetoCD").val(response.valorNetoCD);
+                $("input#montoDescuento").val(response.montoDescuento);
+
                 cargarOpcionesPosibles();
                 toastr.success('Valor Agregado');
             }).fail(function(response) {
@@ -251,6 +264,11 @@ $(document).ready(function() {
                 $('#total' + id_detalle).text("" + response.total_pedido);
                 $('#valor').val(response.total_pedido);
                 $('#valor_o').val(response.totalOpciones);
+                $("input#total_ped").val(response.valorTotal);
+                $("input#totalImp").val(response.totalCI);
+                $("input#valorNetoCD").val(response.valorNetoCD);
+                $("input#montoDescuento").val(response.montoDescuento);
+
                 cargarOpcionesPosibles();
                 toastr.success('Datos guardados');
             } else {
@@ -451,6 +469,67 @@ $(document).ready(function() {
             $('#opcion_unidades').val(" ");
         }
     });
+    $("#btnGuardarPedido").on('click', function(e) {
+        var valPed = $('#ped_id').val();
+        var valTotalPed = $('#total_ped').val();
+        if (valPed > 0 && valTotalPed > 0) {
+            e.preventDefault();
+            var form = $('#form_new_pedido');
+            form.validate({
+                errorClass: "state-error",
+                validClass: "state-success",
+                errorElement: "em",
+                rules: {
+                    ped_id: {
+                        required: true
+                    },
+                    estadoNegociacion: {
+                        required: true
+                    },
+
+                },
+                messages: {
+                    ped_id: {
+                        required: 'Ingrese almenos un producto'
+                    },
+                    estadoNegociacion: {
+                        required: 'Escoja un estado valido'
+                    }
+                },
+                errorPlacement: function(element, errorClass, validClass) {
+                    $(element).closest('.field').addClass(errorClass).removeClass(validClass);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).closest('.field').addClass(errorClass).removeClass(validClass);
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).closest('.field').removeClass(errorClass).addClass(validClass);
+                }
+            });
+            if (form.valid(true)) {
+                var datos = new FormData(form[0]);
+                var validator = form.validate();
+                $.ajax({
+                    dataType: 'json',
+                    method: form.attr('method'),
+                    url: form.attr('action'),
+                    data: datos,
+                    contentType: false,
+                    processData: false,
+                    cache: false
+                }).done(function(response) {
+                    toastr.success('Datos guardados');
+                }).fail(function(response) {
+                    toastr.error('Error al guardar');
+                });
+            } else {
+                toastr.warning('Ingrese almenos un producto');
+            }
+        } else {
+            toastr.warning('Ingrese almenos un producto');
+
+        }
+    });
 });
 //Elimina la opcion seleccionada del listado 
 function functionDelete(id_opcion) {
@@ -464,9 +543,11 @@ function functionDelete(id_opcion) {
         data: data,
     }).done(function(response) {
         $('#total' + id_detalle).text("" + response.total_pedido);
+        $("input#total_ped").val(response.valorTotal);
+        $("input#totalImp").val(response.totalCI);
+        $("input#valorNetoCD").val(response.valorNetoCD);
+        $("input#montoDescuento").val(response.montoDescuento);
 
-        // var total = "total" + id_detalle;
-        // document.getElementById(total).innerHTML = " " + response.total_pedido;
         $('#valor').val(response.total_pedido);
         $("#" + id_opcion).remove();
         cargarOpcionesPosibles();
@@ -558,8 +639,12 @@ function myFunction(val, id) {
     }).done(function(response) {
         $('#total' + id_detalle).text(response.result);
         $("#valor").val(response.result); //le pasa el valor total de la fila en el valor de la ventana modal
-        // $("#nc" + id_detalle).val(cantidad);
-        // document.getElementById("nc" + id_detalle).value = cantidad;
+        $("#nc" + id_detalle).val(cantidad); //le pasa el valor total de la fila en el valor de la ventana modal
+        $("input#total_ped").val(response.valorTotal);
+        $("input#valorNetoCD").val(response.valorNetoCD);
+        $("input#montoDescuento").val(response.montoDescuento);
+
+        $("input#totalImp").val(response.totalCI);
         toastr.success('Datos guardados');
     });
 }
@@ -577,8 +662,31 @@ function actualizaCantidadOpcion(val, id) {
     }).done(function(response) {
         toastr.success('Datos guardados');
         $('#total' + id_detalle).text(response.result);
+        $("input#total_ped").val(response.valorTotal);
+        $("input#totalImp").val(response.totalCI);
+        $("input#valorNetoCD").val(response.valorNetoCD);
+        $("input#montoDescuento").val(response.montoDescuento);
+
+
         $('#valor').val(response.result);
         $('#valor_o').val(response.totalOpciones);
+    });
+}
+//funcion que actualiza el % de descuento y el valor del pedido
+function actualizaDescuento(val) {
+    var porcentaje = val;
+    var id_pedido = $('#ped_id').val();
+    var data = { porcentaje: porcentaje, id_pedido: id_pedido };
+    $.ajax({
+        dataType: 'json',
+        method: 'POST',
+        url: Routing.generate('ajax_actualiza_porcentaje_descuento'),
+        data: data,
+    }).done(function(response) {
+        $("input#totalImp").val(response.totalCI);
+        $("input#valorNetoCD").val(response.valorNetoCD);
+        $("input#montoDescuento").val(response.montoDescuento);
+        toastr.success('Datos guardados');
     });
 }
 //funcion que actualiza el valor por detalle al cambiar el valor de la cotizacion
@@ -593,6 +701,11 @@ function myFunctionValCotizacion(val, id) {
         data: data,
     }).done(function(response) {
         $('#total' + id_detalle).text(response.result);
+        $("input#total_ped").val(response.valorTotal);
+        $("input#totalImp").val(response.totalCI);
+        $("input#valorNetoCD").val(response.valorNetoCD);
+        $("input#montoDescuento").val(response.montoDescuento);
+
         $("#valor").val(response.result); //le pasa el valor total de la fila en el valor de la ventana modal
         $('#vm' + id_detalle).val(valorCotizacion);
         toastr.success('Datos guardados');
@@ -625,6 +738,10 @@ function eliminarProductoDetalle(id_detalle_pedido) {
             url: Routing.generate('ajax_eliminar_detalle_pedido'),
             data: data
         }).done(function(response) {
+            $("input#total_ped").val(response.valorTotal);
+            $("input#valorNetoCD").val(response.valorNetoCD);
+            $("input#montoDescuento").val(response.montoDescuento);
+            $("input#totalImp").val(response.totalCI);
             $("#tr" + id_detalle_pedido).remove();
             toastr.success('Eliminacion exitosa');
         }).fail(function() {
@@ -649,10 +766,21 @@ function select_prod() {
         }).done(function(response) {
             var respuesta = response.producto;
             $("input#ped_id").val(response.id_pedido);
-            // $("#bsq_producto").val(); //deja en planco el input de ingreso
+            $("input#n_cot").val(response.codigoCotizacion);
+            $("input#total_ped").val(response.valorTotal);
+            $("input#valorNetoCD").val(response.valorNetoCD);
+            $("input#montoDescuento").val(response.montoDescuento);
+
+            $("input#totalImp").val(response.totalCI);
             $("#lista_producto").html("");
             $("input#bsq_producto").val("");
             $("#dT_pedido tbody").append(respuesta);
+            // $('#collapseEmpresa').collapse('hide')
+            // $('#collapseContacto').collapse('hide')
+            $("#bsq_empre_pedido").prop('disabled', true);
+            $("#datosPedido").show();
+            $('#btnGuardarPedido').attr("disabled", false);
+
         });
     });
 }
@@ -688,7 +816,27 @@ function conta_lista() {
             $("#bsq_empre_pedido").val();
             $("#lista_empre_cot").html("");
             $("#contacto").show(); //activa div de ingreso de producto
+            $("#collapseContacto").collapse('show'); //activa div de ingreso de producto
             cargarContactos();
         });
     });
+}
+
+function cargar() {
+    var drop1 = $('#ped_id').val();
+    if (drop1 != "") {
+        data = { ped_id: drop1 };
+        $.ajax({
+            dataType: 'json',
+            method: 'POST',
+            url: Routing.generate('ajax_cargar_tabla_ingresada'),
+            data: data,
+        }).done(function(response) {
+            if (response.producto != "") {
+                $("#dT_pedido tbody").append(response.producto);
+            } else {
+                $("#dT_pedido tbody").append('No se han seleccionado productos');
+            }
+        });
+    }
 }

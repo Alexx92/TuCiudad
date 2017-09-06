@@ -24,7 +24,7 @@ class Producto
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=200, nullable=true)
+     * @ORM\Column(name="nombre", type="string", length=200, nullable=false)
      */
     private $nombre;
 
@@ -38,14 +38,14 @@ class Producto
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=true)
+     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=false)
      */
     private $fechaIngreso;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="valor_unitario", type="string", length=20, nullable=true)
+     * @ORM\Column(name="valor_unitario", type="integer", nullable=true)
      */
     private $valorUnitario;
 
@@ -66,14 +66,14 @@ class Producto
     /**
      * @var integer
      *
-     * @ORM\Column(name="estado", type="integer", nullable=true)
+     * @ORM\Column(name="estado", type="integer", nullable=false)
      */
     private $estado;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="tipo", type="integer", nullable=true)
+     * @ORM\Column(name="tipo", type="integer", nullable=false)
      */
     private $tipo;
 
@@ -83,6 +83,13 @@ class Producto
      * @ORM\Column(name="tiempo_apx_produccion", type="integer", nullable=true)
      */
     private $tiempoApxProduccion;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="valor_minimo_venta", type="integer", nullable=true)
+     */
+    private $valorMinimoVenta;
 
 
 
@@ -168,7 +175,7 @@ class Producto
     /**
      * Set valorUnitario
      *
-     * @param string $valorUnitario
+     * @param integer $valorUnitario
      * @return Producto
      */
     public function setValorUnitario($valorUnitario)
@@ -181,7 +188,7 @@ class Producto
     /**
      * Get valorUnitario
      *
-     * @return string 
+     * @return integer 
      */
     public function getValorUnitario()
     {
@@ -301,5 +308,28 @@ class Producto
     public function getTiempoApxProduccion()
     {
         return $this->tiempoApxProduccion;
+    }
+
+    /**
+     * Set valorMinimoVenta
+     *
+     * @param integer $valorMinimoVenta
+     * @return Producto
+     */
+    public function setValorMinimoVenta($valorMinimoVenta)
+    {
+        $this->valorMinimoVenta = $valorMinimoVenta;
+
+        return $this;
+    }
+
+    /**
+     * Get valorMinimoVenta
+     *
+     * @return integer 
+     */
+    public function getValorMinimoVenta()
+    {
+        return $this->valorMinimoVenta;
     }
 }

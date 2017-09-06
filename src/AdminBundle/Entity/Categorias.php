@@ -24,7 +24,7 @@ class Categorias
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=50, nullable=true)
+     * @ORM\Column(name="nombre", type="string", length=50, nullable=false)
      */
     private $nombre;
 
@@ -45,14 +45,14 @@ class Categorias
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=true)
+     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=false)
      */
     private $fechaIngreso;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="estado", type="integer", nullable=true)
+     * @ORM\Column(name="estado", type="integer", nullable=false)
      */
     private $estado;
 

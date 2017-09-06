@@ -215,9 +215,6 @@ admin_pedido_editar:
 admin_pedido_eliminar:
     path:     /pedido/eliminar/
     defaults: { _controller: AdminBundle:Pedido:pedidoEliminar }
-    options:
-        expose: true
-
 #ruta ajax buscar empresas
 ajax_busq_empre_cot:
     path:     /ajax/busqueda/empresa/data/
@@ -236,13 +233,6 @@ ajax_busq_empre_form:
     defaults: { _controller: AdminBundle:Pedido:cargarFormCotizacion }
     options:
         expose: true
-#ruta ajax guardar producto-empresa
-# ajax_guard_prod_empresa:
-#     path:     /ajax/busqueda/empresa/data/response/prod
-#     defaults: { _controller: AdminBundle:Pedido:guardarProducto }
-#     options:
-#         expose: true
-
 #ruta ajax buscar producto
 ajax_busq_producto:
     path:     /ajax/busqueda/producto/data/
@@ -310,13 +300,6 @@ ajax_cargar_opciones_unidad_producto:
     defaults: { _controller: AdminBundle:Pedido:cargaOpcionesUnidadesOpcionProducto}
     options:
         expose: true
-
-# #ruta ajax carga las categorias de producto
-# ajax_cargar_categorias_producto:
-#     path:     /ajax/busqueda/pedido/cargaTodasCategoriasProducto/
-#     defaults: { _controller: AdminBundle:Pedido:cargaCategoriasProducto}
-#     options:
-#         expose: true
 #ruta ajax guarda pedido detalle
 ajax_guardar_detalle_pedido:
     path:     /ajax/busqueda/pedido/guardaPedidoDet/
@@ -327,6 +310,12 @@ ajax_guardar_detalle_pedido:
 ajax_eliminar_detalle_pedido:
     path:     /ajax/busqueda/pedido/eliminarProductoDetalle/
     defaults: { _controller: AdminBundle:Pedido:eliminaDetallePedido}
+    options:
+        expose: true
+#ruta ajax cambiar porcentaje de descuento
+ajax_actualiza_porcentaje_descuento:
+    path:     /ajax/pedido/actualizaDescuento/
+    defaults: { _controller: AdminBundle:Pedido:actualizaCantidadDescuentoPedido}
     options:
         expose: true
 
@@ -463,9 +452,17 @@ json_guardar_contacto:
     defaults: { _controller: AdminBundle:AppIonic:contactoGuardarJson}
     options:
         expose: true
-#ruta json guardar Pedido 
+#ruta json guardar Pedido
 json_guardar_pedido:
     path:     /appionic/pedido/guardar.json/
     defaults: { _controller: AdminBundle:AppIonic:pedidoGuardarJson}
+    options:
+        expose: true
+
+
+#
+ajax_cargar_tabla_ingresada:
+    path:     /pedido/editar/mostrarTabla/
+    defaults: { _controller: AdminBundle:Pedido:cargarTabla}
     options:
         expose: true

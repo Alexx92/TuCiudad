@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Pedidos
  *
- * @ORM\Table(name="pedidos", indexes={@ORM\Index(name="fk_etapa", columns={"fk_etapa"}), @ORM\Index(name="fk_pedidos_contac_empre1_idx", columns={"contac_empre_id"}), @ORM\Index(name="fk_pedidos_personal1_idx", columns={"personal_id"}), @ORM\Index(name="fk_pedidos_estapas_proceso1_idx", columns={"estapas_proceso_id"})})
+ * @ORM\Table(name="pedidos", indexes={@ORM\Index(name="fk_pedidos_contac_empre1_idx", columns={"contac_empre_id"}), @ORM\Index(name="fk_pedidos_personal1_idx", columns={"personal_id"}), @ORM\Index(name="fk_pedidos_etapa_proceso1_idx", columns={"etapa_proceso_id"}), @ORM\Index(name="fk_pedidos_etapa1_idx", columns={"etapa_id"})})
  * @ORM\Entity
  */
 class Pedidos
@@ -29,30 +29,44 @@ class Pedidos
     private $codigoPedido;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="codigo_cotizacion", type="string", length=200, nullable=true)
+     */
+    private $codigoCotizacion;
+
+    /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=true)
+     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=false)
      */
     private $fechaIngreso;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="descuentos", type="string", length=50, nullable=true)
+     * @ORM\Column(name="descuentos", type="integer", nullable=true)
      */
     private $descuentos;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="valor_neto", type="string", length=50, nullable=true)
+     * @ORM\Column(name="iva_actual", type="integer", nullable=true)
+     */
+    private $ivaActual;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="valor_neto", type="integer", nullable=true)
      */
     private $valorNeto;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="total", type="string", length=50, nullable=true)
+     * @ORM\Column(name="total", type="integer", nullable=true)
      */
     private $total;
 
@@ -81,14 +95,24 @@ class Pedidos
     private $contacEmpre;
 
     /**
-     * @var \EstapasProceso
+     * @var \Etapa
      *
-     * @ORM\ManyToOne(targetEntity="EstapasProceso")
+     * @ORM\ManyToOne(targetEntity="Etapa")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="estapas_proceso_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="etapa_id", referencedColumnName="id")
      * })
      */
-    private $estapasProceso;
+    private $etapa;
+
+    /**
+     * @var \EtapaProceso
+     *
+     * @ORM\ManyToOne(targetEntity="EtapaProceso")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="etapa_proceso_id", referencedColumnName="id")
+     * })
+     */
+    private $etapaProceso;
 
     /**
      * @var \Personal
@@ -99,16 +123,6 @@ class Pedidos
      * })
      */
     private $personal;
-
-    /**
-     * @var \Etapas
-     *
-     * @ORM\ManyToOne(targetEntity="Etapas")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="fk_etapa", referencedColumnName="id")
-     * })
-     */
-    private $fkEtapa;
 
 
 
@@ -146,6 +160,29 @@ class Pedidos
     }
 
     /**
+     * Set codigoCotizacion
+     *
+     * @param string $codigoCotizacion
+     * @return Pedidos
+     */
+    public function setCodigoCotizacion($codigoCotizacion)
+    {
+        $this->codigoCotizacion = $codigoCotizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCotizacion
+     *
+     * @return string 
+     */
+    public function getCodigoCotizacion()
+    {
+        return $this->codigoCotizacion;
+    }
+
+    /**
      * Set fechaIngreso
      *
      * @param \DateTime $fechaIngreso
@@ -171,7 +208,7 @@ class Pedidos
     /**
      * Set descuentos
      *
-     * @param string $descuentos
+     * @param integer $descuentos
      * @return Pedidos
      */
     public function setDescuentos($descuentos)
@@ -184,7 +221,7 @@ class Pedidos
     /**
      * Get descuentos
      *
-     * @return string 
+     * @return integer 
      */
     public function getDescuentos()
     {
@@ -192,9 +229,32 @@ class Pedidos
     }
 
     /**
+     * Set ivaActual
+     *
+     * @param integer $ivaActual
+     * @return Pedidos
+     */
+    public function setIvaActual($ivaActual)
+    {
+        $this->ivaActual = $ivaActual;
+
+        return $this;
+    }
+
+    /**
+     * Get ivaActual
+     *
+     * @return integer 
+     */
+    public function getIvaActual()
+    {
+        return $this->ivaActual;
+    }
+
+    /**
      * Set valorNeto
      *
-     * @param string $valorNeto
+     * @param integer $valorNeto
      * @return Pedidos
      */
     public function setValorNeto($valorNeto)
@@ -207,7 +267,7 @@ class Pedidos
     /**
      * Get valorNeto
      *
-     * @return string 
+     * @return integer 
      */
     public function getValorNeto()
     {
@@ -217,7 +277,7 @@ class Pedidos
     /**
      * Set total
      *
-     * @param string $total
+     * @param integer $total
      * @return Pedidos
      */
     public function setTotal($total)
@@ -230,7 +290,7 @@ class Pedidos
     /**
      * Get total
      *
-     * @return string 
+     * @return integer 
      */
     public function getTotal()
     {
@@ -307,26 +367,49 @@ class Pedidos
     }
 
     /**
-     * Set estapasProceso
+     * Set etapa
      *
-     * @param \AdminBundle\Entity\EstapasProceso $estapasProceso
+     * @param \AdminBundle\Entity\Etapa $etapa
      * @return Pedidos
      */
-    public function setEstapasProceso(\AdminBundle\Entity\EstapasProceso $estapasProceso = null)
+    public function setEtapa(\AdminBundle\Entity\Etapa $etapa = null)
     {
-        $this->estapasProceso = $estapasProceso;
+        $this->etapa = $etapa;
 
         return $this;
     }
 
     /**
-     * Get estapasProceso
+     * Get etapa
      *
-     * @return \AdminBundle\Entity\EstapasProceso 
+     * @return \AdminBundle\Entity\Etapa 
      */
-    public function getEstapasProceso()
+    public function getEtapa()
     {
-        return $this->estapasProceso;
+        return $this->etapa;
+    }
+
+    /**
+     * Set etapaProceso
+     *
+     * @param \AdminBundle\Entity\EtapaProceso $etapaProceso
+     * @return Pedidos
+     */
+    public function setEtapaProceso(\AdminBundle\Entity\EtapaProceso $etapaProceso = null)
+    {
+        $this->etapaProceso = $etapaProceso;
+
+        return $this;
+    }
+
+    /**
+     * Get etapaProceso
+     *
+     * @return \AdminBundle\Entity\EtapaProceso 
+     */
+    public function getEtapaProceso()
+    {
+        return $this->etapaProceso;
     }
 
     /**
@@ -350,28 +433,5 @@ class Pedidos
     public function getPersonal()
     {
         return $this->personal;
-    }
-
-    /**
-     * Set fkEtapa
-     *
-     * @param \AdminBundle\Entity\Etapas $fkEtapa
-     * @return Pedidos
-     */
-    public function setFkEtapa(\AdminBundle\Entity\Etapas $fkEtapa = null)
-    {
-        $this->fkEtapa = $fkEtapa;
-
-        return $this;
-    }
-
-    /**
-     * Get fkEtapa
-     *
-     * @return \AdminBundle\Entity\Etapas 
-     */
-    public function getFkEtapa()
-    {
-        return $this->fkEtapa;
     }
 }

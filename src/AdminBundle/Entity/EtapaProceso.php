@@ -5,12 +5,12 @@ namespace AdminBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * EstapasProceso
+ * EtapaProceso
  *
- * @ORM\Table(name="estapas_proceso")
+ * @ORM\Table(name="etapa_proceso")
  * @ORM\Entity
  */
-class EstapasProceso
+class EtapaProceso
 {
     /**
      * @var integer
@@ -24,14 +24,21 @@ class EstapasProceso
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=45, nullable=true)
+     * @ORM\Column(name="sigla", type="string", length=45, nullable=false)
+     */
+    private $sigla;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string", length=45, nullable=false)
      */
     private $nombre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="descripcion", type="string", length=45, nullable=true)
+     * @ORM\Column(name="descripcion", type="string", length=200, nullable=true)
      */
     private $descripcion;
 
@@ -48,10 +55,33 @@ class EstapasProceso
     }
 
     /**
+     * Set sigla
+     *
+     * @param string $sigla
+     * @return EtapaProceso
+     */
+    public function setSigla($sigla)
+    {
+        $this->sigla = $sigla;
+
+        return $this;
+    }
+
+    /**
+     * Get sigla
+     *
+     * @return string 
+     */
+    public function getSigla()
+    {
+        return $this->sigla;
+    }
+
+    /**
      * Set nombre
      *
      * @param string $nombre
-     * @return EstapasProceso
+     * @return EtapaProceso
      */
     public function setNombre($nombre)
     {
@@ -74,7 +104,7 @@ class EstapasProceso
      * Set descripcion
      *
      * @param string $descripcion
-     * @return EstapasProceso
+     * @return EtapaProceso
      */
     public function setDescripcion($descripcion)
     {

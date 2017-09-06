@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Pedidos
  *
- * @ORM\Table(name="pedidos", indexes={@ORM\Index(name="fk_etapa", columns={"fk_etapa"}), @ORM\Index(name="fk_pedidos_contac_empre1_idx", columns={"contac_empre_id"}), @ORM\Index(name="fk_pedidos_personal1_idx", columns={"personal_id"}), @ORM\Index(name="fk_pedidos_estapas_proceso1_idx", columns={"estapas_proceso_id"})})
+ * @ORM\Table(name="pedidos", indexes={@ORM\Index(name="fk_pedidos_contac_empre1_idx", columns={"contac_empre_id"}), @ORM\Index(name="fk_pedidos_personal1_idx", columns={"personal_id"}), @ORM\Index(name="fk_pedidos_etapa_proceso1_idx", columns={"etapa_proceso_id"}), @ORM\Index(name="fk_pedidos_etapa1_idx", columns={"etapa_id"})})
  * @ORM\Entity
  */
 class Pedidos
@@ -29,30 +29,44 @@ class Pedidos
     private $codigoPedido;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="codigo_cotizacion", type="string", length=200, nullable=true)
+     */
+    private $codigoCotizacion;
+
+    /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=true)
+     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=false)
      */
     private $fechaIngreso;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="descuentos", type="string", length=50, nullable=true)
+     * @ORM\Column(name="descuentos", type="integer", nullable=true)
      */
     private $descuentos;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="valor_neto", type="string", length=50, nullable=true)
+     * @ORM\Column(name="iva_actual", type="integer", nullable=true)
+     */
+    private $ivaActual;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="valor_neto", type="integer", nullable=true)
      */
     private $valorNeto;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="total", type="string", length=50, nullable=true)
+     * @ORM\Column(name="total", type="integer", nullable=true)
      */
     private $total;
 
@@ -81,14 +95,24 @@ class Pedidos
     private $contacEmpre;
 
     /**
-     * @var \EstapasProceso
+     * @var \Etapa
      *
-     * @ORM\ManyToOne(targetEntity="EstapasProceso")
+     * @ORM\ManyToOne(targetEntity="Etapa")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="estapas_proceso_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="etapa_id", referencedColumnName="id")
      * })
      */
-    private $estapasProceso;
+    private $etapa;
+
+    /**
+     * @var \EtapaProceso
+     *
+     * @ORM\ManyToOne(targetEntity="EtapaProceso")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="etapa_proceso_id", referencedColumnName="id")
+     * })
+     */
+    private $etapaProceso;
 
     /**
      * @var \Personal
@@ -99,16 +123,6 @@ class Pedidos
      * })
      */
     private $personal;
-
-    /**
-     * @var \Etapas
-     *
-     * @ORM\ManyToOne(targetEntity="Etapas")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="fk_etapa", referencedColumnName="id")
-     * })
-     */
-    private $fkEtapa;
 
 
 }

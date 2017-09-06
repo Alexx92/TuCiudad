@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EPProducto
  *
- * @ORM\Table(name="e_p_producto", indexes={@ORM\Index(name="fk_etapas_produccion_producto_etapas_produccion1_idx", columns={"etapas_produccion_id"}), @ORM\Index(name="fk_e_p_producto_pedido_detalle1_idx", columns={"pedido_detalle_id"})})
+ * @ORM\Table(name="e_p_producto", indexes={@ORM\Index(name="fk_e_p_producto_pedido_detalle1_idx", columns={"pedido_detalle_id"}), @ORM\Index(name="fk_e_p_producto_etapa_produccion1_idx", columns={"etapa_produccion_id"})})
  * @ORM\Entity
  */
 class EPProducto
@@ -22,6 +22,16 @@ class EPProducto
     private $id;
 
     /**
+     * @var \EtapaProduccion
+     *
+     * @ORM\ManyToOne(targetEntity="EtapaProduccion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="etapa_produccion_id", referencedColumnName="id")
+     * })
+     */
+    private $etapaProduccion;
+
+    /**
      * @var \PedidoDetalle
      *
      * @ORM\ManyToOne(targetEntity="PedidoDetalle")
@@ -30,16 +40,6 @@ class EPProducto
      * })
      */
     private $pedidoDetalle;
-
-    /**
-     * @var \EtapasProduccion
-     *
-     * @ORM\ManyToOne(targetEntity="EtapasProduccion")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="etapas_produccion_id", referencedColumnName="id")
-     * })
-     */
-    private $etapasProduccion;
 
 
 }

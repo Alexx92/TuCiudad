@@ -5,12 +5,12 @@ namespace AdminBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * EstapasProceso
+ * Etapa
  *
- * @ORM\Table(name="estapas_proceso")
+ * @ORM\Table(name="etapa")
  * @ORM\Entity
  */
-class EstapasProceso
+class Etapa
 {
     /**
      * @var integer
@@ -24,16 +24,23 @@ class EstapasProceso
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=45, nullable=true)
+     * @ORM\Column(name="nombre", type="string", length=30, nullable=false)
      */
     private $nombre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="descripcion", type="string", length=45, nullable=true)
+     * @ORM\Column(name="siglas", type="string", length=45, nullable=false)
      */
-    private $descripcion;
+    private $siglas;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion", type="string", length=200, nullable=true)
+     */
+    private $observacion;
 
 
 }

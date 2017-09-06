@@ -22,30 +22,30 @@ class PedidoDetalle
     private $id;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="valor_producto", type="string", length=50, nullable=true)
+     * @ORM\Column(name="valor_producto", type="integer", nullable=false)
      */
     private $valorProducto;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="valor_modificado", type="string", length=50, nullable=true)
+     * @ORM\Column(name="valor_modificado", type="integer", nullable=false)
      */
     private $valorModificado;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="cantidad", type="string", length=50, nullable=true)
+     * @ORM\Column(name="cantidad", type="integer", nullable=false)
      */
     private $cantidad;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="total", type="string", length=50, nullable=true)
+     * @ORM\Column(name="total", type="integer", nullable=false)
      */
     private $total;
 
@@ -111,7 +111,7 @@ class PedidoDetalle
     /**
      * Set valorProducto
      *
-     * @param string $valorProducto
+     * @param integer $valorProducto
      * @return PedidoDetalle
      */
     public function setValorProducto($valorProducto)
@@ -124,7 +124,7 @@ class PedidoDetalle
     /**
      * Get valorProducto
      *
-     * @return string 
+     * @return integer 
      */
     public function getValorProducto()
     {
@@ -134,7 +134,7 @@ class PedidoDetalle
     /**
      * Set valorModificado
      *
-     * @param string $valorModificado
+     * @param integer $valorModificado
      * @return PedidoDetalle
      */
     public function setValorModificado($valorModificado)
@@ -147,7 +147,7 @@ class PedidoDetalle
     /**
      * Get valorModificado
      *
-     * @return string 
+     * @return integer 
      */
     public function getValorModificado()
     {
@@ -157,7 +157,7 @@ class PedidoDetalle
     /**
      * Set cantidad
      *
-     * @param string $cantidad
+     * @param integer $cantidad
      * @return PedidoDetalle
      */
     public function setCantidad($cantidad)
@@ -170,7 +170,7 @@ class PedidoDetalle
     /**
      * Get cantidad
      *
-     * @return string 
+     * @return integer 
      */
     public function getCantidad()
     {
@@ -180,7 +180,7 @@ class PedidoDetalle
     /**
      * Set total
      *
-     * @param string $total
+     * @param integer $total
      * @return PedidoDetalle
      */
     public function setTotal($total)
@@ -193,7 +193,7 @@ class PedidoDetalle
     /**
      * Get total
      *
-     * @return string 
+     * @return integer 
      */
     public function getTotal()
     {

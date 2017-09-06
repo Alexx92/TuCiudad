@@ -11,6 +11,8 @@ use AdminBundle\Entity\Pedidos;
 use AdminBundle\Entity\ContacEmpre;
 use AdminBundle\Entity\Personal;
 use AdminBundle\Entity\PedidoDetalle;
+use AdminBundle\Entity\EtapaProceso;
+use AdminBundle\Entity\Etapa;
 use AdminBundle\Entity\Producto;
 use AdminBundle\Entity\DetallepedidoOpcionesproducto;
 use AdminBundle\Entity\OpcionesProducto;
@@ -28,22 +30,30 @@ class PedidoController extends Controller
             'menu_o_con'      => 'pedido'
         ));
     }
-
     public function pedidoNuevoAction()
     {
         // Titulo que se mostrara en la barra de navegacion
         $titulo = 'Nuevo Pedido';
-
+        $fecha = new \DateTime(date("d-m-Y H:i:s"));
+        
         return $this->render('AdminBundle:Pedidos:nuevo.html.twig', array(
-            'titulo'      => $titulo,
-            'nombreContacto' => null,
-            'lista_contactos' =>null,
-            'lista_opciones' =>null,
-            'submenu'     => 'pedido_nueva',
-            'menu_o_con'  => 'pedido'
+            'titulo'                    => $titulo,
+            'nombreContacto'            => null,
+            'fecha'                     => $fecha,
+            'lista_etapa_negociacion'   => null,
+            'lista_contactos'           => null,
+            'lista_opciones'            => null,
+            'submenu'                   => 'pedido_nueva',
+            'menu_o_con'                => 'pedido'
         ));
     }
-
+    //Crear numero de cotizacion
+    private function crearNumeroCotizacion($id_pedido)
+    {
+        $codigo = substr("0000000", 0,- strlen($id_pedido));
+        $codigo.=$id_pedido;        
+        return $codigo;
+    }
     //carga taba
     public function pedidoCargartablaAction(Request $request)
     {
@@ -52,111 +62,100 @@ class PedidoController extends Controller
        // $where = array('estado' => 1);
 
         $lista_pedidos = array();
-        // $pedido = $em->getRepository('AdminBundle:Pedidos')->findAll();
         if ($pedido = $em->getRepository('AdminBundle:Pedidos')->findAll()) {
             
             foreach ($pedido as $value) {
                 $datos = new stdClass();                
                 $datos->id                  = $value->getId();
+                $datos->codigo_cotizacion   = $value->getCodigoCotizacion();                
                 $datos->codigo_pedido       = $value->getCodigoPedido();
+                $datos->fechaIngreso        = $value->getFechaIngreso();
                 $datos->personal_nombre     = $value->getPersonal()->getPrimerNombre();
+                $estado = $em->getRepository('AdminBundle:Etapa')->findOneBy(array('id'=>$value->getEtapa()));
+                $datos->estado              = $estado->getNombre();
                 $empresa = $em->getRepository('AdminBundle:ContacEmpre')->findOneBy(array('id'=>$value->getContacEmpre()->getId()));
                 $datos->empresa_nombre      = $empresa->getFkEmpresa()->getNombre();
+
                 // $concacto = $em->getRepository('AdminBundle:ContacEmpre')->findOneBy(array('id'=>$value->getContacEmpre()->getId()));
                 // $datos->empresa_nombre      = $empresa->getFkEmpresa()->getNombre();
-                $datos->observacion         = $value->getObservacion();
-                $datos->valorNeto           = $value->getValorNeto();
                 
                 $lista_pedidos[]  = $datos;
             }
          
         }
-        // dump($lista_pedidos);
-        // exit;
         return $this->render('AdminBundle:Layouts:tabla_pedido_index.html.twig', array(
             'lista_pedidos' => $lista_pedidos
         ));
     }
-    
     // guardar datos
     public function pedidoGuardarAction(Request $request)
     {
         $result = false;
-
         if ($request->getMethod() == 'POST') {
-            $id_pedido                  = ($request->get('ped_id', false)) ? $request->get('ped_id'): 0;
-            $id_empresa                 = $request->get('empre_id');
-            $id_producto                = $request->get('prod_id');
+            $id_pedido      = ($request->get('ped_id', false)) ? $request->get('ped_id'): 0;
+            $ped_obs        = $request->get('ped_obs');
+            $ped_new_e_n    = $request->get('newEstadoNegociacion');
             /*Creacion de pedido*/
             $user = $this->getUser();//se obtiene el usuario del sistema
             $user_n = $user->getUserName();// obtencion de username del usuario actual
             $user_email = $user->getEmail();//obtencion del email del usuario actual
-
             $em = $this->getDoctrine()->getManager();
             /*Si el correo y el usuario existen como vendedor realiza el pedido */
-            if ($personal = $em->getRepository('AdminBundle:Vendedor')->findOneBy(array('username'=>$user_n, 'correo'=>$user_email))) {
-                /*Extraccion de objeto empresa  para creacion de pedido */
-                $empresa = $em->getRepository('AdminBundle:Empresa')->findOneBy(array( 'id' => $id_empresa ));
-                /*Inicio creacion pedido*/
-                    /*Verifica que el pedido ya alla sido creado y que solo sea una agregacion de producto*/
-                if (!$new_pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array( 'id' => $id_pedido ))) {
-                    $new_pedido = new Pedidos();
-                    $new_pedido->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));
-                    $new_pedido->setFkVendedor($personal);//relaciona el usuario vendedor con el pedido
-                    $new_pedido->setFkEmpresa($empresa);//realciona la empresa con el pedido
-                    //$new_pedido->setEtapa(1);
-                    $em->persist($new_pedido);
-                    $em->flush();
-                    $id_pedido = $new_pedido->getId();
-                   // dump( $id_pedido," segundo"  );
+            if ($personal = $em->getRepository('AdminBundle:Personal')->findOneBy(array('username'=>$user_n, 'correo'=>$user_email))) {
+                $pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array( 'id' => $id_pedido));
+                $fechaActual = new \DateTime(date("d-m-Y H:i:s"));
+                if ($pedido->getFechaIngreso() != $fechaActual)  {//verifica el cambio en fecha de modificacion
+                    $pedido->setFechaModificacion($fechaActual);
                 }
-                /*Fin */
-                /*Inicio creacion de detalle de pedido*/
-                    /*Extrae el mismo objeto pedido que se creo*/
-                    $pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array( 'id' => $id_pedido));
-                    /*Extraccion de objeto producto  para creacion de detalle pedido */
-                    $producto = $em->getRepository('AdminBundle:Producto')->findOneBy(array( 'id' => $id_producto ));
-                    /*Creacion de detalle pedido */
-                    $pedido_detalle = new PedidoDetalle();
-                    $pedido_detalle->setFkProducto($producto);
-                    $pedido_detalle->setFkPedido($pedido);
-                    $pedido_detalle->setValorProducto($producto->getValorUnitario());
-                    $pedido_detalle->setCantidad(1);
-                    $pedido_detalle->setTotal($producto->getValorUnitario());
-                    $em->persist($pedido_detalle);
-                    $em->flush();
-                /*Fin*/
-                /*Inicio actualizacion de total de el pedido*/
-                    $new_pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array( 'id' => $id_pedido ));
-                    $valorTotal =  $new_pedido->getTotal();//obtiene el valor total antes de cambiarlo
-                    $valorNuevo =  $pedido_detalle->getTotal();//obtiene el valor nuevo a sumar
-
-                    $new_pedido->setTotal($valorTotal + $valorNuevo);//actualiza el valor total del pedido sumandole el valor del detalle nuevo
-                    $em->persist($new_pedido);
-                    $em->flush();
-                /*Fin*/
+                if($pedido->getEtapa()->getId() == 6){//verifica el primer cambio en la etapa general del pedido 
+                    $pedido->setEtapa($em->getRepository('AdminBundle:Etapa')->findOneBy(array('id'=>1)));
+                    $pedido->setEtapaProceso($em->getRepository('AdminBundle:EtapaProceso')->findOneBy(array('id'=>1)));
+                }else{
+                    $pedido->setEtapaProceso($em->getRepository('AdminBundle:EtapaProceso')->findOneBy(array('id'=>$ped_new_e_n)));
+                }
+                $pedido->setObservacion($ped_obs);
+                $em->persist($pedido);
+                $em->flush();
                 $result = true;
             }
         }
-
-        $response = new JsonResponse();
-        $response->setData(array('result' => $result, 'id_pedido' => $id_pedido));
-        
-        return $response;
+       echo json_encode(array('result' => $result));
+       exit;
     }
-
     // cargar formulario para editar
     public function pedidoEditarAction(Request $request)
     {
-
-        $titulo  = 'Ver pedio';
-
+        $titulo  = 'Ver/Editar pedido';
         $id = $request->get('id', false);
-
         $em = $this->getDoctrine()->getManager();
-
-        $empresa = $em->getRepository('AdminBundle:Empresa')->findOneBy(array('id' => $id));
+        /*lleno el data de pedido*/
+        $ObjPedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array('id'=>$id));
+        $pedido = array();
+        $pedido['id']                   = $ObjPedido->getId();
+        $pedido['n_cot']                = $ObjPedido->getCodigoCotizacion();
+        $pedido['cod_ped']              = $ObjPedido->getCodigoPedido();
+        $pedido['fechaIngreso']         = $ObjPedido->getFechaIngreso();
+        $pedido['fechaModificacion']    = $ObjPedido->getFechaModificacion();
+        $pedido['descuento']            = ($ObjPedido->getDescuentos() > 0)? $ObjPedido->getDescuentos() : 0;
+        $pedido['total']                = $ObjPedido->getTotal();
+        $pedido['ivaActual']            = "19";
+        // $pedido['ivaActual']            = $ObjPedido->getIvaActual();
+        $pedido['valorNeto']            = $ObjPedido->getValorNeto();
+        $pedido['obs']                  = $ObjPedido->getObservacion();
+        $pedido['etapa']               = $em->getRepository('AdminBundle:Etapa')->findOneBy(array('id'=>$ObjPedido->getEtapa()));
+        $pedido['estadoProceso']        = $em->getRepository('AdminBundle:EtapaProceso')->findOneBy(array('id'=>$ObjPedido->getEtapaProceso()));
+        $pedido['montoDescuento']       = ($ObjPedido->getDescuentos() > 0 && $ObjPedido->getDescuentos() != "") ? ($ObjPedido->getDescuentos()/100)*$ObjPedido->getTotal() : 0;
+        $pedido['totalImp']             = (1+(19/100))*$ObjPedido->getValorNeto();
+     
+        $lista_etapa_negociacion = $em->getRepository('AdminBundle:EtapaProceso')->findBy(array());
         
+        $contactoEmpre = $em->getRepository('AdminBundle:ContacEmpre')->findOneBy(array( 'id' => $ObjPedido->getContacEmpre()))->getFkContacto();
+        $lisContactEmpre = $em->getRepository('AdminBundle:ContacEmpre')->findBy(array( 'fkEmpresa' => $ObjPedido->getContacEmpre()->getFkEmpresa()));
+        
+        $pedido['id_contacto']   = $contactoEmpre->getId();
+
+        /*lleno el data de empresa*/
+        $empresa = $em->getRepository('AdminBundle:ContacEmpre')->findOneBy(array('id' => $ObjPedido->getContacEmpre()))->getFkEmpresa();        
         $data = array();
 
         $data['id']                = $empresa->getId();
@@ -179,33 +178,19 @@ class PedidoController extends Controller
         $data['web']               = $empresa->getWeb();
         $data['obs']               = $empresa->getObservacion();
         $data['coordenadas']       = $empresa->getCoordenadas();
-        $data['imagen']            = $empresa->getImagen();
+        $data['imagen']            = $empresa->getImagen();   
 
-        // carga de datos con la lista de contactos vinculados a la empresa
-        $lista_contempre = array();
-        if ($cont_empre = $em->getRepository('AdminBundle:ContacEmpre')->findBy(array( 'fkEmpresa' => $id ))) {
-            foreach ($cont_empre as $value) {
-                $datos = new stdClass();
-                
-                $datos->id_contacto            = $value->getId();
-                $datos->pri_nombre_fkcont      = $value->getFkContacto()->getPrimerNombre();
-                $datos->seg_nombre_fkcont      = $value->getFkContacto()->getSegundoNombre();
-                $datos->apellido_pate_fkcont   = $value->getFkContacto()->getApellidoPaterno();
-                $datos->apellido_mate_fkcont   = $value->getFkContacto()->getApellidoMaterno();
-                
-                $lista_contempre[]  = $datos;
-            }
-        }
         
         return $this->render('AdminBundle:Pedidos:nuevo.html.twig', array(
             'titulo'          => $titulo,
             'data'            => $data,
-            'lista_contempre' => $lista_contempre,
+            'pedido'          => $pedido,
+            'lista_contactos' => $lisContactEmpre,
+            'lista_etapa_negociacion' => $lista_etapa_negociacion,
             'submenu'         => 'pedido_nueva',
             'menu_o_con'      => 'pedido'
         ));
     }
-
     // ajax buscar empresas
     public function buscarEmpresaAction(Request $request)
     {
@@ -248,9 +233,10 @@ class PedidoController extends Controller
                 if($lista_contactos==''){
                     $lista_contactos .= '<option value="">Seleccione</option>';
                 }
-                $lista_contactos .= '<option value="'.$result->getFkContacto()->getId().'">'."Rut ".':'.$result->getFkContacto()->getRun(). ',  '.$result->getFkContacto()->getPrimerNombre().' '.$result->getFkContacto()->getApellidoPaterno().'</option>';
+                $retVal = ($result->getFkContacto()->getRun()!="") ? "Run ".':'.$result->getFkContacto()->getRun() : '' ;
+                $lista_contactos .= '<option value="'.$result->getFkContacto()->getId().'">'.$retVal.$result->getFkContacto()->getPrimerNombre().' '.$result->getFkContacto()->getApellidoPaterno().' '.$result->getFkContacto()->getApellidoMaterno().'</option>';
             }
-        }      
+        }
         $response = new JsonResponse();
         $response->setData(array('op'=>$op, 'contLista' => $lista_contactos));
         return $response;
@@ -348,9 +334,8 @@ class PedidoController extends Controller
         $response = new JsonResponse();
         $response->setData(array('totalOpciones' => $total,'lista_opciones_guardadas' => $listaOpcionesGuardadas,'valorModificado'=>$valorModificado->getValorModificado(),'cantidad'=>$valorModificado->getCantidad()));
         return $response;
-    }
-   
-    /*Encargado de Buscar nombre de producto*/
+    }   
+    /*Encargado de Buscar datos del producto y guardar el detallepedido junto con el pedido*/
     public function buscardatosproductosAction(Request $request)
     {
         $id_prod     = $request->get('id_producto');
@@ -371,12 +356,19 @@ class PedidoController extends Controller
                 if (!$new_pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array( 'id' => $id_pedido ))) {
                     $new_pedido = new Pedidos();
                     $new_pedido->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));
+                 
                     $new_pedido->setPersonal($personal);//relaciona el usuario vendedor con el pedido
                     $new_pedido->setContacEmpre($em->getRepository('AdminBundle:ContacEmpre')->findOneBy(array('fkContacto'=>$id_contacto, 'fkEmpresa'=>$id_empresa)));
-                    //$new_pedido->setEtapa(1);
+                    $new_pedido->setEtapa($em->getRepository('AdminBundle:Etapa')->findOneBy(array('id'=>6)));
+                    $new_pedido->setEtapaProceso($em->getRepository('AdminBundle:EtapaProceso')->findOneBy(array('id'=>6))); 
+                    $new_pedido->setIvaActual("19");
                     $em->persist($new_pedido);
                     $em->flush();
                     $id_pedido = $new_pedido->getId();
+                    $new_pedido->setCodigoCotizacion($this->crearNumeroCotizacion($id_pedido));
+                    
+                    $em->persist($new_pedido);
+                    $em->flush();                     
                 }
             /*Fin*/
             /*Inicio creacion de detalle de pedido*/
@@ -387,7 +379,7 @@ class PedidoController extends Controller
                 $pedido_detalle->setFkPedido($pedido);
                 $pedido_detalle->setValorProducto($producto->getValorUnitario());
                 $pedido_detalle->setCantidad(1);
-                $idEtapaPrincipal = ($em->getRepository('AdminBundle:ProductoCategoria')->findOneBy(array('fkProducto'=>$id_prod,'fkCategoria'=>1)))? 2 : 1;                
+                $idEtapaPrincipal = ($em->getRepository('AdminBundle:ProductoCategoria')->findOneBy(array('fkProducto'=>$id_prod,'fkCategoria'=>1)))? 2 : 3;                
                 $pedido_detalle->setEtapaPedidoDetalle($em->getRepository('AdminBundle:EtapaPedidoDetalle')->findOneBy(array('id'=>$idEtapaPrincipal)));
                 $pedido_detalle->setTotal($producto->getValorUnitario());
                 $pedido_detalle->setValorModificado($producto->getValorUnitario());
@@ -399,6 +391,9 @@ class PedidoController extends Controller
                 $valorTotal = $new_pedido->getTotal();//obtiene el valor total antes de cambiarlo
                 $valorNuevo = $pedido_detalle->getTotal();//obtiene el valor nuevo a sumar
                 $new_pedido->setTotal($valorTotal + $valorNuevo);//actualiza el valor total del pedido sumandole el valor del detalle nuevo
+                // $new_pedido->setValorNeto((1-($new_pedido->getDescuentos()/100))*$new_pedido->getTotal());
+                $montoDescuento = ($new_pedido->getDescuentos() > 0)  ? ($new_pedido->getDescuentos()/100)*($valorTotal + $valorNuevo) : 0 ;            
+                $new_pedido->setValorNeto(($valorTotal + $valorNuevo)-$montoDescuento);
                 $em->persist($new_pedido);
                 $em->flush();
             /*Fin actualizacion total de Pedido*/
@@ -414,8 +409,7 @@ class PedidoController extends Controller
             ->getQuery();
             $id_detalle = $pedido_detalle->getId();
             //$acotizar  = ($em->getRepository('AdminBundle:ProductoCategoria')->findOneBy(array('fkProducto'=>$id_prod,'fkCategoria'=>1)))? "readonly" : "";
-            $acotizar  = ($idEtapaPrincipal==2)? "readonly" : "";
-            
+            $acotizar  = ($idEtapaPrincipal==2)? "readonly" : "";            
             if ($resultQuery = $q->getResult()) {
                 foreach ($resultQuery as $value) {
                     //$id_detalle = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('fkProducto'=> $value->getId(), 'fkPedido'=> $new_pedido->getId()))->getId();
@@ -436,9 +430,11 @@ class PedidoController extends Controller
                 }
                 $result = true;
             }
+            /* Calculo de valor imponible*/
+            $totalCI = (($new_pedido->getIvaActual()/100)+1)*$new_pedido->getValorNeto();         
         }//final if que evalua el Personal 
         $response = new JsonResponse();
-        $response->setData(array('producto' => $producto,'id_pedido' => $id_pedido));
+        $response->setData(array('montoDescuento'=>$montoDescuento,'valorNetoCD'=>$new_pedido->getValorNeto(), 'totalCI'=>$totalCI,'producto' => $producto,'id_pedido' => $id_pedido,'codigoCotizacion'=>$pedido->getCodigoCotizacion(),'valorTotal'=>$new_pedido->getTotal()));
         return $response;
     }
     public function cargarFormCotizacionAction(Request $request)
@@ -489,7 +485,10 @@ class PedidoController extends Controller
             $valorASumar  = $valOPNuevo-$valOPAntiguo;//saco la diferencia entre las opciones para saber cuanto es lo que tengo que sumar
         /*Fin*/
         $valor = $detalle->getTotal()+($valorASumar*$detalle->getCantidad());//se calcula el valor a sumar y se actualiza el total del detallePedido
-        $pedido->setTotal($pedido->getTotal()+($valor-$detalle->getTotal()));
+        $ValorTotal = ($pedido->getTotal()-$detalle->getTotal())+$valor;
+        $pedido->setTotal($ValorTotal);
+        $montoDescuento = ($pedido->getDescuentos() > 0)  ? ($pedido->getDescuentos()/100)*$ValorTotal: 0 ;            
+        $pedido->setValorNeto($ValorTotal-$montoDescuento);
         $detalle->setTotal($valor);       
         $detalle_opciones->setCantidad($cantidad);
         $em->persist($detalle);
@@ -497,8 +496,10 @@ class PedidoController extends Controller
         $em->persist($detalle_opciones);
         $em->flush();
         $total = $this->calculaTotalOpciones($id_detalle);
+
+        $totalCI = (($pedido->getIvaActual()/100)+1)*$pedido->getValorNeto();     
         $response = new JsonResponse();
-        $response->setData(array('result' => $detalle->getTotal(),'totalOpciones'=>$total));
+        $response->setData(array('montoDescuento'=>$montoDescuento,'valorNetoCD'=>$pedido->getValorNeto(),'totalCI'=>$totalCI,'valorTotal'=>$pedido->getTotal(),'result' => $detalle->getTotal(),'totalOpciones'=>$total));
         return $response;
     }
     //Funcion que actualizala cantidad de productos de pedido
@@ -513,15 +514,21 @@ class PedidoController extends Controller
         /* Inicio calculo de la diferencia para actualizar el valor del pedido*/
             $totalAntiguo = $detalle->getTotal();
             $pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array('id'=>$detalle->getFkPedido()));
-            $pedido->setTotal($pedido->getTotal()+($totalNuevo-$totalAntiguo));
+            $ValorTotal = $pedido->getTotal()+($totalNuevo-$totalAntiguo);
+            $pedido->setTotal($ValorTotal);
+            $montoDescuento = ($pedido->getDescuentos() > 0)  ? ($pedido->getDescuentos()/100)* $ValorTotal : 0;        
+            $pedido->setValorNeto($ValorTotal-$montoDescuento);         
         /*Fin*/
         $detalle->setCantidad($cantidad);
         $detalle->setTotal($totalNuevo);
         $em->persist($detalle);
         $em->persist($pedido);
         $em->flush();
+               
+        $totalCI = (($pedido->getIvaActual()/100)+1)*$pedido->getValorNeto();
+            
         $response = new JsonResponse();
-        $response->setData(array('result' => $detalle->getTotal()));
+        $response->setData(array('montoDescuento'=>$montoDescuento,'valorTotal'=>$pedido->getTotal(),'valorNetoCD'=>$pedido->getValorNeto(), 'totalCI'=>$totalCI,'result' => $detalle->getTotal()));
         return $response;
     }
     public function actualizaPrecioCotizacionProductoAction(Request $request)
@@ -535,15 +542,23 @@ class PedidoController extends Controller
         /* Inicio Calculo de la diferencia para actualizar el valor del pedido */
             $totalAntiguo = $detalle->getTotal();                        
             $pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array('id'=>$detalle->getFkPedido()));
-            $pedido->setTotal($pedido->getTotal()+($totalNuevo-$totalAntiguo));
+            $ValorPedido = $pedido->getTotal()+($totalNuevo-$totalAntiguo);
+            $pedido->setTotal($ValorPedido);            
+            $montoDescuento = ($pedido->getDescuentos() > 0)  ? ($pedido->getDescuentos()/100)*$ValorPedido : 0;    
+            $pedido->setValorNeto($ValorPedido-$montoDescuento);            
         /*Fin*/
         $detalle->setValorModificado($valorNuevo);        
         $detalle->setTotal($totalNuevo);
         $em->persist($detalle);
-        $em->flush();       
-        $response = new JsonResponse();
-        $response->setData(array('result' => $detalle->getTotal()));
-        return $response;
+        $em->persist($pedido);
+        $em->flush();
+
+        /* Calculo de valor imponible*/
+        $totalCI = (($pedido->getIvaActual()/100)+1)*$pedido->getValorNeto();
+    
+       $response = new JsonResponse();
+       $response->setData(array('montoDescuento'=>$montoDescuento,'valorNetoCD'=>$pedido->getValorNeto(),'valorTotal'=>$pedido->getTotal(),'totalCI'=>$totalCI,'result' => $detalle->getTotal()));
+       return $response;
     }
     /*Funcion que guarda la opcion del producto (producto_detalle)*/
     public function guardarOpcionDetalleProductoAction(Request $request)
@@ -560,15 +575,21 @@ class PedidoController extends Controller
             $detalleP_opcionesP->setCantidad(1);
             $detalleP_opcionesP->setValor($opcion->getValor());
         }
-        $detalle->setTotal($detalle->getTotal()+($opcion->getValor())*$detalle->getCantidad());
+        $detalle->setTotal($detalle->getTotal()+($opcion->getValor()*$detalle->getCantidad()));
         $pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array('id'=>$detalle->getFkPedido()));
-        $pedido->setTotal($pedido->getTotal()+$opcion->getValor());
+        $ValorTotal = $pedido->getTotal()+($opcion->getValor()*$detalle->getCantidad());
+        $pedido->setTotal($ValorTotal);
+        $montoDescuento = ($pedido->getDescuentos() > 0)  ? ($pedido->getDescuentos()/100)*$ValorTotal : 0 ;            
+        $pedido->setValorNeto($ValorTotal-$montoDescuento);     
         $em->persist($detalle);
+        $em->persist($pedido);
         $em->persist($detalleP_opcionesP);
         $em->flush();
+        /* Calculo de valor imponible*/
+        $totalCI = (($pedido->getIvaActual()/100)+1)*$pedido->getValorNeto();
         $total= $this->calculaTotalOpciones($id_detalle);
         $response = new JsonResponse();
-        $response->setData(array('total_pedido'=>$detalle->getTotal(),'id_op_det'=>$detalleP_opcionesP->getId(), 'totalOpciones'=>$total));
+        $response->setData(array('montoDescuento'=>$montoDescuento,'valorTotal'=>$pedido->getTotal(),'valorNetoCD'=>$pedido->getValorNeto(), 'totalCI'=>$totalCI,'total_pedido'=>$detalle->getTotal(),'id_op_det'=>$detalleP_opcionesP->getId(), 'totalOpciones'=>$total));
         return $response;
     }
     //funcion que calcula el tota de opciones por id_detalle
@@ -605,16 +626,21 @@ class PedidoController extends Controller
             $detalle = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('id'=>$id_detalle));//objeto detalle asiciado para descontar valor de la opcion a eliminar
             $detalle->setTotal($detalle->getTotal()-($detalle->getCantidad()*$valorEliminar));//total -= cantidadUnidadesProducto * valorOpcionXunidad            
             $pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array('id'=>$detalle->getFkPedido()));
-            $pedido->setTotal($pedido->getTotal()-($detalle->getCantidad()*$valorEliminar));
-
+            $ValorTotal = $pedido->getTotal()-($detalle->getCantidad()*$valorEliminar);
+            $pedido->setTotal($ValorTotal);
+            $montoDescuento = ($pedido->getDescuentos() > 0)  ? ($pedido->getDescuentos()/100)*$ValorTotal : 0 ;            
+            $pedido->setValorNeto($ValorTotal-$montoDescuento);
             $em->remove($delete);
             $em->persist($detalle);
             $em->persist($pedido);
             $em->flush();
         }
+        /* Calculo de valor imponible*/
+        $totalCI = (($pedido->getIvaActual()/100)+1)*$pedido->getValorNeto();
+      
         $total = $this->calculaTotalOpciones($id_detalle);
         $response = new JsonResponse();
-        $response->setData(array('total_pedido'=>$detalle->getTotal(),'totalOpciones'=>$total));
+        $response->setData(array('montoDescuento'=>$montoDescuento,'valorTotal'=>$pedido->getTotal(),'valorNetoCD'=>$pedido->getValorNeto(), 'totalCI'=>$totalCI,'total_pedido'=>$detalle->getTotal(),'totalOpciones'=>$total));
         return $response;
     }
     /*Funcion que guarda la opcion del producto (producto_detalle)*/
@@ -628,13 +654,20 @@ class PedidoController extends Controller
             $em->remove($value);
         }
         $pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array('id'=>$pedidoDetalle->getFkPedido()));
-        $pedido->setTotal($pedido->getTotal()-$pedidoDetalle->getTotal());
+        $ValorTotal = $pedido->getTotal()-$pedidoDetalle->getTotal();
+        $pedido->setTotal($ValorTotal);
+
+        $montoDescuento = ($pedido->getDescuentos() > 0)  ? ($pedido->getDescuentos()/100)* $ValorTotal : 0 ;            
+        $pedido->setValorNeto($ValorTotal-$montoDescuento);
+
         $em->remove($pedidoDetalle);
         $em->persist($pedido);
         $em->flush();
 
+        $totalCI = (($pedido->getIvaActual()/100)+1)*$pedido->getValorNeto();       
+        
         $response = new JsonResponse();
-        $response->setData(array('total_pedido'=>$pedidoDetalle->getTotal()));
+        $response->setData(array('valorNetoCD'=>$pedido->getValorNeto(),'valorTotal'=>$pedido->getTotal(),'montoDescuento'=>$montoDescuento,'totalCI'=>$totalCI));
         return $response;
     }
     /*Funcion que guarda la opcion del producto (producto_detalle)*/
@@ -667,7 +700,10 @@ class PedidoController extends Controller
         /*INICIO de set para cantidades totales*/
             $detalle_pedido->setTotal($detalle_pedido->getTotal()+($detalle_pedido->getCantidad()*$costo));//totalDetalle +=  cantidadDetalleproducto * valorDeOpcion
             $pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array('id'=>$detalle_pedido->getFkPedido()));//Objeto pedido asociado a detalle_pedido
-            $pedido->setTotal($pedido->getTotal()+($detalle_pedido->getCantidad()*$costo));//totalPedido +=  cantidadDetalleproducto * valorDeOpcion
+            $ValorTotal = $pedido->getTotal()+($detalle_pedido->getCantidad()*$costo);
+            $pedido->setTotal($ValorTotal);//totalPedido +=  cantidadDetalleproducto * valorDeOpcion
+            $montoDescuento = ($pedido->getDescuentos() > 0)  ? ($pedido->getDescuentos()/100)* $ValorTotal : 0 ;            
+            $pedido->setValorNeto($ValorTotal-$montoDescuento);
         /*FIN*/
         /*INICIO Guardado en BDD*/
             $em->persist($detalle_pedido);
@@ -675,14 +711,16 @@ class PedidoController extends Controller
             $em->persist($pedido);
             $em->flush();
         /*FIN*/
+          /* Calculo de valor imponible*/
+        $totalCI = (($pedido->getIvaActual()/100)+1)*$pedido->getValorNeto();       
         $total = $this->calculaTotalOpciones($id_detalle);
         $response = new JsonResponse();
-        $response->setData(array('res'=>$res,'total_pedido'=>$detalle_pedido->getTotal(),'id_op_det'=>$detalleP_opcionesP->getId(),'totalOpciones'=>$total));
+        $response->setData(array('montoDescuento'=>$montoDescuento,'valorTotal'=>$pedido->getTotal(),'valorNetoCD'=>$pedido->getValorNeto(), 'totalCI'=>$totalCI,'res'=>$res,'total_pedido'=>$detalle_pedido->getTotal(),'id_op_det'=>$detalleP_opcionesP->getId(),'totalOpciones'=>$total));
         return $response;
     }
     /*Funcion que carga las unidades de las opciones(producto_detalle)*/
     public function cargaOpcionesUnidadesOpcionProductoAction(Request $request)
-    {        
+    {
         $valor  = $request->get('valorChek');
         $em = $this->getDoctrine()->getManager();//declaracion de doctrine
         $lista_contactos="";
@@ -729,5 +767,75 @@ class PedidoController extends Controller
         // $response = new JsonResponse();
         // $response->setData(array());
         // return $response;
+    }
+    //guarda las opciones de la ventana modal de pedido detalle, solamente queda guardar la observacion el resto es ajax
+    public function validaEstadoIngresoAction(Request $request)
+    {
+        $id_pedido    = $request->get('ped_id');
+        $em = $this->getDoctrine()->getManager();//declaracion de doctrine
+        $pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array('id'=>$id_pedido));
+        $pedido->setEtapa($em->getRepository('AdminBundle:Etapa')->findOneBy(array('id'=>1)));
+        $pedido->setEtapaProceso($em->getRepository('AdminBundle:EtapaProceso')->findOneBy(array('id'=>1)));
+
+        $em->persist($detalle);
+        $em->flush();
+        $result = true;
+        echo json_encode(array('result' => $result));
+        exit;
+
+        
+    }
+    public function cargarTablaAction(Request $request)
+    {
+        $id_pedido    = $request->get('ped_id');
+        $em = $this->getDoctrine()->getManager();//declaracion de doctrine
+        $pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array('id'=>$id_pedido));
+        
+        // $idEtapaPrincipal = ($em->getRepository('AdminBundle:ProductoCategoria')->findOneBy(array('fkProducto'=>$id_prod,'fkCategoria'=>1)))? 2 : 1;                
+        
+
+        $AllDetalles = $em->getRepository('AdminBundle:PedidoDetalle')->findBy(array('fkPedido'=>$id_pedido));
+        $producto   = '';
+        // $acotizar  = ($idEtapaPrincipal==2)? "readonly" : "";  
+        foreach ($AllDetalles as $value) {
+            $acotizar = ($value->getEtapaPedidoDetalle()->getId()==2) ? false : true ;            
+            //$id_detalle = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('fkProducto'=> $value->getId(), 'fkPedido'=> $new_pedido->getId()))->getId();
+            $producto .= '<tr id=tr'.$value->getId().'>';
+            $producto .= '<td class="td-width-40">'.$value->getFkProducto()->getCodigoProd().'</td>';
+            $producto .= '<td title="Nombre">'.$value->getFkProducto()->getNombre().'</td>';
+            $producto .= '<td title="Valor Base">'.$value->getFkProducto()->getValorUnitario().'</td>';
+            $producto .= '<td class="text-right td-width-30" title="Cantidad"><input style="width: 50px;" name="newCantidad" id="nc'.$value->getId().'" type="number" min="1" class="text-right val_num" value="'.$value->getCantidad().'" onchange="myFunction(this.value, this.id)"></td>';
+            $producto .= '<td class="text-right td-width-50" title="Valor Cotizacion"><input style="width: 100px;" name="totalac" id="vm'.$value->getId().'" type="number" min="1" class="text-right val_num" value="'.$value->getValorModificado().'" onchange="myFunctionValCotizacion(this.value, this.id)"></td>';
+            $producto .= '<td class="text-right td-width-100" title="Total por producto" id="total'.$value->getId().'">'.$value->getTotal().'</td>';
+            $producto .= '<td class="text-right td-width-100" title="Estado" id="total'.$value->getId().'">'.$value->getEtapaPedidoDetalle()->getNombre().'</td>';
+            if ($acotizar) {
+                $producto .= '<td class="text-right td-width-50" ><a id="'.$value->getId().'" onclick="modal(this.id)"><i class="material-icons">mode_edit</i></a><a id="'.$value->getId().'" onclick="eliminarProductoDetalle(this.id)"><i class="material-icons">delete_forever</i></a></td>';
+            }else{
+                $producto .= '<td class="text-right td-width-50" ><a id="'.$value->getId().'" onclick="modalVerEditarProductoCotizar('.$value->getFkProducto().')"><i class="material-icons">mode_edit</i></a><a id="'.$value->getId().'" onclick="eliminarProductoDetalle(this.id)"><i class="material-icons">delete_forever</i></a></td>';
+             }
+            $producto .= '</tr>';
+        }
+
+        $response = new JsonResponse();
+        $response->setData(array('producto'=>$producto));
+        return $response;
+    }
+    public function actualizaCantidadDescuentoPedidoAction(Request $request ){
+        $porcentaje = $request->get('porcentaje');
+        $id_pedido = $request->get('id_pedido');
+        $em = $this->getDoctrine()->getManager();
+        $pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array('id'=>$id_pedido));
+        
+        $pedido->setValorNeto((1-($porcentaje/100))*$pedido->getTotal());
+        $montoDescuento = ($porcentaje/100)*$pedido->getTotal();
+        $pedido->setDescuentos($porcentaje);
+        $em->persist($pedido);
+        $em->flush();
+        $totalCI = (($pedido->getIvaActual()/100)+1)*$pedido->getValorNeto();
+        
+
+        $response = new JsonResponse();
+        $response->setData(array('montoDescuento'=>$montoDescuento,'valorNetoCD'=>$pedido->getValorNeto(),'totalCI'=>$totalCI));
+        return $response;        
     }
 }

@@ -24,7 +24,7 @@ class Empresa
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=200, nullable=true)
+     * @ORM\Column(name="nombre", type="string", length=200, nullable=false)
      */
     private $nombre;
 
@@ -78,23 +78,23 @@ class Empresa
     private $dirCalle;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="dir_numero", type="string", length=50, nullable=true)
+     * @ORM\Column(name="dir_numero", type="integer", nullable=true)
      */
     private $dirNumero;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="dir_numero_departamento", type="string", length=50, nullable=true)
+     * @ORM\Column(name="dir_numero_departamento", type="integer", nullable=true)
      */
     private $dirNumeroDepartamento;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="dir_numero_piso", type="string", length=50, nullable=true)
+     * @ORM\Column(name="dir_numero_piso", type="integer", nullable=true)
      */
     private $dirNumeroPiso;
 
@@ -150,14 +150,14 @@ class Empresa
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=true)
+     * @ORM\Column(name="fecha_ingreso", type="datetime", nullable=false)
      */
     private $fechaIngreso;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="estado", type="integer", nullable=true)
+     * @ORM\Column(name="estado", type="integer", nullable=false)
      */
     private $estado;
 
@@ -370,7 +370,7 @@ class Empresa
     /**
      * Set dirNumero
      *
-     * @param string $dirNumero
+     * @param integer $dirNumero
      * @return Empresa
      */
     public function setDirNumero($dirNumero)
@@ -383,7 +383,7 @@ class Empresa
     /**
      * Get dirNumero
      *
-     * @return string 
+     * @return integer 
      */
     public function getDirNumero()
     {
@@ -393,7 +393,7 @@ class Empresa
     /**
      * Set dirNumeroDepartamento
      *
-     * @param string $dirNumeroDepartamento
+     * @param integer $dirNumeroDepartamento
      * @return Empresa
      */
     public function setDirNumeroDepartamento($dirNumeroDepartamento)
@@ -406,7 +406,7 @@ class Empresa
     /**
      * Get dirNumeroDepartamento
      *
-     * @return string 
+     * @return integer 
      */
     public function getDirNumeroDepartamento()
     {
@@ -416,7 +416,7 @@ class Empresa
     /**
      * Set dirNumeroPiso
      *
-     * @param string $dirNumeroPiso
+     * @param integer $dirNumeroPiso
      * @return Empresa
      */
     public function setDirNumeroPiso($dirNumeroPiso)
@@ -429,7 +429,7 @@ class Empresa
     /**
      * Get dirNumeroPiso
      *
-     * @return string 
+     * @return integer 
      */
     public function getDirNumeroPiso()
     {

@@ -23,6 +23,12 @@ class ProductoController extends Controller
             'menu_o_con'   => 'producto'
         ));
     }
+    //Crear codigo de pedido
+    private function crearNumeroProducto($id_producto){
+        $codigo =substr("0000", 0,-strlen($id_producto));
+        $codigo.=$id_producto;
+        return $codigo;
+    }
     public function productoNuevoAction()
     {
         $titulo  = 'Nuevo Producto / Servicio';
@@ -45,27 +51,21 @@ class ProductoController extends Controller
     public function productoCargartablaAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
         $where = array('estado' => 1);
-
         $lista_producto = array();
-
         if($producto = $em->getRepository('AdminBundle:Producto')->findBy($where, array('id' => 'ASC')) )
         {
             foreach($producto as $value)
             {
-                $datos = new stdClass();
-                
+                $datos = new stdClass();                
                 $datos->id            = $value->getId();
                 $datos->prod_nombre   = $value->getNombre();
                 $datos->prod_cod      = $value->getCodigoProd();
                 $datos->prod_valor    = $value->getValorUnitario();
                 
                 $lista_producto[]  = $datos;
-
             }
         }
-
         return $this->render('AdminBundle:Layouts:tabla_producto_index.html.twig', array(
             'lista_producto' => $lista_producto
         ));
@@ -91,9 +91,8 @@ class ProductoController extends Controller
             }
             $producto->setNombre($prod_nombre);
             $producto->setObservacion($observacion);
-            // $producto->setTipo($valorCheck);           
             $em->persist($producto);
-            $em->flush();       
+            $em->flush();      
             
             $categoria_producto = new ProductoCategoria();
             $categoria_producto->setFkCategoria($em->getRepository('AdminBundle:Categorias')->findOneBy(array('id'=>1)));
@@ -120,13 +119,11 @@ class ProductoController extends Controller
             $id               = ($request->get('prod_id', false)) ? $request->get('prod_id'): 0;
             $prod_nombre      = ucfirst($request->get('prod_nombre'));
             $prod_codigo      = $request->get('prod_codigo');
-            // $prod_descp       = ucfirst($request->get('prod_descp'));
             $prod_valor       = $request->get('prod_valor');
             /*valor de id de select categoria*/
-             $valselect        = $request->get('selectCat');
+            $valselect        = $request->get('selectCat');
             $valorCheck       = $request->get('check');
             $tiempoProduccion = $request->get('time');
-
             $observacion      = ucfirst($request->get('prod_obs'));
             $imagen           = ($request->files->get('prod_imagen', false))? $request->files->get('prod_imagen'): null;
 
@@ -140,8 +137,7 @@ class ProductoController extends Controller
 
             $producto->setNombre($prod_nombre);
             $producto->setCodigoProd($prod_codigo);
-            // $producto->setDescripcion($prod_descp);
-            $producto->setValorUnitario($prod_valor);                
+            $producto->setValorUnitario($prod_valor);
             $producto->setObservacion($observacion);
             $producto->setTipo($valorCheck);
             $producto->setTiempoApxProduccion($tiempoProduccion);
@@ -151,23 +147,27 @@ class ProductoController extends Controller
             {
                 $dir_image = $this->subirImagen($imagen);
                 $producto->setImagen($dir_image);
-            }          
+            }
+            if ($producto->getCodigoProd()=="") {
+                $em->persist($producto);
+                $em->flush();
+                $producto->s(crearNumeroProducto($producto->getId()));
+            }
             $em->persist($producto);
-            $em->flush();       
+            $em->flush();
+            
+            
+            
             
             if (!$categoria_producto = $em->getRepository('AdminBundle:ProductoCategoria')->findOneBy(array('fkProducto'=>$producto->getId(),'fkCategoria'=>$valselect))) {
                 $categoria_producto = new ProductoCategoria();
                 $categoria_producto->setFkCategoria($em->getRepository('AdminBundle:Categorias')->findOneBy(array('id'=>$valselect)));
                 $categoria_producto->setFkProducto($producto);
                 $em->persist($categoria_producto);
-                $em->flush();  
-                
+                $em->flush();
+
             }
-
-
-
             $result = true;
-
             $id_newb = $producto->getId();
         }
 
@@ -354,35 +354,56 @@ class ProductoController extends Controller
     //cargar todas las opciones por la categoria del producto
     public function cargarTodasOpcionesAction(Request $request)
     {
-        $prod_id = $request->get('prod_id');
-     
+        $prod_id = $request->get('prod_id');     
         $em = $this->getDoctrine()->getManager();
-        $dql= " SELECT  op.id, op.nombre, op.valor,IDENTITY(op.unidadMedidaDimension, 'id') AS unidadMedidaDimension, IDENTITY(op.unidadMedidaPeso,'id') AS unidadMedidaPeso
-                FROM AdminBundle:ProductoCategoria pc  INNER JOIN AdminBundle:OpcionesProducto op WITH pc.fkCategoria = op.categorias
-                where pc.fkProducto=:id_producto";   
-        $results= $em->createQuery($dql)
-                    ->setParameter('id_producto', $prod_id)
-                    ->getResult();
 
+        // $dql= " SELECT  op.id, op.nombre, op.valor,IDENTITY(op.unidadMedidaDimension, 'id') AS unidadMedidaDimension, IDENTITY(op.unidadMedidaPeso,'id') AS unidadMedidaPeso
+        //         FROM AdminBundle:ProductoCategoria pc  INNER JOIN AdminBundle:OpcionesProducto op WITH pc.fkCategoria = op.categorias
+        //         where pc.fkProducto=:id_producto";   
+        // $results= $em->createQuery($dql)
+        //             ->setParameter('id_producto', $prod_id)
+        //             ->getResult();
+        $dql= " SELECT  op.id, op.nombre, op.valor ,  
+                IDENTITY(op.unidadMedidaDimension, 'id') AS unidadMedidaDimension,    umd.sigla as sigla_dimension,
+                IDENTITY(op.unidadMedidaPeso, 'id') AS unidadMedidaPeso ,             ump.sigla as sigla_peso
+          
+                FROM AdminBundle:OpcionesProducto op 
+                LEFT JOIN op.unidadMedidaPeso ump
+                LEFT JOIN op.unidadMedidaDimension umd
+                INNER JOIN AdminBundle:ProductoCategoria pc
+                WITH pc.fkCategoria = op.categorias
+                WHERE pc.fkProducto =:id_producto";  
+
+        $query= $em->createQuery($dql)
+                    ->setParameter('id_producto', $prod_id);
+        $results = $query->getResult();
+
+        // $lista_opciones = '';
+        // foreach ($results as $result) {
+        //     $nombreUnidad ="";
+        //     if (isset($result['unidadMedidaDimension']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaDimension')->findOneBy(array('id'=>$result['unidadMedidaDimension']))) {
+        //        $nombreUnidad= ' x ['.$opcion->getSigla().']';
+        //     } else {
+        //         if (isset($result['unidadMedidaPeso']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaPeso')->findOneBy(array('id'=>$result['unidadMedidaPeso']))) {
+        //              $nombreUnidad= 'x ['.$opcion->getSigla().']';
+        //         }
+        //     }
+        //     $lista_opciones .= '<li value="'.$result['id'].'">'.$result['nombre'].', $ '.$result['valor'].' '.$nombreUnidad.'</li>';
+        // }
         $lista_opciones = '';
         foreach ($results as $result) {
             $nombreUnidad ="";
-            if (isset($result['unidadMedidaDimension']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaDimension')->findOneBy(array('id'=>$result['unidadMedidaDimension']))) {
-               $nombreUnidad= ' x ['.$opcion->getSigla().']';
-            } else {
-                if (isset($result['unidadMedidaPeso']) && $opcion = $em->getRepository('AdminBundle:UnidadMedidaPeso')->findOneBy(array('id'=>$result['unidadMedidaPeso']))) {
-                     $nombreUnidad= 'x ['.$opcion->getSigla().']';
-                }
-            }
+            if (isset($result['unidadMedidaDimension']) )   { $nombreUnidad= ' x ['.$result['sigla_dimension'].']'; }
+            else if (isset($result['unidadMedidaPeso']) )   { $nombreUnidad= ' x ['.$result['sigla_peso'].']'; }
             $lista_opciones .= '<li value="'.$result['id'].'">'.$result['nombre'].', $ '.$result['valor'].' '.$nombreUnidad.'</li>';
-        }       
+        }
         $allCategoriasProducto = $em->getRepository('AdminBundle:ProductoCategoria')->findBy(array('fkProducto'=>$prod_id));
         $listaAllCategoriasProducto='';
         foreach ($allCategoriasProducto as $value) {
             $listaAllCategoriasProducto.='<div class="valign-wrapper"  id ="'.$value->getId().'"><i onClick="functionDelete('.$value->getId().' )"class="material-icons del_btn_i pointer">remove_circle_outline</i>'.$value->getFkCategoria()->getNombre().'</div>';            
         }
         $response = new JsonResponse();
-        $response->setData(array('lista_opciones'=>$lista_opciones,'listaAllCategoriasProducto'=>$listaAllCategoriasProducto));
+        $response->setData(array('lista_opciones'=>$lista_opciones,'listaAllCategoriasProducto'=>$listaAllCategoriasProducto, 'lista_opciones_array' => $results));
         return $response;
     }
     //carga todas las categorias por id_producto
