@@ -38,16 +38,22 @@
                                                     <input type="text" name="prod_nombre" id="prod_nombre" class="gui-input" value="{{data.prod_nombre is defined ? data.prod_nombre}}" required>
                                                 </label>
                                             </div>
-                                            <div class="form-group col-sm-12 col-lg-3">
+                                            <div class="form-group col-sm-12 col-lg-3" {{(data.id is not defined)? "style='display:none;'" }}>
                                                 <label class="field">
                                                     Codigo producto
-                                                    <input type="text" name="prod_codigo" id="prod_codigo" class="gui-input" value="{{data.prod_codigo is defined ? data.prod_codigo}}" required>
+                                                    <input type="text" name="prod_codigo" id="prod_codigo" class="gui-input" value="{{data.prod_codigo is defined ? data.prod_codigo}}" disabled required>
                                                 </label>
                                             </div>
                                             <div class="form-group col-sm-12 col-lg-3">
                                                 <label class="field">
-                                                    Precio
-                                                    <input type="number" name="prod_valor" min="1" id="prod_valor" class="gui-input val_num" value="{{data.prod_valor is defined ? data.prod_valor}}" required>
+                                                    Precio Venta
+                                                    <input type="text" name="prod_valor" min="1" id="prod_valor" class="gui-input val_num" value="{{data.prod_valor is defined ? data.prod_valor}}" {{(is_granted('ROLE_ADMIN_B'))? '': ((data.id is defined)? 'disabled' : '' )}} required>
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-lg-3">
+                                                <label class="field">
+                                                    Precio Minimo
+                                                    <input type="text" name="prod_valor_minimo" min="1" id="prod_valor_minimo" class="gui-input val_num" value="{{data.prod_valor_minimo is defined ? data.prod_valor_minimo}}" {{(is_granted('ROLE_ADMIN_B'))? '':  ((data.id is defined)? 'disabled' : '' )}} required>
                                                 </label>
                                             </div>
                                         </div>

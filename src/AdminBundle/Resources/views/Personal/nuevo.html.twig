@@ -78,9 +78,9 @@
                                                 </label>
                                                 <label class="field select">
                                                     <select id="sexo" name="sexo" required>
-                                                        <option value="{{data.sexo is defined ? data.sexo}}">{{data.sexo is defined ? sexo : "Seleccione"}}</option>
-                                                        <option   value="1">Hombre</option>
-                                                        <option   value="2">Mujer</option>
+                                                        <option value="">Seleccione</option>                                                       
+                                                        <option  {{(data.id is defined)? (data.sexo == 1)? 'selected' }}  value="1">Hombre</option>
+                                                        <option  {{(data.id is defined)? (data.sexo == 2)? 'selected' }} value="2">Mujer</option>
                                                     </select>
                                                     <i class="arrow"></i>
                                                 </label>

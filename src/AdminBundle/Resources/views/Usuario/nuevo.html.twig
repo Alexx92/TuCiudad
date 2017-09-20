@@ -1,0 +1,190 @@
+{% extends 'admin.html.twig' %}
+
+{% block body  %}
+    <div class="container">
+        <!-- bloque superior -->
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="row"><h4>{{ titulo }}</h4></div>
+            </div>
+            <div class="col-sm-12 col-md-6 text-right">
+                <a href="{{ url('admin_personal') }}" class="btn btn-system btn-per" data-toggle="tooltip" data-placement="bottom" title="Atras"><i class="material-icons">arrow_back</i></a>
+            </div>
+        </div>
+        <!-- bloque superior fin-->
+
+        <!-- contenido -->
+        <div class="row">
+            <div role="tab-block">
+                <!-- Tabs Navigation -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#datos-personal-tab" aria-controls="datos-personal-tab" role="tab" data-toggle="tab">Datos Contacto</a></li>
+                </ul>
+                <!-- Tab Content Panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade active in" id="datos-personal-tab">
+                        <div class="admin-form theme-default theme-info">
+                            <div class="panel heading-border panel-default panel-info">
+                                <div class="panel-body bg-light">
+                                    <div class="row">
+                                        <div class="form-group col-sm-12 col-lg-3">
+                                            <label class="field append-icon">
+                                                <div class="dropdown">
+                                                    <input type="text" name="bsq_personal" id="bsq_personal" class="gui-input dropdown-toggle" data-toggle="dropdown" placeholder="Busqueda de personal">
+                                                    <ul id="lista_personal" aria-labelledby="bsq_personal" class="dropdown-menu" role="menu"></ul>
+                                                </div>
+                                                <label for="bsq_personal" class="field-icon">
+                                                        <i class="fa fa-search"></i>
+                                                </label>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="section-divider mb40">
+                                        <span>Datos del personal</span>
+                                    </div>
+                                    <form id="from_personal" class="" >
+                                        <input type="hidden" name="personal_id" id="personal_id" >
+                                        <div class="row">
+                                            <div class="form-group col-sm-12 col-lg-3">
+                                                <label class="field">
+                                                    Primer Nombre
+                                                    <input type="text" name="primer_nombre" id="primer_nombre" class="gui-input" disabled>
+                                                </label>
+                                            </div>                                            
+                                            <div class="form-group col-sm-12 col-lg-3">
+                                                <label class="field">
+                                                    Segundo Nombre
+                                                    <input type="text" name="segundo_nombre" id="segundo_nombre" class="gui-input"  disabled>
+                                                </label>
+                                            </div>
+                                            <div class="form-group  col-sm-12 col-md-3">
+                                                <label class="field">
+                                                    Apellido Paterno 
+                                                    <input type="text" name="apellido_paterno" id="apellido_paterno" class="gui-input"  disabled>
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-3">
+                                                <label class="field">
+                                                    Apellido Materno
+                                                    <input type="text" name="apellido_materno" id="apellido_materno" class="gui-input"  disabled>
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-3">
+                                                <label class="field">
+                                                    Cedula de Identidad
+                                                    <input type="text" name="dni" id="dni" class="gui-input val_num" disabled>
+                                                </label>
+                                            </div>                                            
+                                            <div class="form-group col-sm-12 col-md-3"> <!-- Date input -->
+                                                <label class="field"  for="fecha_nacimiento">
+                                                    Fecha Nacimiento
+                                                    <div class="input-group date">
+                                                        <input  type="text" name="fecha_nacimiento"  id="fecha_nacimiento"  class="gui-input" disabled>
+                                                        <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-3">
+                                                <label class="field">
+                                                    Sexo
+                                                </label>
+                                                <input  type="text" name="sexo"  id="sexo"  class="gui-input" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-sm-12 col-md-3">
+                                                <label class="field">
+                                                    Telefono
+                                                    <input type="text" name="telefono" id="telefono" class="gui-input val_num" disabled>
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-3">
+                                                <label class="field">
+                                                    Celular
+                                                    <input type="text" name="celular" id="celular" class="gui-input val_num" disabled>
+                                                </label>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-3">
+                                                <label class="field">
+                                                    Email
+                                                    <input type="email" name="email" id="email" class="gui-input" disabled>
+                                                </label>
+                                            </div>                                         
+                                            <div class="form-group col-sm-12 col-md-3">
+                                                <label class="field">
+                                                    Skype
+                                                    <input type="text" name="skype" id="skype" class="gui-input" disabled>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="section-divider mb40">
+                                        <span>Datos de usuario</span>
+                                    </div>
+                                    <div class="row col-sm-10 col-sm-offset-3">
+                                        <form id="form_usuario" class="" action="{{ url('admin_usuario_guardar') }}" method="post" enctype=" multipart/form-data"  novalidate="novalidate">
+                                            <input type="hidden" name="personal_id" id="personal_id" >
+                                            <input type="hidden" name="usuario_id" id="usuario_id" >
+                                            <div class="row">
+                                                <div class="form-group col-sm-12 col-lg-3">
+                                                    <label class="field">
+                                                        Username
+                                                        <input id="username" name="username"  type="text" class="gui-input" value="" disabled required>
+                                                    </label>
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-3">
+                                                    <label class="field">
+                                                        Rol
+                                                    </label>
+                                                    <label class="field select">
+                                                        <select id="roles" name="roles" class="form-control"  required>
+                                                            <option value="">Seleccione</option>                                                          
+                                                            {% for rol in roles %}
+                                                                <option id="seleccion" name="seleccion" value={{rol.id}}>{{rol.nombre}}</option>
+                                                            {% endfor %}                                                          
+                                                        </select>
+                                                        <i class="arrow"></i>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="row" id="passwords" name="passwords" style="display:none;">
+                                                <div class="row">
+                                                    <label class="field col-sm-3">
+                                                        Ingrese Contraseña
+                                                        <input type="password" name="pass1" id="pass1" class="gui-input" autocomplete="off" required onchange="validarContraseñas(this.value)">
+                                                    </label>
+                                                </div>
+                                                <div class="row">
+                                                    <label class="field col-sm-3">
+                                                        Vuelva a Introducir contraseña
+                                                        <input type="password" name="pass2" id="pass2" class="gui-input" autocomplete="off" required onchange="validarContraseñas()">
+                                                    </label>
+                                                </div> 
+                                            </div>                                                                                                                             
+                                        </form>
+                                    </div>
+                                </div>                                           
+                                <div class="panel-footer text-right">
+                                    <button id="guardar_usuario" class="btn btn-success "> Guardar Cambios <i class="fa fa-save"></i></button>
+                                    <a  class="btn btn-warning " role="button">Cancelar<i class="fa fa-ban"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        <!-- contenido fin-->
+    </div>
+ {% endblock body %} 
+
+{% block javascripts %}
+<!-- Bootstrap Date-Picker Plugin -->
+    <script src="{{ absolute_url(asset('assets/js/datapicker/bootstrap-datepicker.min.js')) }}"></script>  
+        <link rel="stylesheet" href="{{ absolute_url(asset('assets/js/datapicker/bootstrap-datepicker3.css')) }}"/>
+        <script src="{{ absolute_url(asset('assets/js/datapicker/bootstrap-datepicker.es.min.js')) }}"></script>
+        <script src="{{ absolute_url(asset('assets/js/rut/jquery.rut.js')) }}"></script>
+        <script src="{{ absolute_url(asset('assets/js/module/usuario/nuevo.js')) }}"></script>
+{% endblock %}
+
+

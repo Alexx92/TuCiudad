@@ -157,7 +157,34 @@ ajax_cargar_area:
     defaults: { _controller: AdminBundle:Personal:cargarArea }
     options:
          expose: true
+#ruta para cargar areas
+ajax_bsq_personal:
+    path:     /ajax/busqueda/personal/bqda/
+    defaults: { _controller: AdminBundle:Personal:buscarPersonal }
+    options:
+         expose: true
+#ruta para cargar areas
+ajax_busq_personal_form:
+    path:     /ajax/busqueda/personal/cargarPersonal/
+    defaults: { _controller: AdminBundle:Personal:buscarPersonalForm }
+    options:
+         expose: true
 
+
+#--------------------Usuario-------------------------------
+admin_usuario:
+    path:     /usuario/
+    defaults: { _controller: AdminBundle:Usuario:usuarioNuevo }
+
+admin_usuario_guardar:
+    path:     /register/nuevo/
+    defaults: { _controller: AdminBundle:Usuario:usuarioGuardar }
+#ruta para cargar areas
+ajax_validar_username:
+    path:     /usuario/username/
+    defaults: { _controller: AdminBundle:Usuario:generarUsername }
+    options:
+         expose: true
 
 #-----------------------Categorias-----------------------
 admin_categorias:

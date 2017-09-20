@@ -18,11 +18,20 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+    // protected $int;
 
     public function __construct()
     {
         parent::__construct();
         // your own logic
-        $this->roles = array('ROLE_ADMIN');
+        //$this->roles = array('ROLE_ADMIN');
+        // $this->setRol($int);
     }
+    public function setRol($int){
+        if ($int == 1) {
+            $this->roles = array('ROLE_ADMIN');
+        } else {            
+            $this->roles = array('ROLE_USER');
+        }
+    }      
 }

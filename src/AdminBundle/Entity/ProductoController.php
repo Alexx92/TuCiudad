@@ -116,11 +116,11 @@ class ProductoController extends Controller
         if( $request->getMethod() == 'POST' )
         {
             // captura de datos desde el formulario
-            $id               = ($request->get('prod_id', false)) ? $request->get('prod_id'): 0;      
+            $id               = ($request->get('prod_id', false)) ? $request->get('prod_id'): 0;
             $prod_nombre      = ucfirst($request->get('prod_nombre'));
-            //$prod_codigo      = $request->get('prod_codigo');         
+            $prod_codigo      = $request->get('prod_codigo');
             $prod_valor       = $request->get('prod_valor');
-            $valorMinimo      = ucfirst($request->get('prod_valor_minimo'));
+            $valorMinimo      = ucfirst($request->get('prod_valor_min'));
             /*valor de id de select categoria*/
             $valselect        = $request->get('selectCat');
             $valorCheck       = $request->get('check');
@@ -135,42 +135,41 @@ class ProductoController extends Controller
                 $producto->setEstado(1);
                 $producto->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));
             }
-          
-            $producto->setNombre($prod_nombre);          
+            $producto->setNombre($prod_nombre);
+            $producto->setCodigoProd($prod_codigo);
+            $producto->setValorUnitario($prod_valor);
+            $producto->setValorMinimoVenta($valorMinimo);
             $producto->setObservacion($observacion);
             $producto->setTipo($valorCheck);
             $producto->setTiempoApxProduccion($tiempoProduccion);
-            if ($this->isGranted('ROLE_ADMIN_B')) {
-                $producto->setValorUnitario($prod_valor);
-                $producto->setValorMinimoVenta($valorMinimo);
-            }
+
             // guardar imagen
             if ($imagen)
             {
                 $dir_image = $this->subirImagen($imagen);
                 $producto->setImagen($dir_image);
             }
-            if ($id == 0)
+            if ($producto->getCodigoProd()=="")
             {
                 $em->persist($producto);
                 $em->flush();
-                $producto->setCodigoProd( $this->crearNumeroProducto($producto->getId()));
-                if (!$categoria_producto = $em->getRepository('AdminBundle:ProductoCategoria')->findOneBy(array('fkProducto'=>$producto->getId(),'fkCategoria'=>$valselect))) {
-                    $categoria_producto = new ProductoCategoria();
-                    $categoria_producto->setFkCategoria($em->getRepository('AdminBundle:Categorias')->findOneBy(array('id'=>$valselect)));
-                    $categoria_producto->setFkProducto($producto);
-                    $em->persist($categoria_producto);
-                    $em->flush();
-                }
-            }     
+                $producto->s(crearNumeroProducto($producto->getId()));
+            }
             $em->persist($producto);
-            $em->flush();        
+            $em->flush();
+            if (!$categoria_producto = $em->getRepository('AdminBundle:ProductoCategoria')->findOneBy(array('fkProducto'=>$producto->getId(),'fkCategoria'=>$valselect))) {
+                $categoria_producto = new ProductoCategoria();
+                $categoria_producto->setFkCategoria($em->getRepository('AdminBundle:Categorias')->findOneBy(array('id'=>$valselect)));
+                $categoria_producto->setFkProducto($producto);
+                $em->persist($categoria_producto);
+                $em->flush();
+            }
             $result = true;
-            $id_producto = $producto->getId();
+            $id_newb = $producto->getId();
         }
 
         $response = new JsonResponse();
-        $response->setData(array('result' => $result, 'id_newb' => $id_producto));
+        $response->setData(array('result' => $result, 'id_newb' => $id_newb));
         
         return $response;
     }
@@ -183,15 +182,15 @@ class ProductoController extends Controller
         $producto = $em->getRepository('AdminBundle:Producto')->findOneBy(array('id' => $id));      
         
         $data = array();
-        $data['id']                 = $producto->getId();
-        $data['prod_nombre']        = $producto->getNombre();      
-        $data['prod_codigo']        = $producto->getCodigoProd();
-        $data['prod_valor']         = $producto->getValorUnitario();
-        $data['prod_valor_minimo']  = $producto->getValorMinimoVenta();      
-        $data['tipo']               = $producto->getTipo();        
-        $data['observacion']        = $producto->getObservacion();
-        $data['imagen']             = $producto->getImagen();
-        $data['time']               = $producto->getTiempoApxProduccion();
+        $data['id']            = $producto->getId();
+        $data['prod_nombre']   = $producto->getNombre();
+        $data['prod_codigo']   = $producto->getCodigoProd();
+        // $data['prod_descp']    = $producto->getDescripcion();
+        $data['prod_valor']    = $producto->getValorUnitario();
+        $data['tipo']          = $producto->getTipo();        
+        $data['observacion']   = $producto->getObservacion();
+        $data['imagen']        = $producto->getImagen();
+        $data['time']          = $producto->getTiempoApxProduccion();
 
         // carga de datos con la lista de contactos vinculados a la empresa
         $lcategoria = array();
@@ -203,7 +202,7 @@ class ProductoController extends Controller
                $datos->id                    = $value->getId();
                $datos->fkproducto            = $value->getFkProducto()->getId();
                $datos->fkcategoria           = $value->getFkCategoria()->getId();              
-               $datos->nombre                = $value->getFkCategoria()->getNombre();              
+               $datos->nombre           = $value->getFkCategoria()->getNombre();              
                $lcategoria[]  = $datos;
            }
         }

@@ -1,7 +1,7 @@
 <?php
 
 namespace AdminBundle\Controller;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -24,14 +24,13 @@ class PedidoController extends Controller
 {
     public function pedidoIndexAction()
     {
-
-        return $this->render('AdminBundle:Pedidos:index.html.twig', array(
+         return $this->render('AdminBundle:Pedidos:index.html.twig', array(
             'submenu'         => 'pedido',
             'menu_o_con'      => 'pedido'
-        ));
-    }
+         ));
+    }   
     public function pedidoNuevoAction()
-    {
+    {               
         // Titulo que se mostrara en la barra de navegacion
         $titulo = 'Nuevo Pedido';
         $fecha = new \DateTime(date("d-m-Y H:i:s"));
@@ -58,13 +57,39 @@ class PedidoController extends Controller
     public function pedidoCargartablaAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $user_email = $user->getEmail();           
+        $id_personal = $em->getRepository('AdminBundle:Personal')->findOneBy(array('correo'=>$user_email))->getId();
 
-       // $where = array('estado' => 1);
+        if ($this->isGranted('ROLE_TRABAJADOR')) {            
+            $dql= " SELECT  op.id                    
+                FROM AdminBundle:Pedidos op           
+                INNER JOIN AdminBundle:PedidoDetalle pc
+                WITH op.id = pc.fkPedido
+                WHERE  op.etapa !=: id_etapa and pc.personal = :id_personal" ;
 
+            $query= $em->createQuery($dql)
+                        ->setParameter('id_etapa', 1 )
+                        ->setParameter('id_personal', $id_personal );
+            $results = $query->getResult();
+        }
+        if ($this->isGranted('ROLE_VENTA_A')) {
+            $dql= " SELECT  op.id
+                    FROM AdminBundle:Pedidos op
+                    WHERE op.personal = :id_personal" ;
+
+            $query= $em->createQuery($dql)
+                        ->setParameter('id_personal', $id_personal );
+            $results = $query->getResult();
+        }
+        if ($this->isGranted('ROLE_ADMIN_D')) {
+            $results = $em->getRepository('AdminBundle:Pedidos')->findAll();
+        }
+        // $where = array('estado' => 1);
         $lista_pedidos = array();
-        if ($pedido = $em->getRepository('AdminBundle:Pedidos')->findAll()) {
-            
-            foreach ($pedido as $value) {
+        if (sizeof($results) > 0) {            
+            foreach ($results as $result) {
+                $value = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array('id'=>$result));
                 $datos = new stdClass();                
                 $datos->id                  = $value->getId();
                 $datos->codigo_cotizacion   = $value->getCodigoCotizacion();                
@@ -122,7 +147,7 @@ class PedidoController extends Controller
        echo json_encode(array('result' => $result));
        exit;
     }
-    // cargar formulario para editar
+    // cargar formulario para editarwhw
     public function pedidoEditarAction(Request $request)
     {
         $titulo  = 'Ver/Editar pedido';
@@ -147,7 +172,6 @@ class PedidoController extends Controller
         $pedido['montoDescuento']       = ($ObjPedido->getDescuentos() > 0 && $ObjPedido->getDescuentos() != "") ? ($ObjPedido->getDescuentos()/100)*$ObjPedido->getTotal() : 0;
         $pedido['totalImp']             = (1+(19/100))*$ObjPedido->getValorNeto();
      
-        $lista_etapa_negociacion = $em->getRepository('AdminBundle:EtapaProceso')->findBy(array());
         
         $contactoEmpre = $em->getRepository('AdminBundle:ContacEmpre')->findOneBy(array( 'id' => $ObjPedido->getContacEmpre()))->getFkContacto();
         $lisContactEmpre = $em->getRepository('AdminBundle:ContacEmpre')->findBy(array( 'fkEmpresa' => $ObjPedido->getContacEmpre()->getFkEmpresa()));
@@ -178,15 +202,49 @@ class PedidoController extends Controller
         $data['web']               = $empresa->getWeb();
         $data['obs']               = $empresa->getObservacion();
         $data['coordenadas']       = $empresa->getCoordenadas();
-        $data['imagen']            = $empresa->getImagen();   
+        $data['imagen']            = $empresa->getImagen();
 
-        
+      
+        if ($this->isGranted('ROLE_ADMIN_A')) {
+            if ($ObjPedido->getEtapaProceso()->getId() != 6) {
+                $dql= " SELECT  op.id, op.sigla, op. nombre
+                        FROM AdminBundle:EtapaProceso op
+                        WHERE  op.id != 6" ;
+                $query= $em->createQuery($dql);
+                $results = $query->getResult();
+            }else{
+                $results = $em->getRepository('AdminBundle:EtapaProceso')->findAll();
+            }
+        }else{
+            if ($ObjPedido->getEtapaProceso()->getId()!= 6) {
+                if ($ObjPedido->getEtapaProceso()->getId() == 2) {
+                    $dql= " SELECT  op.id, op.sigla, op. nombre
+                        FROM AdminBundle:EtapaProceso op
+                        WHERE op.id != 6 and op.id != 4 and op.id !=1";
+                    $query= $em->createQuery($dql);
+                    $results = $query->getResult();
+                }else{
+                    $dql= " SELECT  op.id, op.sigla, op. nombre
+                            FROM AdminBundle:EtapaProceso op
+                            WHERE  op.id != 6 and op.id != 4" ;
+                    $query= $em->createQuery($dql);
+                    $results = $query->getResult();
+                }
+            }else{
+                $dql= " SELECT  op.id, op.sigla, op. nombre
+                    FROM AdminBundle:EtapaProceso op
+                    WHERE op.id != 4" ;
+                $query= $em->createQuery($dql);
+                $results = $query->getResult();               
+            }
+        }
+                
         return $this->render('AdminBundle:Pedidos:nuevo.html.twig', array(
             'titulo'          => $titulo,
             'data'            => $data,
             'pedido'          => $pedido,
             'lista_contactos' => $lisContactEmpre,
-            'lista_etapa_negociacion' => $lista_etapa_negociacion,
+            'lista_etapa_negociacion' => $results,
             'submenu'         => 'pedido_nueva',
             'menu_o_con'      => 'pedido'
         ));
@@ -409,7 +467,7 @@ class PedidoController extends Controller
             ->getQuery();
             $id_detalle = $pedido_detalle->getId();
             //$acotizar  = ($em->getRepository('AdminBundle:ProductoCategoria')->findOneBy(array('fkProducto'=>$id_prod,'fkCategoria'=>1)))? "readonly" : "";
-            $acotizar  = ($idEtapaPrincipal==2)? "readonly" : "";            
+            $acotizar  = ($idEtapaPrincipal==2)? "readonly" : "";
             if ($resultQuery = $q->getResult()) {
                 foreach ($resultQuery as $value) {
                     //$id_detalle = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('fkProducto'=> $value->getId(), 'fkPedido'=> $new_pedido->getId()))->getId();
@@ -417,8 +475,8 @@ class PedidoController extends Controller
                     $producto .= '<td class="td-width-40">'.$value->getCodigoProd().'</td>';
                     $producto .= '<td title="Nombre">'.$value->getNombre().'</td>';
                     $producto .= '<td title="Valor Base">'.$value->getValorUnitario().'</td>';
-                    $producto .= '<td class="text-right td-width-30" title="Cantidad"><input style="width: 50px;" name="newCantidad" id="nc'.$id_detalle.'" type="number" min="1" class="text-right val_num" value="'.$pedido_detalle->getCantidad().'" onchange="myFunction(this.value, this.id)" '.$acotizar.'></td>';
-                    $producto .= '<td class="text-right td-width-50" title="Valor Cotizacion"><input style="width: 100px;" name="totalac" id="vm'.$id_detalle.'" type="number" min="1" class="text-right val_num" value="'.$pedido_detalle->getTotal().'" onchange="myFunctionValCotizacion(this.value, this.id)" '.$acotizar.'></td>';
+                    $producto .= '<td td-width-30" title="Cantidad"><input style="width: 50px;" name="newCantidad" id="nc'.$id_detalle.'" type="number" min="1" class="text-right val_num" value="'.$pedido_detalle->getCantidad().'" onchange="myFunction(this.value, this.id)" '.$acotizar.'></td>';
+                    $producto .= '<td td-width-50" title="Valor Cotizacion"><input style="width: 100px;" name="totalac" id="vm'.$id_detalle.'" type="number" min="1" class="text-right val_num" value="'.$pedido_detalle->getTotal().'" onchange="myFunctionValCotizacion(this.value, this.id)" '.$acotizar.' '.((!$this->isGranted('ROLE_ADMIN_C'))? 'disabled' : '').'></td>';
                     $producto .= '<td class="text-right td-width-100" title="Total por producto" id="total'.$id_detalle.'">'.$pedido_detalle->getTotal().'</td>';
                     $producto .= '<td class="text-right td-width-100" title="Estado" id="total'.$id_detalle.'">'.$pedido_detalle->getEtapaPedidoDetalle()->getNombre().'</td>';
                     if ($acotizar=="") {
@@ -790,29 +848,28 @@ class PedidoController extends Controller
         $id_pedido    = $request->get('ped_id');
         $em = $this->getDoctrine()->getManager();//declaracion de doctrine
         $pedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array('id'=>$id_pedido));
-        
-        // $idEtapaPrincipal = ($em->getRepository('AdminBundle:ProductoCategoria')->findOneBy(array('fkProducto'=>$id_prod,'fkCategoria'=>1)))? 2 : 1;                
-        
 
         $AllDetalles = $em->getRepository('AdminBundle:PedidoDetalle')->findBy(array('fkPedido'=>$id_pedido));
         $producto   = '';
-        // $acotizar  = ($idEtapaPrincipal==2)? "readonly" : "";  
         foreach ($AllDetalles as $value) {
-            $acotizar = ($value->getEtapaPedidoDetalle()->getId()==2) ? false : true ;            
-            //$id_detalle = $em->getRepository('AdminBundle:PedidoDetalle')->findOneBy(array('fkProducto'=> $value->getId(), 'fkPedido'=> $new_pedido->getId()))->getId();
+            $acotizar = ($value->getEtapaPedidoDetalle()->getId()==2) ? "readonly" : "" ;
+         //   $acotizar  = ($idEtapaPrincipal==2)? "readonly" : "";
+            
             $producto .= '<tr id=tr'.$value->getId().'>';
             $producto .= '<td class="td-width-40">'.$value->getFkProducto()->getCodigoProd().'</td>';
             $producto .= '<td title="Nombre">'.$value->getFkProducto()->getNombre().'</td>';
             $producto .= '<td title="Valor Base">'.$value->getFkProducto()->getValorUnitario().'</td>';
-            $producto .= '<td class="text-right td-width-30" title="Cantidad"><input style="width: 50px;" name="newCantidad" id="nc'.$value->getId().'" type="number" min="1" class="text-right val_num" value="'.$value->getCantidad().'" onchange="myFunction(this.value, this.id)"></td>';
-            $producto .= '<td class="text-right td-width-50" title="Valor Cotizacion"><input style="width: 100px;" name="totalac" id="vm'.$value->getId().'" type="number" min="1" class="text-right val_num" value="'.$value->getValorModificado().'" onchange="myFunctionValCotizacion(this.value, this.id)"></td>';
+            $producto .= '<td class="text-right td-width-30" title="Cantidad"><input style="width: 50px;" name="newCantidad" id="nc'.$value->getId().'" type="number" min="1" class="text-right input-group val_num" value="'.$value->getCantidad().'" onchange="myFunction(this.value, this.id)" '.$acotizar.' '.((!$this->isGranted('ROLE_ADMIN_C'))? 'disabled' : '').' ></td>';
+            $producto .= '<td class="text-right td-width-50" title="Valor Cotizacion"><input style="width: 100px;" name="totalac" id="vm'.$value->getId().'" type="number" min="1" class="text-right input-group val_num" value="'.$value->getValorModificado().'" onchange="myFunctionValCotizacion(this.value, this.id)" '.$acotizar.' '.((!$this->isGranted('ROLE_ADMIN_C'))? 'disabled' : '').'></td>';
             $producto .= '<td class="text-right td-width-100" title="Total por producto" id="total'.$value->getId().'">'.$value->getTotal().'</td>';
             $producto .= '<td class="text-right td-width-100" title="Estado" id="total'.$value->getId().'">'.$value->getEtapaPedidoDetalle()->getNombre().'</td>';
-            if ($acotizar) {
-                $producto .= '<td class="text-right td-width-50" ><a id="'.$value->getId().'" onclick="modal(this.id)"><i class="material-icons">mode_edit</i></a><a id="'.$value->getId().'" onclick="eliminarProductoDetalle(this.id)"><i class="material-icons">delete_forever</i></a></td>';
-            }else{
-                $producto .= '<td class="text-right td-width-50" ><a id="'.$value->getId().'" onclick="modalVerEditarProductoCotizar('.$value->getFkProducto().')"><i class="material-icons">mode_edit</i></a><a id="'.$value->getId().'" onclick="eliminarProductoDetalle(this.id)"><i class="material-icons">delete_forever</i></a></td>';
-             }
+            if ($this->isGranted('ROLE_ADMIN_C')) {
+                if ($acotizar == "") {
+                    $producto .= '<td class="text-right td-width-50" ><a id="'.$value->getId().'" onclick="modal(this.id)"><i class="material-icons">mode_edit</i></a> '.(($this->isGranted('ROLE_ADMIN_B'))? '<a id="'.$value->getId().'" onclick="eliminarProductoDetalle(this.id)"><i class="material-icons">delete_forever</i></a>' : '' ).' </td>';
+                }else{
+                    $producto .= '<td class="text-right td-width-50" ><a id="'.$value->getId().'" onclick="modalVerEditarProductoCotizar('.$value->getFkProducto().')"><i class="material-icons">mode_edit</i></a> '.(($this->isGranted('ROLE_ADMIN_B'))? '<a id="'.$value->getId().'" onclick="eliminarProductoDetalle(this.id)"><i class="material-icons">delete_forever</i></a>' : '' ).' </td>';
+                }
+            }
             $producto .= '</tr>';
         }
 
@@ -837,5 +894,22 @@ class PedidoController extends Controller
         $response = new JsonResponse();
         $response->setData(array('montoDescuento'=>$montoDescuento,'valorNetoCD'=>$pedido->getValorNeto(),'totalCI'=>$totalCI));
         return $response;        
+    }
+    /*
+    * Metodo que devuelve true si el $role pasado como atributo esta contenido en los 
+    * roles de usuario registrado no hace referencia a las herencias de security
+    */
+    private function hasRole($role){
+        $user = $this->getUser();
+        $user_email = $user->getEmail();
+        $user_rol =  $user->getRoles();
+        $em = $this->getDoctrine()->getManager();
+        //$rol = $em->getRepository('AdminBundle:Usuario')->findOneBy(array('email'=>$user_email))->getRoles();
+        foreach ($user_rol as $value) {
+            if ($value == $role) {
+               return true;
+            }  
+        }        
+        return false;
     }
 }

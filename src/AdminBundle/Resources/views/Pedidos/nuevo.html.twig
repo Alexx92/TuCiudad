@@ -24,7 +24,7 @@
 					<div role="tabpanel" class="tab-pane fade active in" id="datos-pedido-tab">
 						<div class="admin-form theme-default theme-info">
 							<div class="panel heading-border panel-default panel-info">
-                    			<div class="panel-body bg-light">													
+                    			<div class="panel-body bg-light">																				
 									<div class="row">
 										<div class="col-md-12">											
 											<div class="input-group form-group col-sm-12 col-lg-3 pull-left">
@@ -376,7 +376,7 @@
 										<div class="section-divider mb40">
 											<span>Listado de productos / servicios</span>
 										</div>
-										<div class="col-md-12">
+										<div class="col-md-10 col-md-offset-1">
 											<!-- bloque busqueda / filtros -->
 											<!-- bloque busqueda / filtros fin-->
 											<!-- bloque tabla -->
@@ -386,10 +386,10 @@
 														<tr>
 															<th>#</th>
 															<th>Producto</th>
-															<th>Valor Unitario Base</th>
-															<th class="text-right">Cantidad</th>
-															<th class="text-right">Valor Cotizacion</th>
-															<th class="text-right">Total por Producto</th>
+															<th>Valor Uni.</th>
+															<th>Cantidad</th>
+															<th>Valor Cotizacion</th>
+															<th class="text-right">Total P/P</th>
 															<th class="text-right">Estado</th>
 														</tr>
 													</thead>
@@ -633,7 +633,7 @@
 																			<div class="col-md-2">
 																				<label class="field">
 																					Modificado:
-																					<input type="number" min="1" name="valor_m"  class="gui-input" onchange="myFunctionValCotizacion(this.value, this.id)">
+																					<input type="number" min="1" name="valor_m"  class="gui-input" onchange="myFunctionValCotizacion(this.value, this.id)" {{(is_granted('ROLE_ADMIN_C'))? '': 'disabled'}}>
 																				</label>
 																			</div>																																						
 																			<div class="col-md-2">
@@ -665,128 +665,127 @@
 										</div>
 									</div>
 									{# datos de pedido #}
-									<div class="row" id="datosPedido" style={#{data.id is not defined ? "display:none;" : ""}#}>
+									<div class="row" id="datosPedido" style={{data.id is not defined ? "display:none;" : ""}}>
 										<div class="section-divider mb40">
 											<span>Datos Pedido</span>
 										</div>
-										<div class="col-sm-12">
-											{# <div class="panel"> #}
-												<div class="panel-body">
-												<form id="form_new_pedido" name="form_new_pedido" class="" action="{{ url('admin_pedido_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
-													<div class="row">
-														<div class="col-md-10 col-sm-offset-1">
-															<div class="row">
-																<div class="input-group form-group col-sm-12 col-lg-3 pull-left">
-																	<span class="input-group-addon">Ultima modificacion :</span>
-																	<input type="text" class="form-control" name="fechaModificacion" id="fechaModificacion" value="{{pedido.fechaModificacion is defined ? pedido.fechaModificacion|date("d/m/Y") : "Sin Modificar"}}" disabled>
-																</div>
+										{# <div class="panel"> #}
+										<div class="panel-body">
+											<form id="form_new_pedido" name="form_new_pedido" class="" action="{{ url('admin_pedido_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
+												<div class="row">
+													<div class="col-md-10 col-sm-offset-1">
+														<div class="row">
+															<div class="input-group form-group col-sm-12 col-lg-3 pull-left">
+																<span class="input-group-addon">Ultima modificacion :</span>
+																<input type="text" class="form-control" name="fechaModificacion" id="fechaModificacion" value="{{pedido.fechaModificacion is defined ? pedido.fechaModificacion|date("d/m/Y") : "Sin Modificar"}}" disabled>
 															</div>
-															<div class="row">
-																<div class="input-group form-group col-sm-12 col-lg-3 pull-left">
-																	<span class="input-group-addon">E. Pedido:</span>
-																	<input type="text" class="form-control" name="pedido_etapa" id="pedido_etapa" value="{{pedido.etapa is defined ? pedido.etapa.nombre : "INCONSISTENTE"}}" disabled>
-																</div>
-															</div>
-															<div class="row" style="{{data.id is not defined ? "display:none;" : ""}}">
-																<div class="input-group  col-sm-12 col-lg-3 pull-left ">
-																		<span class="input-group-addon">E. Negociacion:</span>
-																		<input id="estadoNegociacion" name="estadoNegociacion" type="text" class="form-control"   value="{{pedido.estadoProceso is defined ? pedido.estadoProceso.sigla : "INCONSISTENTE"}}" disabled>
-																</div>
-																<div class="input-group form-group col-lg-5 col-sm-offset-4">
-																	<div class="input-group">
-																		<span class="input-group-addon">Cambiar Estado</span>
-																		<label class="field select">
-																			<select id="newEstadoNegociacion" name="newEstadoNegociacion" class="form-control" required>																			
-																				<option value="">Seleccione</option>
-																				{% for etapa in lista_etapa_negociacion %}
-																					<option id="seleccion" {{(pedido.estadoProceso.id == etapa.id)? 'selected'}} name="seleccion" value={{etapa.id}}>{{etapa.sigla }}, {{etapa.nombre}} </option>
-																				{% endfor %}
-																			</select>
-																			<i class="arrow"></i>
-																		</label>					
-																	</div>																	
-																</div>															
-															</div><br>
 														</div>
-													</div>													
-													<div class="col-sm-12 col-sm-offset-3">
-															<input type="hidden" name="ped_id" id="ped_id" value="{{ pedido.id is defined ?  pedido.id }}" >
-															<div class="row">
-																<div class="form-group col-sm-12 col-lg-2">
-																	<label class="field">
-																		Total S/D
-																		<div class="input-group form-group col-sm-12 col-lg-2">
-																			<span class="input-group-addon">$</span>
-																			<input style="width:120px;text-align:left;" type="text" name="total_ped" id="total_ped" class="gui-input val_num" value="{{ pedido.total is defined ? pedido.total : 0 }}" disabled>
-																		</div>
-																	</label>
-																</div>
-																<div class="form-group col-sm-12 col-lg-2">
-																	<label class="field">
-																		Descuento																	
-																		<div class="input-group form-group col-sm-12 col-lg-2">
-																			<input style="width:120px;text-align:right;" type="text" class="gui-input val_num" name="descuento" id="descuento" value="{{ pedido.descuento is defined ?   pedido.descuento }}" onchange="actualizaDescuento(this.value)" >
-																			<span class="input-group-addon">%</span>
-																		</div>
-																	</label>
-																</div>
-																<div class="form-group col-sm-12 col-lg-2">
-																	<label class="field">
-																		Monto Descuento
-																		<div class="input-group form-group col-sm-12 col-lg-2">
-																			<span class="input-group-addon">$</span>
-																			<input style="width:120px;text-align:left;" type="text" name="montoDescuento" id="montoDescuento" class="gui-input val_num" value="{{ pedido.montoDescuento is defined ?   pedido.montoDescuento : 0 }}" disabled>
-																		</div>
-																	</label>
-																</div>
-															</div>															
-															<div class="row">
-																<div class="form-group col-sm-12 col-lg-2">
-																	<label class="field">
-																		Total Neto C/D
-																		<div class="input-group form-group col-sm-12 col-lg-2">
-																			<span class="input-group-addon">$</span>
-																			<input style="width:120px;text-align:left;" type="text" class="gui-input val_num" name="valorNetoCD" id="valorNetoCD" value="{{ pedido.valorNeto is defined ?   pedido.valorNeto : 0 }}" disabled>
-																		</div>
-																	</label>
-																</div>														
-																<div class="form-group col-sm-12 col-lg-2">
-																	<label class="field">
-																		IVA Actual																		
-																	</label>
-																	<div class="input-group form-group col-sm-12 col-lg-2">
-																		<input style="width:120px;text-align:right;" type="text" class="gui-input" name="ivaActual" id="ivaActual" value="{{pedido.ivaActual is defined ? pedido.ivaActual : "19"}}" disabled>
-																		<span class="input-group-addon">%</span>
-																	</div>
-																</div>
-																<div class="form-group col-sm-12 col-lg-2">
-																	<label class="field">
-																		Total Imponible
-																		<div class="input-group form-group col-sm-12 col-lg-2">
-																			<span class="input-group-addon">$</span>
-																			<input style="width:120px;text-align:left;" type="text" name="totalImp" id="totalImp" class="gui-input val_num" value="{{ pedido.totalImp is defined ? pedido.totalImp : 0}}" disabled>
-																		</div>
+														<div class="row">
+															<div class="input-group form-group col-sm-12 col-lg-3 pull-left">
+																<span class="input-group-addon">E. Pedido:</span>
+																<input type="text" class="form-control" name="pedido_etapa" id="pedido_etapa" value="{{pedido.etapa is defined ? pedido.etapa.nombre : "INCONSISTENTE"}}" disabled>
+															</div>
+														</div>
+														<div class="row" style="{{data.id is not defined ? "display:none;" : ""}}">
+															<div class="input-group  col-sm-12 col-lg-3 pull-left ">
+																	<span class="input-group-addon">E. Negociacion:</span>
+																	<input id="estadoNegociacion" name="estadoNegociacion" type="text" class="form-control"   value="{{pedido.estadoProceso is defined ? pedido.estadoProceso.sigla : "INCONSISTENTE"}}" disabled>
+															</div>																
+															<div class="input-group form-group col-lg-5 col-sm-offset-4">
+																<div class="input-group">
+																	<span class="input-group-addon">Cambiar Estado</span>
+																	<label class="field select">
+																		<select id="newEstadoNegociacion" name="newEstadoNegociacion" class="form-control" required {{(is_granted('ROLE_ADMIN_C'))? '': ((pedido.estadoProceso.id == 1 )? 'disabled':'')}}>
+																			<option value="">Seleccione</option>
+																			{% for etapa in lista_etapa_negociacion %}
+																				<option id="seleccion" {{(pedido.estadoProceso.id == etapa.id)? 'selected'}} name="seleccion" value={{etapa.id}}>{{etapa.sigla }}, {{etapa.nombre}} </option>
+																			{% endfor %}
+																		</select>
+																		<i class="arrow"></i>
 																	</label>
 																</div>
 															</div>
-															<div class="row">
-																<div class="form-group col-sm-6 ">
-																	<div class="form-group ">
-																		<label class="field">
-																			Observaciones
-																		</label>
-																		<label class="field prepend-icon">
-																			<textarea class="gui-textarea" id="ped_obs" name="ped_obs">{{ pedido.obs is defined ? pedido.obs}}</textarea>
-																			<label for="ped_obs" class="field-icon"><i class="fa fa-comments"></i></label>
-																		</label>
-																	</div>
-																</div>
-															</div>
-														</form>
+														</div><br>
 													</div>
 												</div>
-											{# </div> #}
-										</div>											
+												<div class="col-sm-12 col-sm-offset-3">
+														<input type="hidden" name="ped_id" id="ped_id" value="{{ pedido.id is defined ?  pedido.id }}" >
+														<div class="row">
+															<div class="form-group col-sm-12 col-lg-2">
+																<label class="field">
+																	Total S/D
+																	<div class="input-group form-group col-sm-12 col-lg-2">
+																		<span class="input-group-addon">$</span>
+																		<input style="width:120px;text-align:left;" type="text" name="total_ped" id="total_ped" class="gui-input val_num" value="{{ pedido.total is defined ? pedido.total : 0 }}" disabled>
+																	</div>
+																</label>
+															</div>
+															<div class="form-group col-sm-12 col-lg-2">
+																<label class="field">
+																	Descuento
+																	<div class="input-group form-group col-sm-12 col-lg-2">
+																		<input style="width:120px;text-align:right;" type="text" class="gui-input val_num" name="descuento" id="descuento" 
+																			value="{{ pedido.descuento is defined ?   pedido.descuento }}" onchange="actualizaDescuento(this.value)" {{(is_granted('ROLE_ADMIN_C'))? '': 'disabled'}}>
+																		<span class="input-group-addon">%</span>
+																	</div>
+																</label>
+															</div>
+															<div class="form-group col-sm-12 col-lg-2">
+																<label class="field">
+																	Monto Descuento
+																	<div class="input-group form-group col-sm-12 col-lg-2">
+																		<span class="input-group-addon">$</span>
+																		<input style="width:120px;text-align:left;" type="text" name="montoDescuento" id="montoDescuento" class="gui-input val_num" value="{{ pedido.montoDescuento is defined ?   pedido.montoDescuento : 0 }}" disabled>
+																	</div>
+																</label>
+															</div>
+														</div>
+														<div class="row">
+															<div class="form-group col-sm-12 col-lg-2">
+																<label class="field">
+																	Total Neto C/D
+																	<div class="input-group form-group col-sm-12 col-lg-2">
+																		<span class="input-group-addon">$</span>
+																		<input style="width:120px;text-align:left;" type="text" class="gui-input val_num" name="valorNetoCD" id="valorNetoCD" value="{{ pedido.valorNeto is defined ?   pedido.valorNeto : 0 }}" disabled>
+																	</div>
+																</label>
+															</div>														
+															<div class="form-group col-sm-12 col-lg-2">
+																<label class="field">
+																	IVA Actual																		
+																</label>
+																<div class="input-group form-group col-sm-12 col-lg-2">
+																	<input style="width:120px;text-align:right;" type="text" class="gui-input" name="ivaActual" id="ivaActual" value="{{pedido.ivaActual is defined ? pedido.ivaActual : "19"}}" disabled>
+																	<span class="input-group-addon">%</span>
+																</div>
+															</div>
+															<div class="form-group col-sm-12 col-lg-2">
+																<label class="field">
+																	Total Imponible
+																	<div class="input-group form-group col-sm-12 col-lg-2">
+																		<span class="input-group-addon">$</span>
+																		<input style="width:120px;text-align:left;" type="text" name="totalImp" id="totalImp" class="gui-input val_num" value="{{ pedido.totalImp is defined ? pedido.totalImp : 0}}" disabled>
+																	</div>
+																</label>
+															</div>
+														</div>
+														<div class="row">
+															<div class="form-group col-sm-6 ">
+																<div class="form-group ">
+																	<label class="field">
+																		Observaciones
+																	</label>
+																	<label class="field prepend-icon">
+																		<textarea class="gui-textarea" id="ped_obs" name="ped_obs">{{ pedido.obs is defined ? pedido.obs}}</textarea>
+																		<label for="ped_obs" class="field-icon"><i class="fa fa-comments"></i></label>
+																	</label>
+																</div>
+															</div>
+														</div>														
+												</div>
+											</form>
+										</div>
+										{# </div> #}
 									</div>										
                         		</div>
                         		<div class="panel-footer text-right">

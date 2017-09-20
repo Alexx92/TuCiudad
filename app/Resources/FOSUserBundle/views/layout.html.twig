@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Login Alta Frontera</title>
+        <title>Login Tu Ciudad</title>
         <link href="{{ absolute_url(asset('assets/css/theme.css')) }}" rel="stylesheet">
         <link href="{{ absolute_url(asset('assets/css/admin.css')) }}" rel="stylesheet">
         <link href="{{ absolute_url(asset('assets/css/admin-forms.css')) }}" rel="stylesheet">
@@ -14,12 +14,12 @@
         </style>
     </head>
     <body>        
-        <div>
+        {# <div>
             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                 {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
                 <a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a>
             {% endif %}
-        </div>        
+        </div>         #}
         {% if app.request.hasPreviousSession %}
             {% for type, messages in app.session.flashbag.all() %}
                 {% for message in messages %}

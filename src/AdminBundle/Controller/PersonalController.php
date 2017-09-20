@@ -21,7 +21,6 @@ class PersonalController extends Controller
             'menu_o_con'   => 'personal'
         ));
     }
-
     public function personalNuevoAction()
     {
         $titulo  = 'Nuevo Personal';
@@ -38,7 +37,7 @@ class PersonalController extends Controller
             'nombreProvincia'   => null,
             'nombreComuna'      => null,
             'nombreArea'        => null,
-            'nombreDepartamento'=>null,
+            'nombreDepartamento'=> null,
             'lista_departamento'=> $lista_departamento,
             'lista_area'        => null,
             'menu'              => 'nuevo',
@@ -46,7 +45,6 @@ class PersonalController extends Controller
             'submenu'           => 'personal_nuevo'
         ));
     }
-
     // carga la taba de contactos en el index
     public function personalCargartablaAction(Request $request)
     {
@@ -67,17 +65,17 @@ class PersonalController extends Controller
                 $datos->apellido_paterno   = $value->getSegundoNombre();
                 $datos->email              = $value->getCorreo();
                 $datos->celular            = $value->getCelular();
-                
+                $rolUser = ($value->getUsername()) ? $em->getRepository('AdminBundle:Usuario')->findOneBy(array('username'=>$value->getUsername()))->getRoles() : 'Sin Definir';
+                $datos->rol                  = (sizeof($rolUser)==1)? substr($rolUser[0],5) :substr($rolUser[1],5) ;                
                 $lista_personal[]  = $datos;
-
             }
+           
         }
 
         return $this->render('AdminBundle:Layouts:tabla_personal_index.html.twig', array(
             'lista_personal' => $lista_personal
         ));
     }
-
     // guarda nuevo personal
     public function personalGuardarAction(Request $request)
     {
@@ -88,6 +86,7 @@ class PersonalController extends Controller
         {                  
             // captura de datos desde el formulario
             $id                        = ($request->get('personal_id', false)) ? $request->get('personal_id'): 0;
+            
             $primer_nombre             = ucfirst($request->get('primer_nombre'));
             $segundo_nombre            = ucfirst($request->get('segundo_nombre'));
             $apellido_paterno          = ucfirst($request->get('apellido_paterno'));
@@ -115,15 +114,47 @@ class PersonalController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            if( !$personal = $em->getRepository('AdminBundle:Personal')->findOneBy(array( 'id' => $id )) )
+            if(!$personal = $em->getRepository('AdminBundle:Personal')->findOneBy(array('id' => $id)))
             {//se trata de una persona nueva
                 $personal = new Personal();
                 $personal->setEstado(1);
                 $personal->setFechaIngreso(new \DateTime(date("d-m-Y H:i:s")));
                 $personal->setEstadoPersonal($em->getRepository('AdminBundle:EstadoPersonal')->findOneBy(array('id'=>2)));
+
+                $valid = true; //actualizo la variable que valida el ingreso
+                $personal->setArea($em->getRepository('AdminBundle:Area')->findOneBy(array('id'=>1)));
+                $personal->setPrimerNombre($primer_nombre);
+                $personal->setSegundoNombre($segundo_nombre);
+                $personal->setApellidoPaterno($apellido_paterno);
+                $personal->setApellidoMaterno($apellido_materno);
+                $personal->setDni($dni);
+                $personal->setSexo($sexo);
+                $personal->setFechaNacimiento($fecha_nacimiento);
+                $personal->setComuna($comuna);
+                $personal->setProvincia($provincia);
+                $personal->setRegion($region);
+                $personal->setDirVillaPbla($dir_villa_pobl);
+                $personal->setDirCalle($dir_calle);
+                $personal->setDirNumeroCasa($dir_numero_casa);
+                $personal->setDirNumeroDepartamento($dir_numero_depto);
+                $personal->setDirNumeroPiso($dir_numero_piso);
+                $personal->setTelefono($telefono);
+                $personal->setCelular($celular);
+                $personal->setCorreo($email);
+                $personal->setSkype($skype);
+                $personal->setObservacion($observacion);
+                // guardar imagen
+                if ($imagen)
+                {
+                    $dir_image = $this->subirImagen($imagen);
+                    $personal->setImagen($dir_image);
+                }    
+                $em->persist($personal);
+                $em->flush();
+    
+                $result = true;
             }
             if ($personal = $em->getRepository('AdminBundle:Personal')->findOneBy(array( 'dni' => $dni ))) {//valida que no alla una persona con el mismo rut
-                if ($personal->getId()==$id) {                
                     $valid = true; //actualizo la variable que valida el ingreso
                     $personal->setArea($em->getRepository('AdminBundle:Area')->findOneBy(array('id'=>1)));
                     $personal->setPrimerNombre($primer_nombre);
@@ -156,8 +187,8 @@ class PersonalController extends Controller
                     $em->flush();
         
                     $result = true;
-                }
-            }
+                
+             }
 
             
 
@@ -165,11 +196,10 @@ class PersonalController extends Controller
         $response = new JsonResponse();
         $response->setData(array('result' => $result,'valid'=>$valid));        
         return $response;
-        // //return $this->redirectToRoute('admin_contacto_nuevo');
+        //return $this->redirectToRoute('admin_contacto_nuevo');
         // echo json_encode(array('result' => $result));
         // exit;
     }
-
     // cargar formulario para editar
     public function personalEditarAction(Request $request)
     {
@@ -192,7 +222,7 @@ class PersonalController extends Controller
         
         $data['dni']               = $personal->getDni();
         $data['sexo']              = $personal->getSexo();
-        $sexo = ($personal->getSexo() == 1) ? "Hombre" : "Mujer" ;
+        //$sexo = ($personal->getSexo() == 1) ? "Hombre" : "Mujer" ;
         $data['fecha_nacimiento'] = date_format($personal->getFechaNacimiento(), 'd-m-Y');
         
         $data['comuna']            = $personal->getComuna();
@@ -248,13 +278,12 @@ class PersonalController extends Controller
             'nombreDepartamento'=> $nombreDepartamento,
             'lista_departamento'=> $lista_departamento,
             'lista_area'        => $lista_area,
-            'sexo'              => $sexo,
+          //  'sexo'              => $sexo,
             'submenu'           => 'personal_nuevo',
             'form'              => 'activo',
             'menu_o_con'        => 'personal'
         ));
     }
-    
     // elimanr un personal
     public function personalEliminarAction(Request $request)
     {
@@ -271,7 +300,6 @@ class PersonalController extends Controller
         echo json_encode(array(true));
         exit;
     }
-
     // subir imagenes
     private function subirImagen($imagen)
     {
@@ -293,8 +321,8 @@ class PersonalController extends Controller
         }
         return $result;
     }
-
-     public function cargarProvinciasAction(Request $request){
+    public function cargarProvinciasAction(Request $request)
+    {
 
         $data = $request->get('id_region');
 
@@ -314,7 +342,6 @@ class PersonalController extends Controller
         
         return $response;
     }
-
     public function cargarComunasAction(Request $request)
     {
         $data = $request->get('id_provincia');
@@ -350,5 +377,129 @@ class PersonalController extends Controller
         
         return $response;
     }
+    public function buscarPersonalAction(Request $request)
+    {
+        $data = $request->get('busq_pers');
+      ;
+        $em = $this->getDoctrine()->getManager();
+ 
+        $query = $em->createQuery(''
+                . 'SELECT c.id, c.primerNombre, c.segundoNombre, c.apellidoPaterno ,c.apellidoMaterno '
+                . 'FROM AdminBundle:Personal c ' 
+                . 'WHERE c.primerNombre LIKE :data '
+                . 'OR c.segundoNombre LIKE :data '
+                . 'OR c.apellidoPaterno LIKE :data '
+                . 'OR c.apellidoMaterno LIKE :data '
+                . 'AND c.estado = 1'
+                . 'ORDER BY c.id ASC'
+                )
+                ->setParameter('data', '%' . $data . '%');
+        
+        $results = $query->getResult();
+        
+        $lista_personal = '';
+        foreach ($results as $result) {
+            $bold_prinombre = preg_replace('/('.$data.')/i', '<strong>$1</strong>', $result['primerNombre']);
+            $bold_segnombre = preg_replace('/('.$data.')/i', '<strong>$1</strong>', $result['segundoNombre']);
+            $bold_apellpat = preg_replace('/('.$data.')/i', '<strong>$1</strong>', $result['apellidoPaterno']);
+            $bold_apellmat = preg_replace('/('.$data.')/i', '<strong>$1</strong>', $result['apellidoMaterno']);
+            $lista_personal .= '<li class="ele" role="presentation"><span role="menuitem" data-id="'.$result['id'].'" data-name="'.$result['primerNombre'].'"  data-apellido="'.$result['apellidoPaterno'].'">'.$bold_prinombre.' '.$bold_segnombre.' '.$bold_apellpat.' '.$bold_apellmat.'</span></li>';
+        }
+ 
+        $response = new JsonResponse();
+        $response->setData(array('lista_personal' => $lista_personal));
+        
+        return $response;
+    }
+    public function buscarPersonalFormAction(Request $request)
+    {
+        $id = $request->get('id_personal');
+        $em = $this->getDoctrine()->getManager();
+        $array = array();
+        $username = '';
+       // $where = array('estado' => 1);
+        if ($query = $em->getRepository('AdminBundle:Personal')->findBy(array('id' => $id ))) {
+            foreach ($query as $value) {
+                $datos = new stdClass();
+                $datos->id_personal         = $value->getId();
+                $datos->primer_nombre       = $value->getPrimerNombre();
+                $datos->segundo_nombre      = $value->getSegundoNombre();
+                $datos->apellido_paterno    = $value->getApellidoPaterno();
+                $datos->apellido_materno    = $value->getApellidoMaterno();
+                $datos->dni                 = $value->getDni();
+                $datos->fechaNacimiento     = date_format($value->getFechaNacimiento(), 'd-m-Y');
+                $datos->sexo                = ($value->getSexo() == 1) ? "Hombre" : "Mujer" ;
+                $datos->telefono            = $value->getTelefono();
+                $datos->celular             = $value->getCelular();
+                $datos->email               = $value->getCorreo();
+                $datos->skype               = $value->getSkype();
 
+                if ($query = $em->getRepository('AdminBundle:Usuario')->findBy(array('username' => $value->getUsername()))) {
+                    foreach ($query as $val) {
+                        $datos->id_usuario       = $val->getId() ;
+                        $datos->username         = $val->getUsername();
+                        $datos->rol              = $val->getRoles();
+                    }
+                }else{
+                    $datos->id_usuario       = 0;
+                    $datos->username         = $this->generarUsername($id);
+                }
+                $array[]  = $datos;
+            }
+        }
+
+        $response = new JsonResponse();
+        $response->setData(array('personal' => $array));
+        return $response;
+    }
+    private  function generarUsername($id_personal)
+    {
+       // $id_personal = $request->get('id', false);     
+        $em = $this->getDoctrine()->getManager();
+        $personal = $em->getRepository('AdminBundle:Personal')->findOneBy(array('id'=>$id_personal));         
+        $username = ' ';       
+         for ($i=0; !$this->esValido($username); $i++) {
+            $k=$i+3;
+            if ($k<=strlen($personal->getApellidoPaterno())) {
+                $username = $this->quitar_tildes($personal->getPrimerNombre()).''.substr($this->quitar_tildes($personal->getApellidoPaterno()),0,$k);                
+            }else{
+                $username = $personal->getPrimerNombre().''.$personal->getApellidoMaterno().''.substr($personal->getApellidoMaterno(),0,($i-strlen ($personal->getApellidoPaterno())));
+            }
+        }
+        return strtolower($username);
+        // $response = new JsonResponse();
+        // $response->setData(array('result' => strtolower($username)));
+        // return $response;
+    }
+    private function quitar_tildes($cadena) {
+        //$cade = utf8_decode($cadena);
+        $no_permitidas= array ('á','é','í','ó','ú',/*,'Á','É','Í','Ó','Ú','ñ'/*,'À','Ã','Ì','Ò','Ù','Ã™','Ã “,'Ã¨','Ã¬','Ã²','Ã¹','ç','Ç','Ã¢','ê','Ã®','Ã´','Ã»','Ã‚','ÃŠ','ÃŽ','Ã'','Ã›','ü','Ã¶','Ã–','Ã¯','Ã¤','«','Ò','Ã','Ã„','Ã‹','Ñ','à','è','ì','ò','ù'*/);
+        $permitidas= array ('a','e','i','o','u',/*,'A','E','I','O','U','n','N','A','E','I','O','U','a','e','i','o','u','c','C','a','e','i','o','u','A','E','I','O','U','u','o','O','i','a','e','U','I','A','E','N','a','e','i','o','u'*/);
+        $texto = str_replace($no_permitidas, $permitidas ,$cadena);
+        return $texto;
+    }
+    private function esValido($username){
+  
+        $valid = false;
+        if ($username!=' ') {
+            $em = $this->getDoctrine()->getManager();        
+            if (!$em->getRepository('AdminBundle:Usuario')->findOneBy(array('username'=>$username))) {
+                $valid = true;
+            }
+        }
+       
+        return $valid;
+    }
+    // private function hasRole($role){
+    //     $user = $this->getUser();
+    //     $user_email = $user->getEmail();
+    //     $user_rol =  $user->getRoles();
+    //     $em = $this->getDoctrine()->getManager();
+    //     foreach ($user_rol as $value) {
+    //         if ($value == $role) {
+    //            return true;
+    //         }  
+    //     }        
+    //     return false;
+    // }
 }

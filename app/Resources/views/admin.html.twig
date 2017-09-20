@@ -7,7 +7,7 @@
         <meta name="description" content="">
         <meta name="keywords" content="">
         <meta name="author" content="">
-        <title>Plantilla admin</title>
+        <title>Administración</title>
         <link rel="shortcut icon" href="">
 
         <!-- Materialize -->
@@ -15,6 +15,15 @@
         {# <link href="{{ absolute_url(asset('assets/css/bootstrap/bootstrap.min.css')) }} " rel="stylesheet"> #}
 
         <!-- estilos del sitio -->
+        {# 3 estilos de layout para crear cuenta usuario #}
+        {# <link href="{{ absolute_url(asset('assets/css/theme.css')) }}" rel="stylesheet">
+        <link href="{{ absolute_url(asset('assets/css/admin.css')) }}" rel="stylesheet">
+        <link href="{{ absolute_url(asset('assets/css/admin-forms.css')) }}" rel="stylesheet"> #}
+        {# <style>
+            body{height:100%;}
+            footer{background-color:rgba(0, 0, 0, 0.1)}
+        </style> #}
+
         <link href="{{ absolute_url(asset('assets/css/theme.css')) }}" rel="stylesheet">
         <link href="{{ absolute_url(asset('assets/css/admin.css')) }}" rel="stylesheet">
         <link href="{{ absolute_url(asset('assets/css/admin-forms.css')) }}" rel="stylesheet">
@@ -33,233 +42,257 @@
     </head>
     <body>
 
-        <!-- Start: Header -->
-        <header class="navbar navbar-fixed-top navbar-shadow">
-            <div class="navbar-branding">
-                <a class="navbar-brand" href="{{ url('admin_homepage') }}">
-                  <b>Tu</b>ciudad
-                </a>
-                <span id="toggle_sidemenu_l" class="ad ad-lines"></span>
-            </div>
-        </header>
-        <!-- End: Header -->
+            <!-- Start: Header -->
+            <header class="navbar navbar-fixed-top navbar-shadow">
+                <div class="navbar-branding">
+                    <a class="navbar-brand" href="{{ url('admin_homepage') }}">
+                    <b>Tu</b>Ciudad
+                    </a>
+                    <span id="toggle_sidemenu_l" class="ad ad-lines"></span>
+                </div>
+            </header>
+            <!-- End: Header -->
 
-        <!-- Start: Sidebar -->
-    <aside id="sidebar_left" class="nano nano-light affix">
+            <!-- Start: Sidebar -->
+        <aside id="sidebar_left" class="nano nano-light affix">
 
-      <!-- Start: Sidebar Left Content -->
-      <div class="sidebar-left-content nano-content">
+        <!-- Start: Sidebar Left Content -->
+        <div class="sidebar-left-content nano-content">
 
-        <!-- Start: Sidebar Header -->
-        <header class="sidebar-header">
+            <!-- Start: Sidebar Header -->
+            <header class="sidebar-header">
+                <!-- Sidebar Widget - Author (hidden)  -->
+                <div class="sidebar-widget author-widget">
+                    <div class="media">
+                    <a class="media-left" href="#">
+                        <img src="" class="img-responsive">
+                    </a>
+                    <div class="media-body">
+                        <div class="media-author">{{  app.user.username|capitalize }}</div>
+                        <div class="media-links"><a href="{{ path('fos_user_security_logout') }}">Logout</a></div>
+                    </div>
+                    </div>
+                </div>
+            </header>
+            <!-- End: Sidebar Header -->
 
-          <!-- Sidebar Widget - Author (hidden)  -->
-          <div class="sidebar-widget author-widget">
-            <div class="media">
-              <a class="media-left" href="#">
-                <img src="" class="img-responsive">
-              </a>
-              <div class="media-body">
-                <div class="media-author">{{  app.user.username|capitalize }}</div>
-                <div class="media-links"><a href="{{ path('fos_user_security_logout') }}">Logout</a></div>
-              </div>
-            </div>
-          </div>
+            <!-- Start: Sidebar Menu -->
+            <ul class="nav sidebar-menu">
+                <li class="sidebar-label pt20">Menu</li>
+                <li>
+                    <a href="{{ url('admin_homepage') }}">
+                        <span class="glyphicon glyphicon-home"></span>
+                        <span class="sidebar-title">Inicio</span>
+                    </a>
+                </li>
+                <li class="sidebar-label pt15"> Menu Administración</li>
+                {% if is_granted('ROLE_ADMIN_D')   %}
+                    <li>{#Contacto-Empresa#}
+                        <a class="accordion-toggle {{menu_o_con == 'contacto' or menu_o_con == 'empresa'?'menu-open'}}" href="#">
+                            <span><i class="fa fa-user-circle-o"></i></span>
+                            <span class="sidebar-title">Clientes</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="nav sub-nav">
+                            <li>
+                                <li class="{{submenu == 'contacto'?'active'}}">
+                                    <a href="{{ url('admin_contacto') }}"><span><i class="fa fa-user-plus"></i></span>Contacto</a>
+                                </li>
+                                <li class="{{submenu == 'empresa'?'active'}}">
+                                    <a href="{{ url('admin_empresa') }}"><span><i class="fa fa-industry"></i></span>Empresa</a>
+                                </li>
+                            </li>
+                        </ul>
+                    </li>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN_D')   %}
+                    <li>{#Producto-Categoria#}
+                        <a class="accordion-toggle {{menu_o_con == 'categoria' or menu_o_con == 'producto'?'menu-open'}}" href="#">
+                            <span><i class="fa fa-truck" aria-hidden="true"></i></span>
+                            <span class="sidebar-title">Productos / Servicios</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="nav sub-nav">
+                            <li>
+                                <li class="{{submenu == 'categoria'?'active'}}">
+                                    <a href="{{ url('admin_categorias') }}">Categorias</a>
+                                </li>
+                                <li class="{{submenu == 'producto'?'active'}}">
+                                    <a href="{{ url('admin_producto') }}">Productos</a>
+                                </li>
+                            </li>                            
+                        </ul>
+                    </li>
+                {% endif %}                
+                <li>{#PedidoListar-PedidoNuevo#}
+                    <a class="accordion-toggle " href="#">
+                        <span><i class="fa fa-list"></i></span>
+                        <span class="sidebar-title">Pedidos</span>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="nav sub-nav">
+                        <li class="">
+                            <a href="{{ url('admin_pedido') }}">Lista</a>
+                        </li>
+                        {% if is_granted('ROLE_VENTA_B') %}
+                            <li class="">
+                                <a href="{{ url('admin_pedido_nuevo') }}">Nuevo</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </li>
+                {% if is_granted('ROLE_ADMIN_D')   %}
+                    <li>{#PersonalListar-PersonalNuevo#}
+                        <a class="accordion-toggle {{menu_o_con == 'personal'?'menu-open'}}" href="#">
+                            <span><i class="fa fa-users"></i></span>
+                            <span class="sidebar-title">Personal</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="nav sub-nav">
+                            <li class="{{submenu == 'Personal'?'active'}}">
+                                <a href="{{ url('admin_personal') }}">Lista</a>
+                            </li>
+                            <li class="{{submenu == 'personal_nuevo'?'active'}}">
+                                <a href="{{ url('admin_personal_nuevo') }}">Nuevo</a>
+                            </li>
+                        </ul>
+                    </li>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN_D')   %}
+                    <li>
+                        <a class="accordion-toggle " href="#">
+                            <span><i class="fa fa-cogs"></i></span>
+                            <span class="sidebar-title">Parametros</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="nav sub-nav">
+                            <li class="">
+                                <a href="">Definir Estados</a>
+                            </li>
+                            <li class="">
+                                <a href="">Datos de la aplicacion</a>
+                            </li>
+                            <li class="{{submenu == 'usuario_editar'?'active'}}" {{(is_granted('ROLE_ADMIN_A'))? '' : 'style="display:none;"'}}>
+                                <a href="{{ url('admin_usuario') }}">Cuentas de usuario</a>
+                            </li>
+                        </ul>
+                    </li>
+                {% endif %}
+            </ul>
+            <!-- End: Sidebar Menu -->
+        </div>
+        <!-- End: Sidebar Left Content -->
 
-        </header>
-        <!-- End: Sidebar Header -->
+        </aside>
+        
+        <!-- Start: Content-Wrapper -->
+        <section id="content_wrapper">
 
-        <!-- Start: Sidebar Menu -->
-        <ul class="nav sidebar-menu">
-            <li class="sidebar-label pt20">Menu</li>
-
-            <li>
-                <a href="{{ url('admin_homepage') }}">
+            <!-- Start: breadcrumb -->
+            <header id="topbar" class="alt">
+            <div class="topbar-left">
+                <ol class="breadcrumb">
+                <li class="crumb-active">
+                    <a href="{{ url('admin_homepage') }}">Dashboard</a>
+                </li>
+                <li class="crumb-icon">
+                    <a href="{{ url('admin_homepage') }}">
                     <span class="glyphicon glyphicon-home"></span>
-                    <span class="sidebar-title">Dashboard</span>
-                </a>
-            </li>
+                    </a>
+                </li>
+                <li class="crumb-link">
+                    <a href="{{ url('admin_homepage') }}">Home</a>
+                </li>
+                <li class="crumb-trail">Dashboard</li>
+                </ol>
+            </div>
+            </header>
+            <!-- End: breadcrumb -->
+            <div id="form_registro">
+                {% block fos_user_content %}            
+                {% endblock fos_user_content %}
+            </div>
+            <!-- Begin: Content -->
+            <section id="content" class="animated fadeIn">
+            {% block body %}{% endblock %}
+            </section>
+        
+            <!-- End: Content -->
 
-            <li class="sidebar-label pt15">Administraci&oacute;n</li>
-
-            <li>
-                <a class="accordion-toggle {{menu_o_con == 'contacto' or menu_o_con == 'empresa'?'menu-open'}}" href="#">
-                    <span><i class="fa fa-user-circle-o"></i></span>
-                    <span class="sidebar-title">Clientes</span>
-                    <span class="caret"></span>
+            {# <!-- Begin: Page Footer --> 
+            <footer id="content-footer" class="affix">
+            <div class="row">
+                <div class="col-md-6">
+                <span class="footer-legal">© 2015 AdminDesigns</span>
+                </div>
+                <div class="col-md-6 text-right">
+                <span class="footer-meta"></span>
+                <a href="#content" class="footer-return-top">
+                    <span class="fa fa-arrow-up"></span>
                 </a>
-                <ul class="nav sub-nav">
-                    <li>
-                        <li class="{{submenu == 'contacto'?'active'}}">
-                            <a href="{{ url('admin_contacto') }}"><span><i class="fa fa-user-plus"></i></span>Contacto</a>
-                        </li>
-                        <li class="{{submenu == 'empresa'?'active'}}">
-                            <a href="{{ url('admin_empresa') }}"><span><i class="fa fa-industry"></i></span>Empresa</a>
-                        </li>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a class="accordion-toggle {{menu_o_con == 'categoria' or menu_o_con == 'producto'?'menu-open'}}" href="#">
-                    <span><i class="fa fa-truck" aria-hidden="true"></i></span>
-                    <span class="sidebar-title">Productos / Servicios</span>
-                    <span class="caret"></span>
+                </div>
+            </div>
+            </footer> #}
+            <footer id="content-footer" class="affix">
+            <div class="row">
+                <div class="col-md-6">
+                <span class="footer-legal">Desarrollado Por: Agencia <a href="tuciudad.cl">tuciudad.cl</a> ©</span>
+                </div>
+                <div class="col-md-6 text-right">
+                <span class="footer-meta"></span>
+                <a href="#content" class="footer-return-top">
+                    <span class="fa fa-arrow-up"></span>
                 </a>
-                <ul class="nav sub-nav">
-                    <li>
-                        <li class="{{submenu == 'categoria'?'active'}}">
-                            <a href="{{ url('admin_categorias') }}">Categorias</a>
-                        </li>
-                        <li class="{{submenu == 'producto'?'active'}}">
-                            <a href="{{ url('admin_producto') }}">Productos</a>
-                        </li>
-                    </li>
-                    
-                </ul>
-            </li>
-            <li>
-                <a class="accordion-toggle " href="#">
-                    <span><i class="fa fa-list"></i></span>
-                    <span class="sidebar-title">Pedidos</span>
-                    <span class="caret"></span>
-                </a>
-                <ul class="nav sub-nav">
-                    <li class="">
-                        <a href="{{ url('admin_pedido') }}">Lista</a>
-                    </li>
-                    <li class="">
-                        <a href="{{ url('admin_pedido_nuevo') }}">Nuevo</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a class="accordion-toggle {{menu_o_con == 'personal'?'menu-open'}}" href="#">
-                    <span><i class="fa fa-users"></i></span>
-                    <span class="sidebar-title">Personal</span>
-                    <span class="caret"></span>
-                </a>
-                <ul class="nav sub-nav">
-                    <li class="{{submenu == 'Personal'?'active'}}">
-                        <a href="{{ url('admin_personal') }}">Lista</a>
-                    </li>
-                    <li class="{{submenu == 'personal_nuevo'?'active'}}">
-                        <a href="{{ url('admin_personal_nuevo') }}">Nuevo</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a class="accordion-toggle " href="#">
-                    <span><i class="fa fa-cogs"></i></span>
-                    <span class="sidebar-title">Parametros</span>
-                    <span class="caret"></span>
-                </a>
-                <ul class="nav sub-nav">
-                    <li class="">
-                        <a href="">Definir Estados</a>
-                    </li>
-                    <li class="">
-                        <a href="">Datos de la aplicacion</a>
-                    </li>
-                    <li class="">
-                        <a href="">Cuentas de usuario</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-        <!-- End: Sidebar Menu -->
+                </div>
+            </div>
+            </footer>
+            <!-- Begin: Page Footer -->
+            
+            <!-- End: Page Footer -->
+            <!-- End: Page Footer -->
 
-      </div>
-      <!-- End: Sidebar Left Content -->
-
-    </aside>
-
-    <!-- Start: Content-Wrapper -->
-    <section id="content_wrapper">
-
-        <!-- Start: breadcrumb -->
-        <header id="topbar" class="alt">
-          <div class="topbar-left">
-            <ol class="breadcrumb">
-              <li class="crumb-active">
-                <a href="{{ url('admin_homepage') }}">Dashboard</a>
-              </li>
-              <li class="crumb-icon">
-                <a href="{{ url('admin_homepage') }}">
-                  <span class="glyphicon glyphicon-home"></span>
-                </a>
-              </li>
-              <li class="crumb-link">
-                <a href="{{ url('admin_homepage') }}">Home</a>
-              </li>
-              <li class="crumb-trail">Dashboard</li>
-            </ol>
-          </div>
-        </header>
-        <!-- End: breadcrumb -->
-
-        <!-- Begin: Content -->
-        <section id="content" class="animated fadeIn">
-          {% block body %}{% endblock %}
         </section>
-        <!-- End: Content -->
+        <!-- End: Content-Wrapper -->
+       
+        <!-- jQuery -->
+        <script src="{{ absolute_url(asset('assets/js/jquery-3.1.1.min.js')) }}"></script>
 
-        <!-- Begin: Page Footer -->
-        <footer id="content-footer" class="affix">
-          <div class="row">
-            <div class="col-md-6">
-              <span class="footer-legal">© 2015 AdminDesigns</span>
-            </div>
-            <div class="col-md-6 text-right">
-              <span class="footer-meta"></span>
-              <a href="#content" class="footer-return-top">
-                <span class="fa fa-arrow-up"></span>
-              </a>
-            </div>
-          </div>
-        </footer>
-        <!-- End: Page Footer -->
+        <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+        <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
 
-    </section>
-    <!-- End: Content-Wrapper -->
+        <!-- gmaps -->
+        <script src="http://maps.google.com/maps/api/js?key=AIzaSyCc6uZiwgDirdfZgc4W41fR5MDs3H02wpk"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.24/gmaps.min.js"></script>
 
-    <!-- jQuery -->
-    <script src="{{ absolute_url(asset('assets/js/jquery-3.1.1.min.js')) }}"></script>
+        <!-- Validate js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
 
-    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+        <!-- JS con scripts comunes y personalizados para el sitio web -->
+        <script src="{{ absolute_url(asset('assets/js/jquery_ui/jquery-ui.min.js')) }}"></script>
 
-    <!-- gmaps -->
-    <script src="http://maps.google.com/maps/api/js?key=AIzaSyCc6uZiwgDirdfZgc4W41fR5MDs3H02wpk"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.24/gmaps.min.js"></script>
+        <script src="{{ absolute_url(asset('assets/js/toastr.min.js')) }}"></script>
+        <script src="{{ absolute_url(asset('assets/js/utility.js')) }}"></script>
+        <script src="{{ absolute_url(asset('assets/js/demo.js')) }}"></script>
+        <script src="{{ absolute_url(asset('assets/js/theme.js')) }}"></script>
 
-    <!-- Validate js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
+        <script src="{{ absolute_url(asset('assets/js/admin.js')) }}"></script>
 
-    <!-- JS con scripts comunes y personalizados para el sitio web -->
-    <script src="{{ absolute_url(asset('assets/js/jquery_ui/jquery-ui.min.js')) }}"></script>
-
-    <script src="{{ absolute_url(asset('assets/js/toastr.min.js')) }}"></script>
-    <script src="{{ absolute_url(asset('assets/js/utility.js')) }}"></script>
-    <script src="{{ absolute_url(asset('assets/js/demo.js')) }}"></script>
-    <script src="{{ absolute_url(asset('assets/js/theme.js')) }}"></script>
-
-    <script src="{{ absolute_url(asset('assets/js/admin.js')) }}"></script>
-
-    {# <script src="assets/admin-tools/admin-forms/js/jquery-ui-datepicker.min.js"></script> #}
+        {# <script src="assets/admin-tools/admin-forms/js/jquery-ui-datepicker.min.js"></script> #}
 
 
-    {# <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.css"></script> #}
-
-   
-    <!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
-     {# <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />  #}
+        {# <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.css"></script> #}
 
     
+        <!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
+        {# <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />  #}
+
+        
 
 
 
-    {% block javascripts %}{% endblock %}
+        {% block javascripts %}{% endblock %}
 
-
+     
     </body>
+
 </html>
