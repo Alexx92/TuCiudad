@@ -100,10 +100,7 @@ class PedidoController extends Controller
                 $datos->estado              = $estado->getNombre();
                 $empresa = $em->getRepository('AdminBundle:ContacEmpre')->findOneBy(array('id'=>$value->getContacEmpre()->getId()));
                 $datos->empresa_nombre      = $empresa->getFkEmpresa()->getNombre();
-
-                // $concacto = $em->getRepository('AdminBundle:ContacEmpre')->findOneBy(array('id'=>$value->getContacEmpre()->getId()));
-                // $datos->empresa_nombre      = $empresa->getFkEmpresa()->getNombre();
-                
+               
                 $lista_pedidos[]  = $datos;
             }
          
