@@ -633,7 +633,7 @@
 																			<div class="col-md-2">
 																				<label class="field">
 																					Modificado:
-																					<input type="number" min="1" name="valor_m"  class="gui-input" onchange="myFunctionValCotizacion(this.value, this.id)" {{(is_granted('ROLE_ADMIN_C'))? '': 'disabled'}}>
+																					<input type="number" min="1" name="valor_m"  class="gui-input" onchange="myFunctionValCotizacion(this.value, this.id)" {{(is_granted('ROLE_ADMIN_C'))? '': ((is_granted('ROLE_VENTA_B'))? '' : 'disabled')}}>
 																				</label>
 																			</div>																																						
 																			<div class="col-md-2">
@@ -695,7 +695,7 @@
 																<div class="input-group">
 																	<span class="input-group-addon">Cambiar Estado</span>
 																	<label class="field select">
-																		<select id="newEstadoNegociacion" name="newEstadoNegociacion" class="form-control" required {{(is_granted('ROLE_ADMIN_C'))? '': ((pedido.estadoProceso.id == 1 )? 'disabled':'')}}>
+																		<select id="newEstadoNegociacion" name="newEstadoNegociacion" class="form-control" required {{(is_granted('ROLE_VENTA_B'))? 'disabled' : ((is_granted('ROLE_ADMIN_C'))? '': ((pedido.estadoProceso.id == 1 )? 'disabled':''))}}>
 																			<option value="">Seleccione</option>
 																			{% for etapa in lista_etapa_negociacion %}
 																				<option id="seleccion" {{(pedido.estadoProceso.id == etapa.id)? 'selected'}} name="seleccion" value={{etapa.id}}>{{etapa.sigla }}, {{etapa.nombre}} </option>
@@ -709,79 +709,79 @@
 													</div>
 												</div>
 												<div class="col-sm-12 col-sm-offset-3">
-														<input type="hidden" name="ped_id" id="ped_id" value="{{ pedido.id is defined ?  pedido.id }}" >
-														<div class="row">
-															<div class="form-group col-sm-12 col-lg-2">
-																<label class="field">
-																	Total S/D
-																	<div class="input-group form-group col-sm-12 col-lg-2">
-																		<span class="input-group-addon">$</span>
-																		<input style="width:120px;text-align:left;" type="text" name="total_ped" id="total_ped" class="gui-input val_num" value="{{ pedido.total is defined ? pedido.total : 0 }}" disabled>
-																	</div>
-																</label>
-															</div>
-															<div class="form-group col-sm-12 col-lg-2">
-																<label class="field">
-																	Descuento
-																	<div class="input-group form-group col-sm-12 col-lg-2">
-																		<input style="width:120px;text-align:right;" type="text" class="gui-input val_num" name="descuento" id="descuento" 
-																			value="{{ pedido.descuento is defined ?   pedido.descuento }}" onchange="actualizaDescuento(this.value)" {{(is_granted('ROLE_ADMIN_C'))? '': 'disabled'}}>
-																		<span class="input-group-addon">%</span>
-																	</div>
-																</label>
-															</div>
-															<div class="form-group col-sm-12 col-lg-2">
-																<label class="field">
-																	Monto Descuento
-																	<div class="input-group form-group col-sm-12 col-lg-2">
-																		<span class="input-group-addon">$</span>
-																		<input style="width:120px;text-align:left;" type="text" name="montoDescuento" id="montoDescuento" class="gui-input val_num" value="{{ pedido.montoDescuento is defined ?   pedido.montoDescuento : 0 }}" disabled>
-																	</div>
-																</label>
-															</div>
-														</div>
-														<div class="row">
-															<div class="form-group col-sm-12 col-lg-2">
-																<label class="field">
-																	Total Neto C/D
-																	<div class="input-group form-group col-sm-12 col-lg-2">
-																		<span class="input-group-addon">$</span>
-																		<input style="width:120px;text-align:left;" type="text" class="gui-input val_num" name="valorNetoCD" id="valorNetoCD" value="{{ pedido.valorNeto is defined ?   pedido.valorNeto : 0 }}" disabled>
-																	</div>
-																</label>
-															</div>														
-															<div class="form-group col-sm-12 col-lg-2">
-																<label class="field">
-																	IVA Actual																		
-																</label>
+													<input type="hidden" name="ped_id" id="ped_id" value="{{ pedido.id is defined ?  pedido.id }}" >
+													<div class="row">
+														<div class="form-group col-sm-12 col-lg-2">
+															<label class="field">
+																Total S/D
 																<div class="input-group form-group col-sm-12 col-lg-2">
-																	<input style="width:120px;text-align:right;" type="text" class="gui-input" name="ivaActual" id="ivaActual" value="{{pedido.ivaActual is defined ? pedido.ivaActual : "19"}}" disabled>
+																	<span class="input-group-addon">$</span>
+																	<input style="width:120px;text-align:left;" type="text" name="total_ped" id="total_ped" class="gui-input val_num" value="{{ pedido.total is defined ? pedido.total : 0 }}" disabled>
+																</div>
+															</label>
+														</div>
+														<div class="form-group col-sm-12 col-lg-2">
+															<label class="field">
+																Descuento
+																<div class="input-group form-group col-sm-12 col-lg-2">
+																	<input style="width:120px;text-align:right;" type="text" class="gui-input val_num" name="descuento" id="descuento" 
+																		value="{{ pedido.descuento is defined ?   pedido.descuento }}" onchange="actualizaDescuento(this.value)" {{(is_granted('ROLE_ADMIN_C'))? '': ((pedido.etapa.id is defined)? (pedido.etapa.id != 6)?'disabled')}}>
 																	<span class="input-group-addon">%</span>
 																</div>
+															</label>
+														</div>
+														<div class="form-group col-sm-12 col-lg-2">
+															<label class="field">
+																Monto Descuento
+																<div class="input-group form-group col-sm-12 col-lg-2">
+																	<span class="input-group-addon">$</span>
+																	<input style="width:120px;text-align:left;" type="text" name="montoDescuento" id="montoDescuento" class="gui-input val_num" value="{{ pedido.montoDescuento is defined ?   pedido.montoDescuento : 0 }}" disabled>
+																</div>
+															</label>
+														</div>
+													</div>
+													<div class="row">
+														<div class="form-group col-sm-12 col-lg-2">
+															<label class="field">
+																Total Neto C/D
+																<div class="input-group form-group col-sm-12 col-lg-2">
+																	<span class="input-group-addon">$</span>
+																	<input style="width:120px;text-align:left;" type="text" class="gui-input val_num" name="valorNetoCD" id="valorNetoCD" value="{{ pedido.valorNeto is defined ?   pedido.valorNeto : 0 }}" disabled>
+																</div>
+															</label>
+														</div>														
+														<div class="form-group col-sm-12 col-lg-2">
+															<label class="field">
+																IVA Actual																		
+															</label>
+															<div class="input-group form-group col-sm-12 col-lg-2">
+																<input style="width:120px;text-align:right;" type="text" class="gui-input" name="ivaActual" id="ivaActual" value="{{pedido.ivaActual is defined ? pedido.ivaActual : "19"}}" disabled>
+																<span class="input-group-addon">%</span>
 															</div>
-															<div class="form-group col-sm-12 col-lg-2">
+														</div>
+														<div class="form-group col-sm-12 col-lg-2">
+															<label class="field">
+																Total Imponible
+																<div class="input-group form-group col-sm-12 col-lg-2">
+																	<span class="input-group-addon">$</span>
+																	<input style="width:120px;text-align:left;" type="text" name="totalImp" id="totalImp" class="gui-input val_num" value="{{ pedido.totalImp is defined ? pedido.totalImp : 0}}" disabled>
+																</div>
+															</label>
+														</div>
+													</div>
+													<div class="row">
+														<div class="form-group col-sm-6 ">
+															<div class="form-group ">
 																<label class="field">
-																	Total Imponible
-																	<div class="input-group form-group col-sm-12 col-lg-2">
-																		<span class="input-group-addon">$</span>
-																		<input style="width:120px;text-align:left;" type="text" name="totalImp" id="totalImp" class="gui-input val_num" value="{{ pedido.totalImp is defined ? pedido.totalImp : 0}}" disabled>
-																	</div>
+																	Observaciones
+																</label>
+																<label class="field prepend-icon">
+																	<textarea class="gui-textarea" id="ped_obs" name="ped_obs">{{ pedido.obs is defined ? pedido.obs}}</textarea>
+																	<label for="ped_obs" class="field-icon"><i class="fa fa-comments"></i></label>
 																</label>
 															</div>
 														</div>
-														<div class="row">
-															<div class="form-group col-sm-6 ">
-																<div class="form-group ">
-																	<label class="field">
-																		Observaciones
-																	</label>
-																	<label class="field prepend-icon">
-																		<textarea class="gui-textarea" id="ped_obs" name="ped_obs">{{ pedido.obs is defined ? pedido.obs}}</textarea>
-																		<label for="ped_obs" class="field-icon"><i class="fa fa-comments"></i></label>
-																	</label>
-																</div>
-															</div>
-														</div>														
+													</div>
 												</div>
 											</form>
 										</div>

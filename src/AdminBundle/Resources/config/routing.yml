@@ -222,6 +222,9 @@ admin_categorias_eliminar:
 admin_pedido:
     path:     /pedido/
     defaults: { _controller: AdminBundle:Pedido:pedidoIndex }
+admin_admin_pedido:
+    path:     /pedido_admin/
+    defaults: { _controller: AdminBundle:Pedido:pedidoAdmin }
 
 cargar_pedido_tabla:
     path:     /pedido/tabla/

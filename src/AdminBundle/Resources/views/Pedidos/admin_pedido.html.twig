@@ -1,0 +1,403 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+	<div class="container">
+		<!-- bloque superior -->
+		<div class="row">
+			<div class="col-sm-12 col-md-6">
+                <div class="row"><h4>{{ titulo }}</h4></div>
+            </div>
+			<div class="col-sm-12 col-md-6 text-right">
+				<a href="{{ url('admin_pedido') }}" class="btn btn-system btn-per" data-toggle="tooltip" data-placement="bottom" title="Atras"><i class="material-icons">arrow_back</i></a>
+			</div>
+		</div>
+		<!-- bloque superior fin-->
+		<!-- contenido -->
+		<div class="row">
+			<div role="tab-block">
+				<!-- Tabs Navigation -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#datos-pedido-tab" aria-controls="datos-pedido-tab" role="tab" data-toggle="tab">Datos Pedido</a></li>
+                </ul>
+				<!-- Tab Content Panes -->
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane fade active in" id="datos-pedido-tab">
+						<div class="admin-form theme-default theme-info">
+							<div class="panel heading-border panel-default panel-info">
+                    			<div class="panel-body bg-light">
+									<div class="row">
+										<div class="col-md-12">											
+											<div class="input-group form-group col-sm-12 col-lg-3 pull-left">
+												<span class="input-group-addon">Fecha Ingreso :</span>
+												<input type="text" class="form-control" name="fechaIngreso" id="fechaIngreso" value="{{pedido.fechaIngreso is defined ? pedido.fechaIngreso|date("d/m/Y") : fecha|date("d/m/Y") }}" disabled>
+                                            </div>                                            
+											<div class="input-group form-group col-sm-12 col-lg-3 pull-right">
+												<span class="input-group-addon">Cot n° :</span>
+												<input type="text" class="form-control" name="n_cot" id="n_cot" value="{{pedido.n_cot is defined ? pedido.n_cot}}" disabled>
+											</div>
+										</div>
+										<div class="col-md-12">											
+                                            <div class="input-group form-group col-sm-12 col-lg-3 pull-left">
+                                                <span class="input-group-addon">Ultima modificacion :</span>
+                                                <input type="text" class="form-control" name="fechaModificacion" id="fechaModificacion" value="{{pedido.fechaModificacion is defined ? pedido.fechaModificacion|date("d/m/Y") : "Sin Modificar"}}" disabled>
+                                            </div>
+										</div>
+									</div>
+									{# Busqueda empresa y vista de codigo #}
+									{# collapse empresa#}
+									<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+										<div class="section-divider mb40" role="tab" id="headingOne">
+											<span>
+												<a data-toggle="collapse" data-toggle="collapse" data-parent="#accordion" href="#collapseEmpresa" aria-expanded="true" aria-controls="headingOne">
+													Datos Empresa
+												</a>
+											</span>
+										</div>
+										<div id="collapseEmpresa" class="panel-collapse collapse "role="tabpanel" aria-labelledby="headingOne">
+											<div class="panel-body">
+												<form id="form_datos_empresa" class="">
+													<input type="hidden" name="empre_id" id="empre_id" value="{{ empresa.id is defined ? pedido.id}}" >
+													<div class="row">
+														<div class="form-group col-sm-12 col-lg-3">
+															<label class="field">
+                                                                Nombre
+																<input type="text"  name="empre_nombre" id="empre_nombre" class="gui-input" value="{{empresa.nombre is defined ? empresa.nombre}}" disabled>
+															</label>
+														</div>
+														<div class="form-group col-sm-12 col-lg-3">
+															<label class="field">
+                                                                Razon Social
+																<input type="text"  name="empre_razon_soc" id="empre_razon_soc" class="gui-input" value="{{empresa.rsocial is defined ? empresa.rsocial}}" disabled>
+															</label>
+														</div>
+														<div class="form-group col-sm-12 col-md-3">
+															<label class="field">
+                                                                Rut
+																<input type="text"  name="empre_rut" id="empre_rut" class="gui-input val_num" value="{{empresa.rut is defined ? empresa.rut}}" disabled>
+															</label>
+														</div>
+													</div>											
+													<div class="row">
+														<div class="form-group col-sm-12 col-md-2">
+															<label class="field">
+                                                                Telefono
+																<input type="text" name="empre_telefono" id="empre_telefono" class="gui-input val_num" value="{{empresa.telefono is defined ? empresa.telefono}}" disabled>
+															</label>
+														</div>
+														<div class="form-group col-sm-12 col-md-2">
+															<label class="field">
+                                                                Celular Empresa
+																<input type="text" name="empre_celular" id="empre_celular" class="gui-input val_num" value="{{empresa.celular is defined ? empresa.celular}}" disabled>
+															</label>
+														</div>
+														<div class="form-group col-sm-12 col-md-2">
+															<label class="field">
+                                                                Email
+																<input type="email" name="empre_mail" id="empre_mail" class="gui-input" value="{{empresa.email is defined ? empresa.email}}" disabled>
+															</label>
+														</div>
+													</div>
+												<form>											
+											</div>
+										</div>
+									</div>
+									{# collapse contacto#}
+									<div class="row" id="contacto" >
+										<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+											<div class="section-divider mb40" role="tab" id="headingTwo">
+												<span>
+													<a data-toggle="collapse" data-toggle="collapse" data-parent="#accordion" href="#collapseContacto" aria-expanded="true" aria-controls="headingTwo">
+														Contacto Asociado a Pedido
+													</a>
+												</span>
+											</div>
+											<div id="collapseContacto" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+												<div class="panel-body">													                                              
+                                                    <div class="row">
+														<div class="form-group col-sm-12 col-lg-3">
+															<label class="field">
+																<input type="text"  name="nombre_contacto" id="nombre_contacto" class="gui-input" value="{{contacto.primerNombre is defined ? contacto.primerNombre}}" disabled>
+															</label>
+														</div>
+														<div class="form-group col-sm-12 col-lg-3">
+															<label class="field">
+																<input type="text" name="contacto_apellido_paterno" id="contacto_apellido_paterno" class="gui-input" value="{{contacto.apellidoPaterno is defined ? contacto.apellidoPaterno}}" disabled>
+															</label>
+														</div>
+														<div class="form-group col-sm-12 col-md-3">
+															<label class="field">
+																<input type="text" name="contacto_apellido_materno" id="contacto_apellido_materno" class="gui-input val_num" value="{{contacto.apellidoMaterno is defined ? contacto.apellidoMaterno}}" disabled>
+															</label>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>											
+									</div>														
+									<!-- Modal Opciones Producto-->
+									<!-- <div class="modal fade bs-example-modal-lg" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel2" aria-hidden="true" style="overflow-y: scroll;">
+										<div class="modal-dialog modal-lg">
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+														<h4 class="header2"><i class="material-icons">mode_edit</i>Actualizacion datos de producto</h4>
+												</div>
+												<div class="modal-body">
+													<div class="panel">
+														<div class="panel-body bg-light">
+															<h4 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos opcionales</h4>	
+															<div class="section-divider mb40">
+																<span></span>
+															</div>
+															{# form de ingreso de opcion #}
+															{# <form id="op" class="modalForm2" action="" method="post" enctype="multipart/form-data"> #}
+																<input type="hidden" name="detalle" id="detalle" value="{{ data.id is defined ? data.id}}" >
+																<div class="row">
+																	<div class="col-md-6 col-lg-12">
+																		<div class="form-group col-sm-12">
+																			<label class="field">Observaciones</label>
+																			<label class="field prepend-icon">
+																				<textarea class="gui-textarea" id="obs" name="obs"></textarea>
+																				<label for="obs" class="field-icon"><i class="fa fa-comments"></i></label>
+																			</label>
+																		</div>
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="form-group col-sm-12 col-md-6 col-md-offset-1">
+																		<label class="field">
+																			Opciones producto
+																		</label>
+																		<label class="field select">
+																			<select id="opciones" name="opciones" class="form-control" required>
+																				<option value="0" selected>Seleccione</option>
+																			</select>
+																			<i class="arrow"></i>
+																		</label>																																																			
+																	</div>	
+																	<div class="form-group col-sm-12 col-md-4">
+																		<!-- Button trigger modal -->
+																		<!-- <button id="botonMoldal3"  style ="margin-top:17px;" type="button" class="btn btn-primary btn-lg"  data-target="#myModal3">
+																			Agregar Nueva Opcion
+																		</button> -->
+																		<!-- Modal Creacion de Opcion-->
+																		<!-- <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="true"  >
+																			<div class="modal-dialog">
+																				<div class="modal-content">
+																					<div class="modal-header">
+																						<h4 class="modal-title" id="myModalLabel3">Creacion de Opcion</h4>
+																					</div>
+																					<div class="modal-body">
+																						<div class="panel">
+																							<div class="panel-body bg-light">
+																								<form id="form-new-opcion" name="form-new-opcion" class=""  action="{{ url('admin_opcion_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
+																									<h5 class="header2"><i class="material-icons" style="vertical-align: bottom;">create</i> Ingreso de datos</h5>
+																									<div class="row">
+																										<div class="col-md-12">
+																											<div class="row">
+																												<div class="form-group col-md-6">
+																													<label class="field">
+																														Nombre
+																														<input type="text" name="opcion_nombre" id="opcion_nombre" class="gui-input" >
+																													</label>
+																												</div>
+																												<div class="form-group col-md-6">
+																													<label class="field">
+																														Valor
+																														<div class="input-group">
+																															<div class="input-group-addon">$</div>
+																															<input type="number" min="1" name="opcion_valor" id="opcion_valor" class="gui-input">{# clase form-control#}
+																														</div>
+																													</label>
+																												</div>
+																											</div>
+																											<div class="row">
+																												<div class="form-group col-md-12">
+																													<h4>Seleccione alternativa </h4> 
+																													<div class="form-group col-md-6">
+																														<label><input type="radio" name="unidad" id="unidad1" value="1"> Medida</label><br>
+																														<label><input type="radio" name="unidad" id="unidad2" value="2"> Peso</label><br>
+																														<label><input  type="radio" name="unidad" id="unidad3"value="3" checked> Unidad</label>																															
+																													</div>
+																													<div id="opcionSelect" class="form-group col-md-6" style="display:none">                                              
+																														<label class="field">
+																															Unidad
+																														</label>
+																														<label class="field select">
+																															<select id="opcion_unidades" name="opcion_unidades" class="form-control">
+																																<option value="">Seleccione unidad</option>																																	
+																															</select>
+																															<i class="arrow"></i>
+																														</label>
+																													</div>																																
+																												</div>
+																											</div>  																																
+																										</div>
+																										<div class="form-group col-md-6 col-md-offset-1">                                              
+																											<label class="field">
+																												Categoria Opcion
+																											</label>
+																											<label class="field select">
+																												<select id="opcion_categorias" name="opcion_categorias" class="form-control">
+																													<option value="" >Seleccione</option>																																	
+																												</select>
+																												<i class="arrow"></i>
+																											</label>
+																										</div>
+																										<div class="form-group col-sm-12">
+																											<label class="field">Observaciones</label>
+																												<label class="field prepend-icon">
+																													<textarea class="gui-textarea" id="opcion_obs" name="opcion_obs"></textarea>
+																													<label for="opcion_obs" class="field-icon"><i class="fa fa-comments"></i></label>                                            
+																												</label>
+																											</div>	
+																											<!-- imagen ingreso-->
+																											<!-- <div class="col-md-12">
+																												<div class="input-field col-md-6">
+																													<label class="field prepend-icon append-button file">
+																														<span class="button btn-primary">Elija un archivo</span>
+																														<input type="file" class="gui-file" name="cat_imagen" id="cat_imagen" onChange="document.getElementById('upload_prod_i').value = this.value;">
+																														<input type="text" class="gui-input" id="upload_prod_i" name="upload_prod_i">
+																														<label class="field-icon"><i class="fa fa-upload"></i></label>
+																													</label>
+																												</div>
+																											</div>
+																										</div>
+																									</div>
+																								</form>
+																							</div>
+																							<div class="modal-footer">
+																								<button id="botonGuardarModal3" type="button" class="btn btn-primary">Guardar Opcion</button>
+																								<button id="botonCancelarModal3" type="button" class="btn btn-default" >Close</button>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>Fin Modal -->
+																	<!-- </div>		
+																	<div id="viewOpciones" class="row" style="display:none">
+																		<div class="col-md-12">	
+																			<div class="col-md-6 col-md-offset-1">
+																				<div id="divLargo" class="form-group col-md-3" style="display:none">
+																					<label class="field">
+																						Largo
+																						<input type="number" min="1"  name="largo" id="dimensiones" class="gui-input" value="" onchange="actualizaValor()">
+																					</label>
+																				</div>
+																				<div id="divAncho" class="form-group col-md-3" style="display:none">
+																					<label class="field">
+																						Ancho
+																						<input type="number" min="1" name="ancho" id="dimensiones" class="gui-input" value="" onchange="actualizaValor()">
+																					</label>
+																				</div>
+																				<div  id="divPeso" class="form-group col-md-3" style="display:none">
+																					<label class="field">
+																						Peso
+																							<input type="number" min="1"name="peso" id="peso"  class="gui-input" value=""  onchange="actualizaValor()">
+																					</label>
+																				</div>
+																			</div>
+																			<div id="divCalculos" class="form-group col-md-5" style="display:none"></div>	
+																			<div class="col-md-4 col-md-offset-5">
+																				<button  id="boton-guardar-opcion-dimensiones" disabled="true" type="button" class="btn btn-primary">Guardar</button>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="row">
+																		<div class="col-md-12 col-lg-12">
+																			<h4><i class="material-icons">playlist_add_check</i> Detalle de Producto</h4>
+																			<div class="section-divider mb40"><span></span></div>
+																			<div class="row col-md-offset-1">
+																				<h4>Opciones Seleccionadas</h4>
+																				<div id="click_opcion" class="click_opcion col-md-offset-1 ">
+																				</div>
+																			</div>																			
+																		</div>
+																		<div class="col-md-12 col-md-offset-1">
+																			<h4>Valores</h4>
+																			<div class="col-md-2 col-md-offset-1 ">
+																				<label class="field">
+																					Cantidad:
+																					<input type="number" min="1" name="cantidad"  class="gui-input" id="" onchange="myFunction(this.value, this.id)" >
+																				</label>
+																			</div>																			
+																			<div class="col-md-2">
+																				<label class="field">
+																					Modificado:
+																					<input type="number" min="1" name="valor_m"  class="gui-input" onchange="myFunctionValCotizacion(this.value, this.id)" {{(is_granted('ROLE_ADMIN_C'))? '': ((is_granted('ROLE_VENTA_B'))? '' : 'disabled')}}>
+																				</label>
+																			</div>																																						
+																			<div class="col-md-2">
+																				<label class="field">
+																					Opciones:
+																					<input type="text" name="valor_o" id="valor_o" class="gui-input" disabled="true">
+																				</label>
+																			</div>																			
+																			<div class="col-md-2">
+																				<label class="field">
+																					Total:
+																					<input type="text" name="valor" id="valor" class="gui-input" disabled="true">
+																				</label>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															{# </form> #}
+														</div>
+													</div>
+													<div class="modal-footer">
+														<div class="col-sm-12 text-right">
+															<button id="botonGuardarModal2" type="button" class="btn btn-primary">Guardar Cambios</button>
+															<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+														</div>
+													</div>
+												</div>
+											</div> 
+										</div>
+									</div> -->
+									{# datos de pedido #}
+									<div class="row" id="datosPedido" >
+										<div class="section-divider mb40">
+											<span>Datos Pedido</span>
+										</div>
+										{# <div class="panel"> #}
+										<div class="panel-body">
+											<form id="form_new_pedido" name="form_new_pedido" class="" action="{{ url('admin_pedido_guardar') }}" method="post" enctype="multipart/form-data" novalidate="novalidate">
+												<div class="row">
+													<div class="col-md-10 col-sm-offset-1">
+													
+														<div class="row">
+															<div class="input-group form-group col-sm-12 col-lg-3 pull-left">
+																<span class="input-group-addon">E. Pedido:</span>
+																<input type="text" class="form-control" name="pedido_etapa" id="pedido_etapa" value="{{pedido.etapa is defined ? pedido.etapa.nombre : "INCONSISTENTE"}}" disabled>
+															</div>												
+															<div class="input-group  col-sm-12 col-lg-3 pull-right ">
+                                                                <span class="input-group-addon">E. Negociacion:</span>
+                                                                <input id="estadoNegociacion" name="estadoNegociacion" type="text" class="form-control"   value="{{pedido.estadoProceso is defined ? pedido.estadoProceso.sigla : "INCONSISTENTE"}}" disabled>
+															</div>															
+														</div>
+													</div>
+												</div>											
+											</form>
+										</div>
+										{# </div> #}
+									</div>										
+                        		</div>
+                        		<div class="panel-footer text-right">
+                        			<button id="btnGuardarPedido" {{data.id is not defined ? 'disabled="true"' : ""}}  class="btn btn-success ">Guardar <i class="fa fa-save"></i></button>
+                        			<button id="btnCancearPedido" class="btn btn-warning ">Cancelar <i class="fa fa-ban"></i></button>
+                        		</div>
+                        	</div>
+                        </div>
+					</div>
+                </div>
+			</div>
+		</div>
+		<!-- contenido fin-->
+	</div>
+{% endblock %}
+
+{% block javascripts %}	
+	<!-- <script src="{{ absolute_url(asset('assets/js/module/pedido/admin_pedido.js')) }}"></script> -->
+{% endblock %}

@@ -91,6 +91,7 @@ class ProductoController extends Controller
             }
             $producto->setNombre($prod_nombre);
             $producto->setObservacion($observacion);
+            $producto->setTipo(1);
             $em->persist($producto);
             $em->flush();      
             

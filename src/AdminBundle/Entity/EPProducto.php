@@ -22,6 +22,13 @@ class EPProducto
     private $id;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_cambio", type="datetime", nullable=true)
+     */
+    private $fechaCambio;
+
+    /**
      * @var \EtapaProduccion
      *
      * @ORM\ManyToOne(targetEntity="EtapaProduccion")
@@ -51,6 +58,29 @@ class EPProducto
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set fechaCambio
+     *
+     * @param \DateTime $fechaCambio
+     * @return EPProducto
+     */
+    public function setFechaCambio($fechaCambio)
+    {
+        $this->fechaCambio = $fechaCambio;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaCambio
+     *
+     * @return \DateTime 
+     */
+    public function getFechaCambio()
+    {
+        return $this->fechaCambio;
     }
 
     /**

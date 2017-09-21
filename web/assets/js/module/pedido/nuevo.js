@@ -835,7 +835,7 @@ function cargar() {
             if (response.producto != "") {
                 $("#dT_pedido tbody").append(response.producto);
             } else {
-                $("#dT_pedido tbody").append('No se han seleccionado productos');
+                // $("#dT_pedido tbody").append('No se han seleccionado productos');
             }
         });
     }

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EtapaProduccion
  *
- * @ORM\Table(name="etapa_produccion", uniqueConstraints={@ORM\UniqueConstraint(name="nombre_UNIQUE", columns={"nombre"})})
+ * @ORM\Table(name="etapa_produccion", uniqueConstraints={@ORM\UniqueConstraint(name="nombre_UNIQUE", columns={"nombre"})}, indexes={@ORM\Index(name="fk_etapa_produccion_categorias1_idx", columns={"categorias_id"})})
  * @ORM\Entity
  */
 class EtapaProduccion
@@ -48,6 +48,16 @@ class EtapaProduccion
      * @ORM\Column(name="prioridad", type="string", length=45, nullable=true)
      */
     private $prioridad;
+
+    /**
+     * @var \Categorias
+     *
+     * @ORM\ManyToOne(targetEntity="Categorias")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="categorias_id", referencedColumnName="id")
+     * })
+     */
+    private $categorias;
 
 
 }
