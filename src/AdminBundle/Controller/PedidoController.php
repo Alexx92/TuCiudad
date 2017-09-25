@@ -132,7 +132,9 @@ class PedidoController extends Controller
                     $pedido->setEtapa($em->getRepository('AdminBundle:Etapa')->findOneBy(array('id'=>1)));
                     $pedido->setEtapaProceso($em->getRepository('AdminBundle:EtapaProceso')->findOneBy(array('id'=>1)));
                 }else{
-                    $pedido->setEtapaProceso($em->getRepository('AdminBundle:EtapaProceso')->findOneBy(array('id'=>$ped_new_e_n)));
+                    if ($ped_new_e_n != '') {
+                        $pedido->setEtapaProceso( $em->getRepository('AdminBundle:EtapaProceso')->findOneBy(array('id'=> $ped_new_e_n)));
+                    }
                 }
                 $pedido->setObservacion($ped_obs);
                 $em->persist($pedido);
@@ -249,7 +251,7 @@ class PedidoController extends Controller
     {
         $titulo  = 'Administrar pedido';
         // $id = $request->get('id', false);
-        $id = 15;
+        $id = 16;
         $em = $this->getDoctrine()->getManager();
         /*lleno el data de pedido*/
         $ObjPedido = $em->getRepository('AdminBundle:Pedidos')->findOneBy(array('id'=>$id));
@@ -293,18 +295,42 @@ class PedidoController extends Controller
         $contacto['telefono']          = $contactoEmpre->getTelefono();
 
         $listaDetalle = $em->getRepository('AdminBundle:PedidoDetalle')->findBy(array('fkPedido'=>$id));
+        $arrayDetalle = array();
+        foreach ($listaDetalle as $detalle) {
+            $det = new stdClass();
+            $det->id = $detalle->getId();            
+            $det->nombre = $detalle->getFkProducto()->getNombre();            
+            $det->cantidad      = $detalle->getCantidad();
+            $det->observacion   = $detalle->getObservacion();
+            $etapa = new stdClass();
+            $etapa->id  = $detalle->getEtapaPedidoDetalle()->getId();
+            $etapa->nombre = $detalle->getEtapaPedidoDetalle()->getNombre();
+            $det->etapaPedidoDetalle = $etapa;
+
+            $categorias = $em->getRepository('AdminBundle:ProductoCategoria')->findBy(array('fkProducto'=>$detalle->getFkProducto()));
+            $arrCat = array();
+            foreach ($categorias as $categoria) {
+                // $cate =  $em->getRepository('AdminBundle:EtapaProduccion')->findBy(array('categorias'=>$categoria->getFkCategoria()->getId()));
+                // $cat = new stdClass();
+                // $cat->id = $categoria->getFkCategoria()->getId();
+                // $cat->nombre = $categoria->getFkCategoria()->getNombre();
+                // $cat->observacion = $categoria->getFkCategoria()->getObservacion();
+                // $arrCat = $em->getRepository('AdminBundle:EtapaProduccion')->findOneBy(array('categorias'=>$categoria));
+                $arrCat = $em->getRepository('AdminBundle:EtapaProduccion')->findBy(array('categorias'=>$categoria->getFkCategoria()->getId()));
+            }
+            $det->arrCategoria = $arrCat;
+            $arrayDetalle[] = $det;
+        }      
+        dump($arrayDetalle);
        
   
-        //     $dql= " SELECT  op.id, op.nombre, op.valor ,  
-        //     IDENTITY(op.unidadMedidaDimension, 'id') AS unidadMedidaDimension,    umd.sigla as sigla_dimension,
-        //     IDENTITY(op.unidadMedidaPeso, 'id') AS unidadMedidaPeso ,             ump.sigla as sigla_peso
-    
-        //     FROM AdminBundle:OpcionesProducto op 
-        //     LEFT JOIN op.unidadMedidaPeso ump
+        // $dql= " SELECT  op.id, op.nombre, op.sigla,op.observaciones, op.prioridad
+        //     IDENTITY(op.unidadMedidaDimension, 'id') AS unidadMedidaDimension,    umd.sigla as sigla_dimension,    
+        //     FROM AdminBundle:OpcionesProducto op
         //     LEFT JOIN op.unidadMedidaDimension umd
         //     INNER JOIN AdminBundle:ProductoCategoria pc
         //     WITH pc.fkCategoria = op.categorias
-        //     WHERE pc.fkProducto =:id_producto";  
+        //     WHERE pc.fkProducto =:id_producto";
 
         // $query= $em->createQuery($dql)
         //             ->setParameter('id_producto', $prod_id);
@@ -317,49 +343,19 @@ class PedidoController extends Controller
         //     else if (isset($result['unidadMedidaPeso']) )   { $nombreUnidad= ' x ['.$result['sigla_peso'].']'; }
         //     $lista_opciones .= '<li value="'.$result['id'].'">'.$result['nombre'].', $ '.$result['valor'].' '.$nombreUnidad.'</li>';
         // }
-        // if ($this->isGranted('ROLE_ADMIN_A')) {
-        //     if ($ObjPedido->getEtapaProceso()->getId() != 6) {
-        //         $dql= " SELECT  op.id, op.sigla, op. nombre
-        //                 FROM AdminBundle:EtapaProceso op
-        //                 WHERE  op.id != 6" ;
-        //         $query= $em->createQuery($dql);
-        //         $results = $query->getResult();
-        //     }else{
-        //         $results = $em->getRepository('AdminBundle:EtapaProceso')->findAll();
-        //     }
-        // }else{
-        //     if ($ObjPedido->getEtapaProceso()->getId()!= 6) {
-        //         if ($ObjPedido->getEtapaProceso()->getId() == 2) {
-        //             $dql= " SELECT  op.id, op.sigla, op. nombre
-        //                 FROM AdminBundle:EtapaProceso op
-        //                 WHERE op.id != 6 and op.id != 4 and op.id !=1";
-        //             $query= $em->createQuery($dql);
-        //             $results = $query->getResult();
-        //         }else{
-        //             $dql= " SELECT  op.id, op.sigla, op. nombre
-        //                     FROM AdminBundle:EtapaProceso op
-        //                     WHERE  op.id != 6 and op.id != 4" ;
-        //             $query= $em->createQuery($dql);
-        //             $results = $query->getResult();
-        //         }
-        //     }else{
-        //         $dql= " SELECT  op.id, op.sigla, op. nombre
-        //             FROM AdminBundle:EtapaProceso op
-        //             WHERE op.id != 4" ;
-        //         $query= $em->createQuery($dql);
-        //         $results = $query->getResult();               
-        //     }
-        // }
-                
+       
+        $listaDepartamentos = $em->getRepository('AdminBundle:Departamento')->findAll();         
         return $this->render('AdminBundle:Pedidos:admin_pedido.html.twig', array(
-            'titulo'          => $titulo,
-            'pedido'          => $pedido,
-            'empresa'         => $empresa, 
-            'contacto'        => $contacto, 
+            'titulo'              => $titulo,
+            'pedido'              => $pedido,
+            'empresa'             => $empresa, 
+            'contacto'            => $contacto, 
+            'arrayDetalle'        => $arrayDetalle, 
+            'listaDepartamentos'  => $listaDepartamentos, 
           //  'lista_contactos' => $lisContactEmpre,
            // 'lista_etapa_negociacion' => $results,
-            'submenu'         => 'pedido_nueva',
-            'menu_o_con'      => 'pedido'
+            'submenu'             => 'pedido_nueva',
+            'menu_o_con'          => 'pedido'
         ));
     }
     // ajax buscar empresas
@@ -981,7 +977,7 @@ class PedidoController extends Controller
                 if ($acotizar == "") {
                     $text = '<a id="'.$value->getId().'" onclick="eliminarProductoDetalle(this.id)"><i class="material-icons">delete_forever</i></a>';
                     $text2 = '<a id="'.$value->getId().'" onclick="modal(this.id)"><i class="material-icons">mode_edit</i></a>';
-                    $producto .= '<td class="text-right td-width-50" >'.(($this->isGranted('ROLE_VENTA_B'))? (($etapa)? $text2 : '') : '').(($this->isGranted('ROLE_ADMIN_B'))? $text : (($this->isGranted('ROLE_VENTA_B'))? (($etapa)? $text : '') : $text )).' </td>';
+                    $producto .= '<td class="text-right td-width-50" >'.(($this->isGranted('ROLE_VENTA_B'))? (($etapa)? $text2 : '') : '').(($this->isGranted('ROLE_ADMIN_B'))? $text2.$text : (($this->isGranted('ROLE_VENTA_B'))? (($etapa)? $text : '') : $text )).' </td>';
                 }else{
                     $producto .= '<td class="text-right td-width-50" ><a id="'.$value->getId().'" onclick="modalVerEditarProductoCotizar('.$value->getFkProducto()->getId().')"><i class="material-icons">mode_edit</i></a> '.(($this->isGranted('ROLE_ADMIN_B'))? '<a id="'.$value->getId().'" onclick="eliminarProductoDetalle(this.id)"><i class="material-icons">delete_forever</i></a>' : '' ).' </td>';
                 }
@@ -1026,5 +1022,65 @@ class PedidoController extends Controller
             }  
         }        
         return false;
+    }
+    public function actualizaPersonalAdministracionAction(Request $request){
+        $id_departamento    = $request->get('val');
+        $em = $this->getDoctrine()->getManager();//declaracion de doctrine
+       
+        //$personal = $em->getRepository('AdminBunde:Personal')->findBy(array('area'=>$em->getRepository('AdminBundle:Personal')->find));
+            $dql= " SELECT op.id,op.dni , op.primerNombre, op.apellidoPaterno, op.apellidoMaterno
+            FROM AdminBundle:Personal op
+            INNER JOIN AdminBundle:Area pc
+            WITH pc.id = op.area
+            WHERE pc.departamento = :id_departamento" ;
+
+            $query= $em->createQuery($dql)
+                        ->setParameter('id_departamento', $id_departamento );
+            $results = $query->getResult();
+        $listaPersonal = '';
+        // if (count($results)>0) {
+            foreach ($results as $results) {
+                if($listaPersonal==''){
+                    $listaPersonal .= '<option value="">Seleccione</option>';
+                }
+                $listaPersonal .= '<option value="'.$results['id'].'">'.$results['primerNombre'].' '.$results['apellidoPaterno'].' '.$results['apellidoMaterno'].'</option>';
+            }    
+        // }else{
+        //     $listaPersonal .= '<option value="">Departamento sin personal</option>';            
+        // }      
+        $response = new JsonResponse();
+        $response->setData(array('listaPersonal'=>$listaPersonal));
+        return $response;
+    }
+    public function guardarPersonalProduccionAdminAction(Request $request){
+        $id_personal    = $request->get('id_personal');
+        $id_etapa    = $request->get('etapa');
+        $id_detalle    = $request->get('id_detalle');
+        // $em = $this->getDoctrine()->getManager();//declaracion de doctrine
+       
+        // //$personal = $em->getRepository('AdminBunde:Personal')->findBy(array('area'=>$em->getRepository('AdminBundle:Personal')->find));
+        //     $dql= " SELECT op.id,op.dni , op.primerNombre, op.apellidoPaterno, op.apellidoMaterno
+        //     FROM AdminBundle:Personal op
+        //     INNER JOIN AdminBundle:Area pc
+        //     WITH pc.id = op.area
+        //     WHERE pc.departamento = :id_departamento" ;
+
+        //     $query= $em->createQuery($dql)
+        //                 ->setParameter('id_departamento', $id_departamento );
+        //     $results = $query->getResult();
+        // $listaPersonal = '';
+        // // if (count($results)>0) {
+        //     foreach ($results as $results) {
+        //         if($listaPersonal==''){
+        //             $listaPersonal .= '<option value="">Seleccione</option>';
+        //         }
+        //         $listaPersonal .= '<option value="'.$results['id'].'">'.$results['primerNombre'].' '.$results['apellidoPaterno'].' '.$results['apellidoMaterno'].'</option>';
+        //     }    
+        // // }else{
+        // //     $listaPersonal .= '<option value="">Departamento sin personal</option>';            
+        // // }      
+        // $response = new JsonResponse();
+        // $response->setData(array('listaPersonal'=>$listaPersonal));
+        // return $response;
     }
 }

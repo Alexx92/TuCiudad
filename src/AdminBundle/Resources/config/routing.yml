@@ -245,6 +245,10 @@ admin_pedido_editar:
 admin_pedido_eliminar:
     path:     /pedido/eliminar/
     defaults: { _controller: AdminBundle:Pedido:pedidoEliminar }
+
+admin_guardar_admin_pedido:
+    path:     /pedido/guardarAdmin/
+    defaults: { _controller: AdminBundle:Pedido:pedidoAdminGuardar }
 #ruta ajax buscar empresas
 ajax_busq_empre_cot:
     path:     /ajax/busqueda/empresa/data/
@@ -346,6 +350,18 @@ ajax_eliminar_detalle_pedido:
 ajax_actualiza_porcentaje_descuento:
     path:     /ajax/pedido/actualizaDescuento/
     defaults: { _controller: AdminBundle:Pedido:actualizaCantidadDescuentoPedido}
+    options:
+        expose: true
+#ruta actualizar select de personal
+ajax_bq_personal:
+    path:     /ajax/pedido/actualizaPersonal/
+    defaults: { _controller: AdminBundle:Pedido:actualizaPersonalAdministracion}
+    options:
+        expose: true
+#ruta guardar etapa del detalle de pedido
+ajax_guardar_personal_detalle:
+    path:     /ajax/pedido/guardarPersonalProducto/
+    defaults: { _controller: AdminBundle:Pedido:guardarPersonalProduccionAdmin}
     options:
         expose: true
 

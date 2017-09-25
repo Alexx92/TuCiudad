@@ -29,9 +29,9 @@ class OpcionesProducto
     private $nombre;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="valor", type="string", length=45, nullable=false)
+     * @ORM\Column(name="valor", type="integer", nullable=false)
      */
     private $valor;
 
@@ -117,7 +117,7 @@ class OpcionesProducto
     /**
      * Set valor
      *
-     * @param string $valor
+     * @param integer $valor
      * @return OpcionesProducto
      */
     public function setValor($valor)
@@ -130,7 +130,7 @@ class OpcionesProducto
     /**
      * Get valor
      *
-     * @return string 
+     * @return integer 
      */
     public function getValor()
     {

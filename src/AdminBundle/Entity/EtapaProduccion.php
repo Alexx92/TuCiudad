@@ -38,14 +38,14 @@ class EtapaProduccion
     /**
      * @var string
      *
-     * @ORM\Column(name="observaciones", type="string", length=45, nullable=true)
+     * @ORM\Column(name="observaciones", type="string", length=200, nullable=true)
      */
     private $observaciones;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="prioridad", type="string", length=45, nullable=true)
+     * @ORM\Column(name="prioridad", type="integer", nullable=true)
      */
     private $prioridad;
 
@@ -143,7 +143,7 @@ class EtapaProduccion
     /**
      * Set prioridad
      *
-     * @param string $prioridad
+     * @param integer $prioridad
      * @return EtapaProduccion
      */
     public function setPrioridad($prioridad)
@@ -156,7 +156,7 @@ class EtapaProduccion
     /**
      * Get prioridad
      *
-     * @return string 
+     * @return integer 
      */
     public function getPrioridad()
     {

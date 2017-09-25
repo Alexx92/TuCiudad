@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EPProducto
  *
- * @ORM\Table(name="e_p_producto", indexes={@ORM\Index(name="fk_e_p_producto_pedido_detalle1_idx", columns={"pedido_detalle_id"}), @ORM\Index(name="fk_e_p_producto_etapa_produccion1_idx", columns={"etapa_produccion_id"})})
+ * @ORM\Table(name="e_p_producto", indexes={@ORM\Index(name="fk_e_p_producto_pedido_detalle1_idx", columns={"pedido_detalle_id"}), @ORM\Index(name="fk_e_p_producto_etapa_produccion1_idx", columns={"etapa_produccion_id"}), @ORM\Index(name="fk_e_p_producto_etapa_pedido_detalle1_idx", columns={"etapa_pedido_detalle_id"}), @ORM\Index(name="fk_e_p_producto_personal1_idx", columns={"personal_id"})})
  * @ORM\Entity
  */
 class EPProducto
@@ -29,6 +29,23 @@ class EPProducto
     private $fechaCambio;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion", type="string", length=200, nullable=true)
+     */
+    private $observacion;
+
+    /**
+     * @var \EtapaPedidoDetalle
+     *
+     * @ORM\ManyToOne(targetEntity="EtapaPedidoDetalle")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="etapa_pedido_detalle_id", referencedColumnName="id")
+     * })
+     */
+    private $etapaPedidoDetalle;
+
+    /**
      * @var \EtapaProduccion
      *
      * @ORM\ManyToOne(targetEntity="EtapaProduccion")
@@ -47,6 +64,16 @@ class EPProducto
      * })
      */
     private $pedidoDetalle;
+
+    /**
+     * @var \Personal
+     *
+     * @ORM\ManyToOne(targetEntity="Personal")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="personal_id", referencedColumnName="id")
+     * })
+     */
+    private $personal;
 
 
 
@@ -81,6 +108,52 @@ class EPProducto
     public function getFechaCambio()
     {
         return $this->fechaCambio;
+    }
+
+    /**
+     * Set observacion
+     *
+     * @param string $observacion
+     * @return EPProducto
+     */
+    public function setObservacion($observacion)
+    {
+        $this->observacion = $observacion;
+
+        return $this;
+    }
+
+    /**
+     * Get observacion
+     *
+     * @return string 
+     */
+    public function getObservacion()
+    {
+        return $this->observacion;
+    }
+
+    /**
+     * Set etapaPedidoDetalle
+     *
+     * @param \AdminBundle\Entity\EtapaPedidoDetalle $etapaPedidoDetalle
+     * @return EPProducto
+     */
+    public function setEtapaPedidoDetalle(\AdminBundle\Entity\EtapaPedidoDetalle $etapaPedidoDetalle = null)
+    {
+        $this->etapaPedidoDetalle = $etapaPedidoDetalle;
+
+        return $this;
+    }
+
+    /**
+     * Get etapaPedidoDetalle
+     *
+     * @return \AdminBundle\Entity\EtapaPedidoDetalle 
+     */
+    public function getEtapaPedidoDetalle()
+    {
+        return $this->etapaPedidoDetalle;
     }
 
     /**
@@ -127,5 +200,28 @@ class EPProducto
     public function getPedidoDetalle()
     {
         return $this->pedidoDetalle;
+    }
+
+    /**
+     * Set personal
+     *
+     * @param \AdminBundle\Entity\Personal $personal
+     * @return EPProducto
+     */
+    public function setPersonal(\AdminBundle\Entity\Personal $personal = null)
+    {
+        $this->personal = $personal;
+
+        return $this;
+    }
+
+    /**
+     * Get personal
+     *
+     * @return \AdminBundle\Entity\Personal 
+     */
+    public function getPersonal()
+    {
+        return $this->personal;
     }
 }

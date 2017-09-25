@@ -22,37 +22,37 @@ class DetallepedidoOpcionesproducto
     private $id;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="cantidad", type="string", length=45, nullable=true)
+     * @ORM\Column(name="cantidad", type="integer", nullable=true)
      */
     private $cantidad;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="valor", type="string", length=45, nullable=true)
+     * @ORM\Column(name="valor", type="integer", nullable=true)
      */
     private $valor;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="largo", type="string", length=45, nullable=true)
+     * @ORM\Column(name="largo", type="integer", nullable=true)
      */
     private $largo;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="ancho", type="string", length=45, nullable=true)
+     * @ORM\Column(name="ancho", type="integer", nullable=true)
      */
     private $ancho;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="peso", type="string", length=45, nullable=true)
+     * @ORM\Column(name="peso", type="integer", nullable=true)
      */
     private $peso;
 

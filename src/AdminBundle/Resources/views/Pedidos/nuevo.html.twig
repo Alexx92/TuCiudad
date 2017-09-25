@@ -163,7 +163,7 @@
 															Contactos asociados a la empresa seleccionada
 														</label>
 														<label class="field select">
-															<select id="lista_contactos_cot" name="lista_contactos_cot" class="form-control" required>														
+															<select id="lista_contactos_cot" name="lista_contactos_cot" class="form-control" required>
 																<option value="">Seleccione</option>
 																{% for contacto in lista_contactos %}
 																	<option id="seleccion" {{(pedido.id_contacto == contacto.fkContacto.id)? 'selected'}} name="seleccion" value={{contacto.fkContacto.id}}>{{(contacto.fkContacto.run != '') ? contacto.fkContacto.run : ''}} {{contacto.fkContacto.primerNombre }} {{contacto.fkContacto.apellidoPaterno}} {{contacto.fkContacto.apellidoMaterno}}</option>

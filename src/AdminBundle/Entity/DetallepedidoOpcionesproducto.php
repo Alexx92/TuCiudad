@@ -22,37 +22,37 @@ class DetallepedidoOpcionesproducto
     private $id;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="cantidad", type="string", length=45, nullable=true)
+     * @ORM\Column(name="cantidad", type="integer", nullable=true)
      */
     private $cantidad;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="valor", type="string", length=45, nullable=true)
+     * @ORM\Column(name="valor", type="integer", nullable=true)
      */
     private $valor;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="largo", type="string", length=45, nullable=true)
+     * @ORM\Column(name="largo", type="integer", nullable=true)
      */
     private $largo;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="ancho", type="string", length=45, nullable=true)
+     * @ORM\Column(name="ancho", type="integer", nullable=true)
      */
     private $ancho;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="peso", type="string", length=45, nullable=true)
+     * @ORM\Column(name="peso", type="integer", nullable=true)
      */
     private $peso;
 
@@ -91,7 +91,7 @@ class DetallepedidoOpcionesproducto
     /**
      * Set cantidad
      *
-     * @param string $cantidad
+     * @param integer $cantidad
      * @return DetallepedidoOpcionesproducto
      */
     public function setCantidad($cantidad)
@@ -104,7 +104,7 @@ class DetallepedidoOpcionesproducto
     /**
      * Get cantidad
      *
-     * @return string 
+     * @return integer 
      */
     public function getCantidad()
     {
@@ -114,7 +114,7 @@ class DetallepedidoOpcionesproducto
     /**
      * Set valor
      *
-     * @param string $valor
+     * @param integer $valor
      * @return DetallepedidoOpcionesproducto
      */
     public function setValor($valor)
@@ -127,7 +127,7 @@ class DetallepedidoOpcionesproducto
     /**
      * Get valor
      *
-     * @return string 
+     * @return integer 
      */
     public function getValor()
     {
@@ -137,7 +137,7 @@ class DetallepedidoOpcionesproducto
     /**
      * Set largo
      *
-     * @param string $largo
+     * @param integer $largo
      * @return DetallepedidoOpcionesproducto
      */
     public function setLargo($largo)
@@ -150,7 +150,7 @@ class DetallepedidoOpcionesproducto
     /**
      * Get largo
      *
-     * @return string 
+     * @return integer 
      */
     public function getLargo()
     {
@@ -160,7 +160,7 @@ class DetallepedidoOpcionesproducto
     /**
      * Set ancho
      *
-     * @param string $ancho
+     * @param integer $ancho
      * @return DetallepedidoOpcionesproducto
      */
     public function setAncho($ancho)
@@ -173,7 +173,7 @@ class DetallepedidoOpcionesproducto
     /**
      * Get ancho
      *
-     * @return string 
+     * @return integer 
      */
     public function getAncho()
     {
@@ -183,7 +183,7 @@ class DetallepedidoOpcionesproducto
     /**
      * Set peso
      *
-     * @param string $peso
+     * @param integer $peso
      * @return DetallepedidoOpcionesproducto
      */
     public function setPeso($peso)
@@ -196,7 +196,7 @@ class DetallepedidoOpcionesproducto
     /**
      * Get peso
      *
-     * @return string 
+     * @return integer 
      */
     public function getPeso()
     {
